@@ -9,15 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.learning.githubviewer.R;
+import com.learning.githubviewer.domain.RepositoryView;
 
-/**
- * Created by Aleksei_Ivshin on 13/02/2015.
- */
-public class MySimpleArrayAdapter extends ArrayAdapter<String> {
+public class RepositoryListViewAdapter extends ArrayAdapter<RepositoryView> {
     private final Context context;
-    private final String[] values;
+    private final RepositoryView[] values;
 
-    public MySimpleArrayAdapter(Context context, int textViewResourceId, String[] values) {
+    public RepositoryListViewAdapter(Context context, int textViewResourceId, RepositoryView[] values) {
         super(context, textViewResourceId, values);
 
         this.context = context;
@@ -27,11 +25,18 @@ public class MySimpleArrayAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.list_row,parent,false);
-        TextView textView = (TextView) rowView.findViewById(R.id.listItemText);
-        textView.setText(values[position]);
-        ImageView avatar = (ImageView) rowView.findViewById(R.id.avatar);
+        View rowView = inflater.inflate(R.layout.list_row, parent, false);
+
+        ImageView avatar = (ImageView) rowView.findViewById(R.id.repoAvatar);
         avatar.setImageResource(R.drawable.github_mark);
+
+        TextView repoName = (TextView) rowView.findViewById(R.id.repoName);
+        repoName.setText(values[position].repositoryName);
+
+        TextView stargazersCount = (TextView) rowView.findViewById(R.id.stars);
+        stargazersCount.setText(values[position].stargazersCount + "");
+
         return rowView;
     }
+
 }

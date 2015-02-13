@@ -15,6 +15,13 @@
         android:layout_height="match_parent"
         android:layout_weight="1"/>
 
+    <fragment
+        android:id="@id/repositoryDetailsFragment"
+        android:name="com.learning.githubviewer.RepositoryDetailFragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"/>
+
 
 
 </LinearLayout>
