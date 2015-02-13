@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="listFragment" type="id"/>
+    <item name="listItemText" type="id"/>
+    <item name="listView" type="id"/>
+    <item name="avatar" type="id"/>
+</resources>
