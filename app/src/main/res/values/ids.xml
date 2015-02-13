@@ -11,5 +11,5 @@
     <item name="createdDate" type="id"/>
     <item name="repositoryLanguage" type="id"/>
     <item name="repositoryDetailsFragment" type="id"/>
-    <item name="detailsFragment" type="id"/>
+    <item name="fragmentContainer" type="id"/>
 </resources>

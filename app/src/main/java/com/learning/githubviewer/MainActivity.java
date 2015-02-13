@@ -1,6 +1,7 @@
 package com.learning.githubviewer;
 
 import android.net.Uri;
+import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 import com.learning.githubviewer.domain.RepositoryView;
 
@@ -16,13 +18,22 @@ import java.net.URI;
 
 public class MainActivity extends ActionBarActivity implements ListViewFragment.OnRepositorySelectedListener {
 
+    private static final String CURRENT_POSITION = "githubviewer.list.currentposition";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.i("MainActivity", "Created");
-    }
 
+        if(findViewById(R.id.fragmentContainer) !=null){
+            ListViewFragment listViewFragment = new ListViewFragment();
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+                transaction.replace(R.id.fragmentContainer,listViewFragment);
+            transaction.commit();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -47,7 +58,7 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
             Log.v("MainActivity.OnRepositorySelected", "Details fragment is null. Create new fragment instance.");
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             RepositoryDetailFragment newDetailFragment = RepositoryDetailFragment.newInstance(repositoryView);
-            transaction.replace(R.id.detailsFragment, newDetailFragment).addToBackStack(null).commit();
+            transaction.replace(R.id.fragmentContainer, newDetailFragment).addToBackStack(null).commit();
 
         }
     }
