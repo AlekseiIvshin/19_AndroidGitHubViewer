@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="drawerLayout" type="id"/>
+    <item name="leftDrawer" type="id"/>
     <item name="listFragment" type="id"/>
     <item name="listView" type="id"/>
     <item name="repoAvatar" type="id"/>

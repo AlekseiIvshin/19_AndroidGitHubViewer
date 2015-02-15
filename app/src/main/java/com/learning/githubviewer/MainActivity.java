@@ -4,12 +4,15 @@ import android.net.Uri;
 import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 
 import com.learning.githubviewer.domain.RepositoryView;
 
@@ -25,12 +28,16 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ListView navigation = (ListView) findViewById(R.id.leftDrawer);
+
+        navigation.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.navigation)));
+
         if(findViewById(R.id.fragmentContainer) !=null){
             ListViewFragment listViewFragment = new ListViewFragment();
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-                transaction.replace(R.id.fragmentContainer,listViewFragment);
+            transaction.add(R.id.fragmentContainer,listViewFragment);
             transaction.commit();
         }
     }
