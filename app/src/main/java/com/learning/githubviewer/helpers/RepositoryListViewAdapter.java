@@ -27,8 +27,6 @@ public class RepositoryListViewAdapter extends ArrayAdapter<RepositoryView> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.list_row, parent, false);
 
-        ImageView avatar = (ImageView) rowView.findViewById(R.id.repoAvatar);
-        avatar.setImageResource(R.drawable.github_mark);
 
         TextView repoName = (TextView) rowView.findViewById(R.id.repoName);
         repoName.setText(values[position].repositoryName);

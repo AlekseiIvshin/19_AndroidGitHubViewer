@@ -1,32 +1,32 @@
-<android.support.v4.widget.DrawerLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-   tools:context=".MainActivity">
+    tools:context=".MainActivity">
 
-    <fragment
-        android:id="@id/listFragment"
-        android:name="com.learning.githubviewer.ListViewFragment"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:orientation="horizontal">
 
-    <fragment
-        android:id="@id/repositoryDetailsFragment"
-        android:name="com.learning.githubviewer.RepositoryDetailFragment"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="2"/>
+        <fragment
+            android:id="@id/listFragment"
+            android:name="com.learning.githubviewer.ListViewFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <fragment
+            android:id="@id/repositoryDetailsFragment"
+            android:name="com.learning.githubviewer.RepositoryDetailFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2" />
+    </LinearLayout>
 
     <ListView
         android:id="@id/leftDrawer"
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:background="#111"/>
+        style="@style/AppTheme.NavDrawer" />
 
-</android.support.v4.widget.DrawerLayout >
+</android.support.v4.widget.DrawerLayout>

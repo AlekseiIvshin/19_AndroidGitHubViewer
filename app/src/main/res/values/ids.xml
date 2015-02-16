@@ -4,7 +4,6 @@
     <item name="leftDrawer" type="id"/>
     <item name="listFragment" type="id"/>
     <item name="listView" type="id"/>
-    <item name="repoAvatar" type="id"/>
     <item name="stars" type="id"/>
     <item name="repoName" type="id"/>
     <item name="ownerLogin" type="id"/>
@@ -13,5 +12,5 @@
     <item name="createdDate" type="id"/>
     <item name="repositoryLanguage" type="id"/>
     <item name="repositoryDetailsFragment" type="id"/>
-    <item name="fragmentContainer" type="id"/>
+    <item name="contentFrame" type="id"/>
 </resources>
