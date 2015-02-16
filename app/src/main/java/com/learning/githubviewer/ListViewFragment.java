@@ -26,7 +26,6 @@ public class ListViewFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setListAdapter(getRepostitoryAdapter());
-
     }
 
     @Override

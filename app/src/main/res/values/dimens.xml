@@ -1,4 +1,8 @@
 <resources>
     <dimen name="defaultVerticalMargin">16dp</dimen>
     <dimen name="defaultHorizontalMargin">16dp</dimen>
+    <dimen name="mainTextSize">16dp</dimen>
+    <dimen name="titleTextSize">20sp</dimen>
+    <dimen name="headlineTextSize">24sp</dimen>
+    <dimen name="dividerHeight">8dp</dimen>
 </resources>

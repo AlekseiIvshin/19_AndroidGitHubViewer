@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    style="@style/AppTheme.RepositoryList.Item">
 
     <TextView
         android:id="@id/repoFullName"
@@ -20,7 +19,7 @@
         style="@style/AppTheme.RepositoryList.Item.Description"
         android:layout_below="@id/repoFullName"
         android:layout_alignParentLeft="true"
-        tools:text="Repository Description DDDDDDDDDDDDDDDDDDDDDEEEEEEEEESCIFOASFGNAOGSNA"/>
+        tools:text="Repository Description DDDDDDDDDDDDDDDD DDDDDEEEEEEEEESCIFOAS FGNAO GSNA"/>
 
     <ImageView
         android:id="@id/repoStarsImage"
@@ -30,5 +29,6 @@
         android:id="@id/repoStars"
         style="@style/AppTheme.RepositoryList.Item.Stars"
         android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         tools:text="NNN"/>
 </RelativeLayout>

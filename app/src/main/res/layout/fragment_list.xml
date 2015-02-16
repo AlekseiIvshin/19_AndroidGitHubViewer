@@ -8,10 +8,8 @@
 
     <ListView
         android:id="@id/android:list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:drawSelectorOnTop="false" />
+        android:drawSelectorOnTop="false"
+        style="@style/AppTheme.NavDrawer.List"/>
 
     <TextView
         android:id="@id/android:empty"

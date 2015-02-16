@@ -3,43 +3,48 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
-        <item name="android:textColor">@color/text_color</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/mainTextColor</item>
+        <item name="android:textSize">@dimen/mainTextSize</item>
         <item name="actionBarStyle">@style/AppTheme.ActionBar</item>
-        <item name="actionMenuTextColor">@color/primary_dark</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
     </style>
-
-
 
     <style name="AppTheme.Main" parent="AppTheme">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:paddingLeft">@dimen/defaultHorizontalMargin</item>
-        <item name="android:paddingRight">@dimen/defaultHorizontalMargin</item>
     </style>
 
     <style name="AppTheme.ActionBar" parent="@style/Widget.AppCompat.ActionBar">
-        <item name="android:background">@drawable/ab_solid</item>
+        <item name="android:background">@color/primary</item>
         <!-- Support library compatibility -->
         <item name="titleTextStyle">@style/AppTheme.ActionBar.TitleText</item>
-        <item name="background">@drawable/ab_solid</item>
-        <item name="elevation">0dp</item>
+        <item name="background">@color/primary</item>
+        <item name="elevation">4dp</item>
     </style>
 
     <style name="AppTheme.ActionBar.TitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/title_text_color</item>
+        <item name="android:textColor">@color/titleTextColor</item>
     </style>
     
-    <style name="AppTheme.NavDrawer" parent="@style/Theme.AppCompat.Light">
+    <style name="AppTheme.NavDrawer" parent="@style/Theme.AppCompat">
         <item name="android:layout_width">240dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_gravity">start</item>
-        <item name="android:background">@drawable/ab_solid</item>
+        <item name="android:background">@color/primary</item>
         <item name="android:choiceMode">singleChoice</item>
         <item name="android:divider">@android:color/transparent</item>
-        <item name="android:dividerHeight">0dp</item>
-        <item name="android:textSize">16dp</item>
-        <item name="android:textColor">@color/title_text_color</item>
+        <item name="android:dividerHeight">6dp</item>
+    </style>
+
+    <style name="AppTheme.NavDrawer.List" parent="@style/Theme.AppCompat">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/titleTextColor</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:divider">@android:color/transparent</item>
+        <item name="android:dividerHeight">@dimen/dividerHeight</item>
     </style>
 
 </resources>

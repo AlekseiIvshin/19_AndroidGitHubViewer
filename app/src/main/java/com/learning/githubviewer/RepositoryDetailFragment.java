@@ -83,7 +83,9 @@ public class RepositoryDetailFragment extends Fragment {
     }
 
     public void updateView(RepositoryView repositoryView) {
-        updateView(repositoryView.repositoryName, repositoryView.id);
+        if(!repositoryName.equalsIgnoreCase(repositoryView.repositoryName) || repositoryId!=repositoryView.id) {
+            updateView(repositoryView.repositoryName, repositoryView.id);
+        }
     }
 
     private void updateView(String repositoryName, int id) {

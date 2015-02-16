@@ -64,6 +64,8 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
             }
         };
 
+        mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_star);
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
 
         navigation.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.navigation)));
 
