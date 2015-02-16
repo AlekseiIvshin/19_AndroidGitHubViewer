@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import com.learning.githubviewer.domain.RepositoryView;
 import com.learning.githubviewer.helpers.RepositoryListViewAdapter;
+import com.learning.githubviewer.stub.RepositoryOfRepository;
 import com.learning.githubviewer.stub.RepositotyViewFactory;
 
 import java.net.URI;
@@ -28,8 +29,13 @@ public class ListViewFragment extends ListFragment {
 
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_list,container,false);
+    }
+
     private ListAdapter getRepostitoryAdapter(){
-        return new RepositoryListViewAdapter(this.getView().getContext(),R.layout.list_row,getStudArray());
+        return new RepositoryListViewAdapter(this.getView().getContext(),R.layout.list_row,getStubArray());
     }
 
 //    @Override
@@ -55,8 +61,8 @@ public class ListViewFragment extends ListFragment {
         Log.v("RepositoriesList","Detached");
     }
 
-    private RepositoryView[] getStudArray(){
-        return RepositotyViewFactory.get(10);
+    private RepositoryView[] getStubArray(){
+        return RepositoryOfRepository.repositoryViews;
     }
 
     @Override
