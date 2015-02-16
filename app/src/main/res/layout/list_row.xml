@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
-        android:id="@id/repoName"
-        style="@style/AppTheme.RepositoryList.Item.RepoName" />
+        android:id="@id/repoFullName"
+        style="@style/AppTheme.RepositoryList.Item.RepoName"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/repoLanguage"
+        tools:text="Repository/Full name"/>
     <TextView
-        android:id="@id/stars"
-        style="@style/AppTheme.RepositoryList.Item.Stars"/>
-</LinearLayout>
+        android:id="@id/repoLanguage"
+        style="@style/AppTheme.RepositoryList.Item.RepoLanguage"
+        android:layout_toLeftOf="@id/repoStarsImage"
+        tools:text="Language"/>
+    <TextView
+        android:id="@id/repoDescription"
+        style="@style/AppTheme.RepositoryList.Item.Description"
+        android:layout_below="@id/repoFullName"
+        android:layout_alignParentLeft="true"
+        tools:text="Repository Description DDDDDDDDDDDDDDDDDDDDDEEEEEEEEESCIFOASFGNAOGSNA"/>
+
+    <ImageView
+        android:id="@id/repoStarsImage"
+        style="@style/AppTheme.RepositoryList.Item.StarsImage"
+        android:layout_toLeftOf="@id/repoStars"/>
+    <TextView
+        android:id="@id/repoStars"
+        style="@style/AppTheme.RepositoryList.Item.Stars"
+        android:layout_alignParentRight="true"
+        tools:text="NNN"/>
+</RelativeLayout>

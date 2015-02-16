@@ -17,7 +17,7 @@ public class RepositotyViewFactory {
         int max = 10;
         RepositoryView[] res = new RepositoryView[count];
         for(int i =0 ;i<count;i++){
-            res[i] = RepositoryViewBuilder.newRepositoryView().id(i).repositoryName(REPONAME+i).repositoryUrl(REPOURL+i).stars(rnd.nextInt(max)+min).build();
+            res[i] = RepositoryViewBuilder.newRepositoryView().id(i).repositoryName(REPONAME+i).repositoryUrl(REPOURL+i).stars(rnd.nextInt(max)+min).description("Description"+i).build();
         }
         return  res;
     }

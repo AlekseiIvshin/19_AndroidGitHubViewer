@@ -13,6 +13,7 @@ public class RepositoryViewBuilder {
     private String repoUrl="";
     private String repoName="";
     private int stars=0;
+    private String description="";
 
     private RepositoryViewBuilder(){};
 
@@ -36,7 +37,12 @@ public class RepositoryViewBuilder {
         return this;
     }
 
+    public RepositoryViewBuilder description(String description){
+        this.description = description;
+        return  this;
+    }
+
     public RepositoryView build(){
-        return new RepositoryView(id,repoUrl,repoName,stars);
+        return new RepositoryView(id,repoUrl,repoName,stars,description);
     }
 }

@@ -4,13 +4,17 @@
     <item name="leftDrawer" type="id"/>
     <item name="listFragment" type="id"/>
     <item name="listView" type="id"/>
-    <item name="stars" type="id"/>
-    <item name="repoName" type="id"/>
+    <!-- View minimum-->
+    <item name="repoFullName" type="id"/>
+    <item name="repoDescription" type="id"/>
+    <item name="repoLanguage" type="id"/>
+    <item name="repoStars" type="id"/>
+    <item name="repoStarsImage" type="id"/>
+    <!--End view minimum-->
     <item name="ownerLogin" type="id"/>
     <item name="ownerAvatar" type="id"/>
     <item name="ownerUrl" type="id"/>
     <item name="createdDate" type="id"/>
-    <item name="repositoryLanguage" type="id"/>
     <item name="repositoryDetailsFragment" type="id"/>
     <item name="contentFrame" type="id"/>
 </resources>

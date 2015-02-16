@@ -105,10 +105,10 @@ public class RepositoryDetailFragment extends Fragment {
 //            }
 //        }
 
-        TextView repoName = (TextView) activity.findViewById(R.id.repoName);
+        TextView repoName = (TextView) activity.findViewById(R.id.repoFullName);
         repoName.setText(details.repositoryName);
 
-        TextView stargazersCount = (TextView) activity.findViewById(R.id.stars);
+        TextView stargazersCount = (TextView) activity.findViewById(R.id.repoStars);
         stargazersCount.setText(details.stargazersCount + "");
 
         DateFormat dateFormat = new SimpleDateFormat(getResources().getString(R.string.dateFormat));
@@ -116,7 +116,7 @@ public class RepositoryDetailFragment extends Fragment {
         TextView createdDate = (TextView) activity.findViewById(R.id.createdDate);
         createdDate.setText(dateFormat.format(details.createdDate));
 
-        TextView repositoryLanguage = (TextView) activity.findViewById(R.id.repositoryLanguage);
+        TextView repositoryLanguage = (TextView) activity.findViewById(R.id.repoLanguage);
         repositoryLanguage.setText(details.language);
 
         TextView ownerLogin = (TextView) activity.findViewById(R.id.ownerLogin);

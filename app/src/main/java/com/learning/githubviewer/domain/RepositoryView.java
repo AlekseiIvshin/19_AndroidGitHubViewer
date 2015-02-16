@@ -6,12 +6,16 @@ public class RepositoryView {
     public final String repoUrl;
     public final String repositoryName;
     public final int stargazersCount;
+    public final String description;
+    public final String language;
 
-    public RepositoryView(int id,String url, String repositoryName, int stargazersCount) {
+    public RepositoryView(int id,String url, String repositoryName, int stargazersCount,String description) {
         this.repoUrl = url;
         this.repositoryName = repositoryName;
         this.stargazersCount = stargazersCount;
         this.id=id;
+        this.description = description;
+        language = "Language";
     }
 
     public RepositoryView(RepositoryView value){
@@ -19,5 +23,7 @@ public class RepositoryView {
         this.repositoryName = value.repositoryName;
         this.repoUrl = value.repoUrl;
         this.stargazersCount = value.stargazersCount;
+        this.description = value.description;
+        language = "Language";
     }
 }

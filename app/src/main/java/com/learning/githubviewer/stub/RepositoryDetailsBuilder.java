@@ -21,6 +21,7 @@ public class RepositoryDetailsBuilder {
     private Date createdDate;
     private String language = "";
     private String fullName = "";
+    private String description="";
     private RepositoryOwner owner;
 
     private RepositoryDetailsBuilder() {
@@ -66,8 +67,13 @@ public class RepositoryDetailsBuilder {
         return this;
     }
 
+    public RepositoryDetailsBuilder description(String description){
+        this.description = description;
+        return this;
+    }
+
     public RepositoryDetails build() {
-        RepositoryView view = RepositoryViewBuilder.newRepositoryView().id(id).repositoryName(repoName).repositoryUrl(repoUrl).stars(stars).build();
+        RepositoryView view = RepositoryViewBuilder.newRepositoryView().id(id).repositoryName(repoName).repositoryUrl(repoUrl).stars(stars).description(description).build();
         return new RepositoryDetails(view, owner, createdDate, language, fullName);
     }
 }
