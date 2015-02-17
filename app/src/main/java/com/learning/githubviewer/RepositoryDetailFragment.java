@@ -2,7 +2,6 @@ package com.learning.githubviewer;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.learning.githubviewer.domain.RepositoryDetails;
-import com.learning.githubviewer.domain.RepositoryView;
 import com.learning.githubviewer.stub.RepositoryOfRepository;
 
 import java.text.DateFormat;
@@ -22,19 +20,16 @@ import java.text.SimpleDateFormat;
 public class RepositoryDetailFragment extends Fragment {
 
     private Context context;
-    private String repositoryName;
-    private int repositoryId = -1;
+    private String repositoryFullName;
 
     public static final String REPOSITORY_NAME = "githubviewer.repository.name";
-    public static final String REPOSITORY_ID = "githubviewer.repository.id";
 
 
-    public static RepositoryDetailFragment newInstance(RepositoryView view) {
+    public static RepositoryDetailFragment newInstance(String aRepositoryFullName) {
         Log.v("RepositoryDetailsFragment", "Get new fragment instance");
         RepositoryDetailFragment detailFragment = new RepositoryDetailFragment();
         Bundle newFragmentArguments = new Bundle();
-        newFragmentArguments.putString(REPOSITORY_NAME, view.repositoryName);
-        newFragmentArguments.putInt(REPOSITORY_ID, view.id);
+        newFragmentArguments.putString(REPOSITORY_NAME, aRepositoryFullName);
         detailFragment.setArguments(newFragmentArguments);
         return detailFragment;
     }
@@ -56,8 +51,7 @@ public class RepositoryDetailFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(REPOSITORY_NAME, repositoryName);
-        outState.putInt(REPOSITORY_ID, repositoryId);
+        outState.putString(REPOSITORY_NAME, repositoryFullName);
     }
 
     @Override
@@ -65,44 +59,34 @@ public class RepositoryDetailFragment extends Fragment {
         super.onStart();
         Bundle args = getArguments();
         if(args!=null){
-            updateView(args.getString(REPOSITORY_NAME), args.getInt(REPOSITORY_ID));
+            update(args.getString(REPOSITORY_NAME));
         } else {
-            updateView(repositoryName,repositoryId);
+            update(repositoryFullName);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.v("RepositoryDetailsFragment.onCreateView","Create view");
+        Log.v("RepositoryDetailsFragment.onCreateView", "Create view");
         if(savedInstanceState!=null){
-            repositoryName = savedInstanceState.getString(REPOSITORY_NAME);
-            repositoryId = savedInstanceState.getInt(REPOSITORY_ID);
+            repositoryFullName = savedInstanceState.getString(REPOSITORY_NAME);
         }
         return inflater.inflate(R.layout.fragment_repository_detail, container, false);
     }
 
-    public void updateView(RepositoryView repositoryView) {
-        if(repositoryName==null || repositoryId<0){
-            updateView(repositoryView.repositoryName, repositoryView.id);
-        } else if(!repositoryName.equalsIgnoreCase(repositoryView.repositoryName) || repositoryId!=repositoryView.id) {
-            updateView(repositoryView.repositoryName, repositoryView.id);
+    public void updateView(String aRepositoryFullName) {
+        if(aRepositoryFullName!=null && !aRepositoryFullName.equalsIgnoreCase(repositoryFullName)){
+            update(aRepositoryFullName);
         }
     }
 
-    private void updateView(String repositoryName, int id) {
-        this.repositoryName = repositoryName;
-        this.repositoryId = id;
-        RepositoryDetails details = getRepositoryDetails(id);
-        if(details==null){
-            showEmpty();
-        } else {
+    private void update(String aRepositoryFullName) {
+        repositoryFullName = aRepositoryFullName;
+        RepositoryDetails details = getRepositoryDetails(repositoryFullName);
+        if(details!=null){
             showDetails(details);
         }
-    }
-
-    public void showEmpty(){
-
     }
 
     public void showDetails(RepositoryDetails details){
@@ -136,8 +120,8 @@ public class RepositoryDetailFragment extends Fragment {
     }
 
 
-    private RepositoryDetails getRepositoryDetails(int id) {
-        return RepositoryOfRepository.getRepositoryDetail(id);
+    private RepositoryDetails getRepositoryDetails(String repoName) {
+        return RepositoryOfRepository.getRepositoryDetail(repoName);
     }
 
 

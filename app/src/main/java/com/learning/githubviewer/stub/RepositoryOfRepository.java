@@ -14,10 +14,10 @@ public class RepositoryOfRepository {
     public final static RepositoryView[] repositoryViews = RepositotyViewFactory.get(count);
     public final static RepositoryDetails[] repositoryDetailses = RepositoryDetailsFactory.get(count);
 
-    public static RepositoryDetails getRepositoryDetail(int id){
+    public static RepositoryDetails getRepositoryDetail(String name){
         Log.v("RepoOfRepo","Total: views "+repositoryViews.length+" details "+repositoryDetailses.length);
         for(int i=0;i<count;i++){
-            if(repositoryDetailses[i].id==id){
+            if(repositoryDetailses[i].repositoryName.equalsIgnoreCase(name)){
                return repositoryDetailses[i];
             }
         }
