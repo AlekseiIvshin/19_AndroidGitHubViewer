@@ -23,7 +23,7 @@ public class RepositoryDetailFragment extends Fragment {
 
     private Context context;
     private String repositoryName;
-    private int repositoryId;
+    private int repositoryId = -1;
 
     public static final String REPOSITORY_NAME = "githubviewer.repository.name";
     public static final String REPOSITORY_ID = "githubviewer.repository.id";
@@ -83,7 +83,9 @@ public class RepositoryDetailFragment extends Fragment {
     }
 
     public void updateView(RepositoryView repositoryView) {
-        if(!repositoryName.equalsIgnoreCase(repositoryView.repositoryName) || repositoryId!=repositoryView.id) {
+        if(repositoryName==null || repositoryId<0){
+            updateView(repositoryView.repositoryName, repositoryView.id);
+        } else if(!repositoryName.equalsIgnoreCase(repositoryView.repositoryName) || repositoryId!=repositoryView.id) {
             updateView(repositoryView.repositoryName, repositoryView.id);
         }
     }
@@ -93,25 +95,33 @@ public class RepositoryDetailFragment extends Fragment {
         this.repositoryId = id;
         RepositoryDetails details = getRepositoryDetails(id);
         if(details==null){
-            Log.v("RepositoryDetailsFragment.updateView","Details for id ="+id+" not found");
-            return;
+            showEmpty();
+        } else {
+            showDetails(details);
         }
+    }
+
+    public void showEmpty(){
+
+    }
+
+    public void showDetails(RepositoryDetails details){
         MainActivity activity = (MainActivity) context;
 
-//        ImageView ownerAvatar = (ImageView) activity.findViewById(R.id.ownerAvatar);
-//        if (details.owner != null) {
-//            if (details.owner.avatarUri == null) {
-//                ownerAvatar.setImageResource(R.drawable.github_mark);
-//            } else {
-//                ownerAvatar.setImageURI(Uri.parse(details.owner.avatarUri));
-//            }
-//        }
+        ImageView ownerAvatar = (ImageView) activity.findViewById(R.id.ownerAvatar);
+        TextView ownerLogin = (TextView) activity.findViewById(R.id.ownerLogin);
+        if (details.owner != null) {
+            ownerLogin.setText(details.owner.login);
+
+            // TODO: its stub for avatar. Some wrong: image not scaled to need sizes
+            ownerAvatar.setImageResource(R.drawable.github_mark);
+        }
 
         TextView repoName = (TextView) activity.findViewById(R.id.repoFullName);
         repoName.setText(details.repositoryName);
 
-        TextView stargazersCount = (TextView) activity.findViewById(R.id.repoStars);
-        stargazersCount.setText(details.stargazersCount + "");
+        TextView repoStars = (TextView) activity.findViewById(R.id.repoStars);
+        repoStars.setText(details.stargazersCount + "");
 
         DateFormat dateFormat = new SimpleDateFormat(getResources().getString(R.string.dateFormat));
 
@@ -121,16 +131,10 @@ public class RepositoryDetailFragment extends Fragment {
         TextView repositoryLanguage = (TextView) activity.findViewById(R.id.repoLanguage);
         repositoryLanguage.setText(details.language);
 
-        TextView ownerLogin = (TextView) activity.findViewById(R.id.ownerLogin);
-        ownerLogin.setText(details.owner.login);
-
-        TextView ownerUrl = (TextView) activity.findViewById(R.id.ownerUrl);
-        if (details.owner.ownerUrl == null) {
-            ownerUrl.setText("-");
-        } else {
-            ownerUrl.setText(details.owner.ownerUrl);
-        }
+        TextView repoDescription = (TextView)activity.findViewById(R.id.repoDescription);
+        repoDescription.setText(details.description);
     }
+
 
     private RepositoryDetails getRepositoryDetails(int id) {
         return RepositoryOfRepository.getRepositoryDetail(id);

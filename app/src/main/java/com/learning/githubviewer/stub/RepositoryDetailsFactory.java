@@ -9,7 +9,7 @@ import java.util.Random;
  * Created by Aleksei_Ivshin on 13/02/2015.
  */
 public class RepositoryDetailsFactory {
-    private static final String REPONAME="RepositoryName ";
+    private static final String REPONAME="OwnerLoginName/RepositoryName";
     private static final String FULL_REPONAME="Full RepositoryName ";
     private static final String REPOURL="http://localhost:81/repository";
     private static final String AVATAR_URL="http://localhost:81/users/avatar";

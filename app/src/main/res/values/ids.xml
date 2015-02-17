@@ -14,7 +14,13 @@
     <item name="ownerLogin" type="id"/>
     <item name="ownerAvatar" type="id"/>
     <item name="ownerUrl" type="id"/>
+    <item name="repoUrl" type="id"/>
     <item name="createdDate" type="id"/>
     <item name="repositoryDetailsFragment" type="id"/>
     <item name="contentFrame" type="id"/>
+
+    <!--Navigation drawer-->
+
+    <!-- TODO: change id to this in drawaer_nav_list_item_style.xml IF to be need to customize listView -->
+    <item name="navDrawerItem" type="id"/>
 </resources>

@@ -1,43 +1,67 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.learning.githubviewer.RepositoryDetailFragment">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@id/repoFullName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.learning.githubviewer.RepositoryDetailFragment">
 
-    <TextView
-        android:id="@id/repoStars"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/ownerAvatar"
+            style="@style/AppTheme.RepositoryDetails.Owner.Avatar"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            tools:src="@drawable/github_mark" />
 
-    <TextView
-        android:id="@id/createdDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@id/ownerLogin"
+            style="@style/AppTheme.RepositoryDetails.Owner.Login"
+            android:layout_toRightOf="@id/ownerAvatar"
+            tools:text="OwnerLogin" />
 
-    <TextView
-        android:id="@id/repoLanguage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@id/repoFullName"
+            style="@style/AppTheme.RepositoryDetails.RepoName"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/ownerAvatar"
+            tools:text="Repository/Full name" />
 
-    <ImageView
-        android:id="@id/ownerAvatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@id/createdDate"
+            style="@style/AppTheme.RepositoryDetails.CreatedDate"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/repoFullName"
+            tools:text="dd/MM/yyyy" />
 
-    <TextView
-        android:id="@id/ownerLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@id/repoLanguage"
+            style="@style/AppTheme.RepositoryDetails.RepoLanguage"
+            android:layout_below="@id/repoFullName"
+            android:layout_toLeftOf="@id/repoStarsImage"
+            tools:text="Language" />
 
-    <TextView
-        android:id="@id/ownerUrl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@id/repoStarsImage"
+            style="@style/AppTheme.RepositoryDetails.StarsImage"
+            android:layout_below="@id/repoFullName"
+            android:layout_toLeftOf="@id/repoStars" />
 
-</LinearLayout>
+        <TextView
+            android:id="@id/repoStars"
+            style="@style/AppTheme.RepositoryDetails.Stars"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/repoFullName"
+            tools:text="NNN" />
+
+        <TextView
+            android:id="@id/repoDescription"
+            style="@style/AppTheme.RepositoryDetails.Description"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/createdDate"
+            tools:text="Redis is an in-memory database that persists on disk. The data model is key-value, but many different kind of values are supported: Strings, Lists, Sets, Sorted Sets, Hashes, HyperLogLogs, Bitmaps." />
+
+    </RelativeLayout>
+
+</ScrollView>

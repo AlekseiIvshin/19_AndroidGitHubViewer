@@ -64,16 +64,12 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
             }
         };
 
-        mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_star);
-        mDrawerToggle.setDrawerIndicatorEnabled(true);
-
-        navigation.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.navigation)));
+        navigation.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_nav_list_item_style, getResources().getStringArray(R.array.navigation)));
 
         drawerLayout.setDrawerListener(mDrawerToggle);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        mDrawerToggle.syncState();
 
         if (findViewById(R.id.contentFrame) != null) {
             if (savedInstanceState != null || mCurrentPos >= 0) {
@@ -117,7 +113,6 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -128,10 +123,8 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
         RepositoryDetailFragment detailFragment =
                 (RepositoryDetailFragment) getSupportFragmentManager().findFragmentById(R.id.repositoryDetailsFragment);
         if (detailFragment != null && mDualPane) {
-            Log.v("MainActivity.OnRepositorySelected", "Details fragment found. Update fragment view.");
             detailFragment.updateView(repositoryView);
         } else {
-            Log.v("MainActivity.OnRepositorySelected", "Details fragment is null. Create new fragment instance.");
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             RepositoryDetailFragment newDetailFragment = RepositoryDetailFragment.newInstance(repositoryView);
             transaction.replace(R.id.contentFrame, newDetailFragment).addToBackStack(null).commit();

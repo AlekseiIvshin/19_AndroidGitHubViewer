@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.RepositoryDetails.Owner.Avatar" parent="Theme.AppCompat">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:maxHeight">@dimen/OwnerAvatarMaxHeight</item>
+        <item name="android:minHeight">@dimen/OwnerAvatarMinHeight</item>
+        <item name="android:maxWidth">@dimen/OwnerAvatarMaxWidth</item>
+        <item name="android:minWidth">@dimen/OwnerAvatarMinWidth</item>
+    </style>
+    <style name="AppTheme.RepositoryDetails.Owner.Login" parent="Theme.AppCompat">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/titleTextSize</item>
+        <item name="android:background">@drawable/repository_list_item</item>
+        <item name="android:padding">@dimen/defaultPadding</item>
+    </style>
+
+    <style name="AppTheme.RepositoryDetails.RepoName" parent="Theme.AppCompat">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/titleTextSize</item>
+        <item name="android:background">@drawable/repository_list_item</item>
+        <item name="android:padding">@dimen/defaultPadding</item>
+    </style>
+
+    <style name="AppTheme.RepositoryDetails.CreatedDate" parent="Theme.AppCompat">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/bodyTextColor</item>
+        <item name="android:layout_marginLeft">@dimen/defaultPadding</item>
+        <item name="android:layout_marginTop">@dimen/defaultPadding</item>
+    </style>
+
+    <style name="AppTheme.RepositoryDetails.Stars" parent="Theme.AppCompat">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">@dimen/defaultPadding</item>
+        <item name="android:layout_marginTop">@dimen/defaultPadding</item>
+    </style>
+
+    <style name="AppTheme.RepositoryDetails.StarsImage" parent="Theme.AppCompat">
+        <item name="android:src">@drawable/ic_star</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/defaultPadding</item>
+    </style>
+
+    <style name="AppTheme.RepositoryDetails.RepoLanguage" parent="Theme.AppCompat">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/mainTextSize</item>
+        <item name="android:layout_marginTop">@dimen/defaultPadding</item>
+    </style>
+
+
+    <style name="AppTheme.RepositoryDetails.Description" parent="Theme.AppCompat">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/mainTextSize</item>
+        <item name="android:layout_marginLeft">@dimen/defaultPadding</item>
+        <item name="android:layout_marginTop">@dimen/defaultPadding</item>
+    </style>
+</resources>
