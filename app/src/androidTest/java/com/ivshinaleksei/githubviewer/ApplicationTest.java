@@ -1,4 +1,4 @@
-package com.learning.githubviewer;
+package com.ivshinaleksei.githubviewer;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

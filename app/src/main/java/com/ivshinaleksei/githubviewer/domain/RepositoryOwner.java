@@ -1,9 +1,4 @@
-package com.learning.githubviewer.domain;
-
-import android.media.Image;
-import android.net.Uri;
-
-import java.net.URI;
+package com.ivshinaleksei.githubviewer.domain;
 
 /**
  * Created by Aleksei_Ivshin on 13/02/2015.
@@ -17,5 +12,14 @@ public class RepositoryOwner {
         this.login = login;
         this.avatarUri = avatarUri;
         this.ownerUrl = url;
+    }
+
+    @Override
+    public String toString() {
+        return "RepositoryOwner{" +
+                "login='" + login + '\'' +
+                ", avatarUri='" + avatarUri + '\'' +
+                ", ownerUrl='" + ownerUrl + '\'' +
+                '}';
     }
 }

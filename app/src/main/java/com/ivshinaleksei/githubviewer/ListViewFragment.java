@@ -1,4 +1,4 @@
-package com.learning.githubviewer;
+package com.ivshinaleksei.githubviewer;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.learning.githubviewer.domain.RepositoryView;
-import com.learning.githubviewer.helpers.RepositoryListViewAdapter;
-import com.learning.githubviewer.stub.RepositoryOfRepository;
+import com.ivshinaleksei.githubviewer.domain.RepositoryView;
+import com.ivshinaleksei.githubviewer.helpers.RepositoryListViewAdapter;
+import com.ivshinaleksei.githubviewer.stub.RepositoryOfRepository;
 
 public class ListViewFragment extends ListFragment {
 

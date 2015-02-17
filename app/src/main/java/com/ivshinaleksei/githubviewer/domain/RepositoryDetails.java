@@ -1,4 +1,4 @@
-package com.learning.githubviewer.domain;
+package com.ivshinaleksei.githubviewer.domain;
 
 import java.util.Date;
 
@@ -17,5 +17,16 @@ public class RepositoryDetails extends RepositoryView {
         this.createdDate = createdDate;
         this.language = language;
         this.fullName = fullName;
+    }
+
+    @Override
+    public String toString() {
+        return "RepositoryDetails{" +
+                super.toString()+
+                "owner=" + owner +
+                ", createdDate=" + createdDate +
+                ", language='" + language + '\'' +
+                ", fullName='" + fullName + '\'' +
+                '}';
     }
 }

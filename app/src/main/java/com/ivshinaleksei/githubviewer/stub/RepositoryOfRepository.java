@@ -1,9 +1,9 @@
-package com.learning.githubviewer.stub;
+package com.ivshinaleksei.githubviewer.stub;
 
 import android.util.Log;
 
-import com.learning.githubviewer.domain.RepositoryDetails;
-import com.learning.githubviewer.domain.RepositoryView;
+import com.ivshinaleksei.githubviewer.domain.RepositoryDetails;
+import com.ivshinaleksei.githubviewer.domain.RepositoryView;
 
 /**
  * Created by Aleksei_Ivshin on 13/02/2015.

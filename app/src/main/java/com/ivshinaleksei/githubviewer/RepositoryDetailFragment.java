@@ -1,4 +1,4 @@
-package com.learning.githubviewer;
+package com.ivshinaleksei.githubviewer;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.learning.githubviewer.domain.RepositoryDetails;
-import com.learning.githubviewer.stub.RepositoryOfRepository;
+import com.ivshinaleksei.githubviewer.domain.RepositoryDetails;
+import com.ivshinaleksei.githubviewer.stub.RepositoryOfRepository;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -68,10 +68,6 @@ public class RepositoryDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.v("RepositoryDetailsFragment.onCreateView", "Create view");
-        if(savedInstanceState!=null){
-            repositoryFullName = savedInstanceState.getString(REPOSITORY_NAME);
-        }
         return inflater.inflate(R.layout.fragment_repository_detail, container, false);
     }
 
@@ -90,6 +86,7 @@ public class RepositoryDetailFragment extends Fragment {
     }
 
     public void showDetails(RepositoryDetails details){
+        Log.v("RDF","ShowDetails: "+details.toString());
         MainActivity activity = (MainActivity) context;
 
         ImageView ownerAvatar = (ImageView) activity.findViewById(R.id.ownerAvatar);

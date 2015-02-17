@@ -1,6 +1,6 @@
-package com.learning.githubviewer.stub;
+package com.ivshinaleksei.githubviewer.stub;
 
-import com.learning.githubviewer.domain.RepositoryOwner;
+import com.ivshinaleksei.githubviewer.domain.RepositoryOwner;
 
 /**
  * Created by Aleksei_Ivshin on 13/02/2015.

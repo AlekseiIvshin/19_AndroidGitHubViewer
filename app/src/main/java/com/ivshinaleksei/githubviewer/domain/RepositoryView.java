@@ -1,4 +1,4 @@
-package com.learning.githubviewer.domain;
+package com.ivshinaleksei.githubviewer.domain;
 
 
 public class RepositoryView {
@@ -25,5 +25,17 @@ public class RepositoryView {
         this.stargazersCount = value.stargazersCount;
         this.description = value.description;
         language = "Language";
+    }
+
+    @Override
+    public String toString() {
+        return "RepositoryView{" +
+                "id=" + id +
+                ", repoUrl='" + repoUrl + '\'' +
+                ", repositoryName='" + repositoryName + '\'' +
+                ", stargazersCount=" + stargazersCount +
+                ", description='" + description + '\'' +
+                ", language='" + language + '\'' +
+                '}';
     }
 }

@@ -1,6 +1,6 @@
-package com.learning.githubviewer.stub;
+package com.ivshinaleksei.githubviewer.stub;
 
-import com.learning.githubviewer.domain.RepositoryView;
+import com.ivshinaleksei.githubviewer.domain.RepositoryView;
 
 public class RepositoryViewBuilder {
 
