@@ -72,14 +72,15 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
         getSupportActionBar().setHomeButtonEnabled(true);
 
         if (findViewById(R.id.contentFrame) != null) {
-            if (savedInstanceState != null || mCurrentPos >= 0) {
+
+            if(mCurrentPos>=0){
                 return;
             }
             ListViewFragment listViewFragment = new ListViewFragment();
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-            transaction.add(R.id.contentFrame, listViewFragment);
+            transaction.replace(R.id.contentFrame, listViewFragment);
             transaction.commit();
         }
     }

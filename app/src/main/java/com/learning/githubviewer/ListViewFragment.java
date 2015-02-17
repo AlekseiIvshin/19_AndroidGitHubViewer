@@ -72,6 +72,9 @@ public class ListViewFragment extends ListFragment {
         mListener.onRepositorySelected(position, adapter.getItem(position));
     }
 
+    public RepositoryView getRepositoryByPosition(int position){
+        return ((RepositoryListViewAdapter) getListAdapter()).getItem(position);
+    }
 
     public interface OnRepositorySelectedListener{
         public void onRepositorySelected(int position, RepositoryView repositoryView);
