@@ -19,7 +19,6 @@ import java.text.SimpleDateFormat;
 
 public class RepositoryDetailFragment extends Fragment {
 
-    private Context context;
     private String repositoryFullName;
 
     public static final String REPOSITORY_NAME = "githubviewer.repository.name";
@@ -32,20 +31,6 @@ public class RepositoryDetailFragment extends Fragment {
         newFragmentArguments.putString(REPOSITORY_NAME, aRepositoryFullName);
         detailFragment.setArguments(newFragmentArguments);
         return detailFragment;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        Log.v("RepositoryDetailsFragment","Attached");
-        super.onAttach(activity);
-        context = activity;
-    }
-
-    @Override
-    public void onDetach() {
-        Log.v("RepositoryDetailsFragment","Detached");
-        super.onDetach();
-        context = null;
     }
 
     @Override
@@ -86,11 +71,8 @@ public class RepositoryDetailFragment extends Fragment {
     }
 
     public void showDetails(RepositoryDetails details){
-        Log.v("RDF","ShowDetails: "+details.toString());
-        MainActivity activity = (MainActivity) context;
-
-        ImageView ownerAvatar = (ImageView) activity.findViewById(R.id.ownerAvatar);
-        TextView ownerLogin = (TextView) activity.findViewById(R.id.ownerLogin);
+        ImageView ownerAvatar = (ImageView) getActivity().findViewById(R.id.ownerAvatar);
+        TextView ownerLogin = (TextView) getActivity().findViewById(R.id.details_ownerLogin);
         if (details.owner != null) {
             ownerLogin.setText(details.owner.login);
 
@@ -98,21 +80,21 @@ public class RepositoryDetailFragment extends Fragment {
             ownerAvatar.setImageResource(R.drawable.github_mark);
         }
 
-        TextView repoName = (TextView) activity.findViewById(R.id.repoFullName);
+        TextView repoName = (TextView) getActivity().findViewById(R.id.details_repoFullName);
         repoName.setText(details.repositoryName);
 
-        TextView repoStars = (TextView) activity.findViewById(R.id.repoStars);
+        TextView repoStars = (TextView) getActivity().findViewById(R.id.details_repoStars);
         repoStars.setText(details.stargazersCount + "");
 
         DateFormat dateFormat = new SimpleDateFormat(getResources().getString(R.string.dateFormat));
 
-        TextView createdDate = (TextView) activity.findViewById(R.id.createdDate);
+        TextView createdDate = (TextView) getActivity().findViewById(R.id.details_createdDate);
         createdDate.setText(dateFormat.format(details.createdDate));
 
-        TextView repositoryLanguage = (TextView) activity.findViewById(R.id.repoLanguage);
+        TextView repositoryLanguage = (TextView) getActivity().findViewById(R.id.details_repoLanguage);
         repositoryLanguage.setText(details.language);
 
-        TextView repoDescription = (TextView)activity.findViewById(R.id.repoDescription);
+        TextView repoDescription = (TextView)getActivity().findViewById(R.id.details_repoDescription);
         repoDescription.setText(details.description);
     }
 

@@ -4,29 +4,29 @@
     style="@style/AppTheme.RepositoryList.Item">
 
     <TextView
-        android:id="@id/repoFullName"
+        android:id="@id/list.item.repoFullName"
         style="@style/AppTheme.RepositoryList.Item.RepoName"
         android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@id/repoLanguage"
+        android:layout_toLeftOf="@id/list.item.repoLanguage"
         tools:text="Repository/Full name"/>
     <TextView
-        android:id="@id/repoLanguage"
+        android:id="@id/list.item.repoLanguage"
         style="@style/AppTheme.RepositoryList.Item.RepoLanguage"
-        android:layout_toLeftOf="@id/repoStarsImage"
+        android:layout_toLeftOf="@id/list.item.repoStarsImage"
         tools:text="Language"/>
     <TextView
-        android:id="@id/repoDescription"
+        android:id="@id/list.item.repoDescription"
         style="@style/AppTheme.RepositoryList.Item.Description"
-        android:layout_below="@id/repoFullName"
+        android:layout_below="@id/list.item.repoFullName"
         android:layout_alignParentLeft="true"
         tools:text="Repository Description DDDDDDDDDDDDDDDD DDDDDEEEEEEEEESCIFOAS FGNAO GSNA"/>
 
     <ImageView
-        android:id="@id/repoStarsImage"
+        android:id="@id/list.item.repoStarsImage"
         style="@style/AppTheme.RepositoryList.Item.StarsImage"
-        android:layout_toLeftOf="@id/repoStars"/>
+        android:layout_toLeftOf="@id/list.item.repoStars"/>
     <TextView
-        android:id="@id/repoStars"
+        android:id="@id/list.item.repoStars"
         style="@style/AppTheme.RepositoryList.Item.Stars"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"

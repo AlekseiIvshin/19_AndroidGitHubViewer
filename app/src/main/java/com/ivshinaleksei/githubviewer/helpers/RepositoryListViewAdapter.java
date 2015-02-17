@@ -27,16 +27,16 @@ public class RepositoryListViewAdapter extends ArrayAdapter<RepositoryView> {
         View rowView = inflater.inflate(R.layout.list_row, parent, false);
 
 
-        TextView repoFullName = (TextView) rowView.findViewById(R.id.repoFullName);
+        TextView repoFullName = (TextView) rowView.findViewById(R.id.list_item_repoFullName);
         repoFullName.setText(values[position].repositoryName);
 
-        TextView repoStars = (TextView) rowView.findViewById(R.id.repoStars);
+        TextView repoStars = (TextView) rowView.findViewById(R.id.list_item_repoStars);
         repoStars.setText(values[position].stargazersCount + "");
 
-        TextView repositoryLanguage = (TextView) rowView.findViewById(R.id.repoLanguage);
+        TextView repositoryLanguage = (TextView) rowView.findViewById(R.id.list_item_repoLanguage);
         repositoryLanguage.setText(values[position].language);
 
-        TextView repoDescription = (TextView) rowView.findViewById(R.id.repoDescription);
+        TextView repoDescription = (TextView) rowView.findViewById(R.id.list_item_repoDescription);
         repoDescription.setText(values[position].description);
 
         return rowView;

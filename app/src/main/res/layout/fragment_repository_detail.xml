@@ -16,50 +16,50 @@
             tools:src="@drawable/github_mark" />
 
         <TextView
-            android:id="@id/ownerLogin"
+            android:id="@id/details.ownerLogin"
             style="@style/AppTheme.RepositoryDetails.Owner.Login"
             android:layout_toRightOf="@id/ownerAvatar"
             tools:text="OwnerLogin" />
 
         <TextView
-            android:id="@id/repoFullName"
+            android:id="@id/details.repoFullName"
             style="@style/AppTheme.RepositoryDetails.RepoName"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/ownerAvatar"
             tools:text="Repository/Full name" />
 
         <TextView
-            android:id="@id/createdDate"
+            android:id="@id/details.createdDate"
             style="@style/AppTheme.RepositoryDetails.CreatedDate"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/repoFullName"
+            android:layout_below="@id/details.repoFullName"
             tools:text="dd/MM/yyyy" />
 
         <TextView
-            android:id="@id/repoLanguage"
+            android:id="@id/details.repoLanguage"
             style="@style/AppTheme.RepositoryDetails.RepoLanguage"
-            android:layout_below="@id/repoFullName"
-            android:layout_toLeftOf="@id/repoStarsImage"
+            android:layout_below="@id/details.repoFullName"
+            android:layout_toLeftOf="@id/details.repoStarsImage"
             tools:text="Language" />
 
         <ImageView
-            android:id="@id/repoStarsImage"
+            android:id="@id/details.repoStarsImage"
             style="@style/AppTheme.RepositoryDetails.StarsImage"
-            android:layout_below="@id/repoFullName"
-            android:layout_toLeftOf="@id/repoStars" />
+            android:layout_below="@id/details.repoFullName"
+            android:layout_toLeftOf="@id/details.repoStars" />
 
         <TextView
-            android:id="@id/repoStars"
+            android:id="@id/details.repoStars"
             style="@style/AppTheme.RepositoryDetails.Stars"
             android:layout_alignParentRight="true"
-            android:layout_below="@id/repoFullName"
+            android:layout_below="@id/details.repoFullName"
             tools:text="NNN" />
 
         <TextView
-            android:id="@id/repoDescription"
+            android:id="@id/details.repoDescription"
             style="@style/AppTheme.RepositoryDetails.Description"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/createdDate"
+            android:layout_below="@id/details.createdDate"
             tools:text="Redis is an in-memory database that persists on disk. The data model is key-value, but many different kind of values are supported: Strings, Lists, Sets, Sorted Sets, Hashes, HyperLogLogs, Bitmaps." />
 
     </RelativeLayout>
