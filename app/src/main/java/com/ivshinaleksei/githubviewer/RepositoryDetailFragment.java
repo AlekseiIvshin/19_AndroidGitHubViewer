@@ -1,7 +1,5 @@
 package com.ivshinaleksei.githubviewer;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,7 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ivshinaleksei.githubviewer.domain.RepositoryDetails;
-import com.ivshinaleksei.githubviewer.stub.RepositoryOfRepository;
+import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
+import com.ivshinaleksei.githubviewer.domain.RepositoryOwner;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -64,43 +63,44 @@ public class RepositoryDetailFragment extends Fragment {
 
     private void update(String aRepositoryFullName) {
         repositoryFullName = aRepositoryFullName;
-        RepositoryDetails details = getRepositoryDetails(repositoryFullName);
+        // TODO: Add getting info from content provider
+        RepositoryFullInfo details = null;
         if(details!=null){
             showDetails(details);
         }
     }
 
-    public void showDetails(RepositoryDetails details){
+    public void showDetails(RepositoryFullInfo details){
+        showOwnerCard((RepositoryOwner)details);
+        showRepositoryCard((RepositoryDetails) details);
+    }
+
+    public void showOwnerCard(RepositoryOwner owner){
         ImageView ownerAvatar = (ImageView) getActivity().findViewById(R.id.ownerAvatar);
         TextView ownerLogin = (TextView) getActivity().findViewById(R.id.details_ownerLogin);
-        if (details.owner != null) {
-            ownerLogin.setText(details.owner.login);
+        ownerLogin.setText(owner.getOwnerLogin());
 
-            // TODO: its stub for avatar. Some wrong: image not scaled to need sizes
-            ownerAvatar.setImageResource(R.drawable.github_mark);
-        }
+        // TODO: its stub for avatar. Some wrong: image not scaled to need sizes
+        ownerAvatar.setImageResource(R.drawable.github_mark);
+    }
 
+    public void showRepositoryCard(RepositoryDetails details){
         TextView repoName = (TextView) getActivity().findViewById(R.id.details_repoFullName);
-        repoName.setText(details.repositoryName);
+        repoName.setText(details.getFullName());
 
         TextView repoStars = (TextView) getActivity().findViewById(R.id.details_repoStars);
-        repoStars.setText(details.stargazersCount + "");
+        repoStars.setText(details.getStargazersCount() + "");
 
         DateFormat dateFormat = new SimpleDateFormat(getResources().getString(R.string.dateFormat));
 
         TextView createdDate = (TextView) getActivity().findViewById(R.id.details_createdDate);
-        createdDate.setText(dateFormat.format(details.createdDate));
+        createdDate.setText(dateFormat.format(details.getCreatedDate()));
 
         TextView repositoryLanguage = (TextView) getActivity().findViewById(R.id.details_repoLanguage);
-        repositoryLanguage.setText(details.language);
+        repositoryLanguage.setText(details.getLanguage());
 
         TextView repoDescription = (TextView)getActivity().findViewById(R.id.details_repoDescription);
-        repoDescription.setText(details.description);
-    }
-
-
-    private RepositoryDetails getRepositoryDetails(String repoName) {
-        return RepositoryOfRepository.getRepositoryDetail(repoName);
+        repoDescription.setText(details.getDescription());
     }
 
 

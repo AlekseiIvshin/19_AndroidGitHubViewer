@@ -3,30 +3,12 @@ package com.ivshinaleksei.githubviewer.domain;
 import java.util.Date;
 
 /**
- * Created by Aleksei_Ivshin on 13/02/2015.
+ * Created by Aleksei_Ivshin on 18/02/2015.
  */
-public class RepositoryDetails extends RepositoryView {
-    public final RepositoryOwner owner;
-    public final Date createdDate;
-    public final String language;
-    public final String fullName;
+public interface RepositoryDetails extends RepositoryPreview {
 
-    public RepositoryDetails(RepositoryView listView, RepositoryOwner owner, Date createdDate, String language, String fullName) {
-        super(listView);
-        this.owner = owner;
-        this.createdDate = createdDate;
-        this.language = language;
-        this.fullName = fullName;
-    }
+    Date getCreatedDate();
+    String getRepositoryUrl();
+    String getDescription();
 
-    @Override
-    public String toString() {
-        return "RepositoryDetails{" +
-                super.toString()+
-                "owner=" + owner +
-                ", createdDate=" + createdDate +
-                ", language='" + language + '\'' +
-                ", fullName='" + fullName + '\'' +
-                '}';
-    }
 }

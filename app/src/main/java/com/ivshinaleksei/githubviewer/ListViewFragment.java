@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.ivshinaleksei.githubviewer.domain.RepositoryView;
 import com.ivshinaleksei.githubviewer.helpers.RepositoryListViewAdapter;
-import com.ivshinaleksei.githubviewer.stub.RepositoryOfRepository;
 
 public class ListViewFragment extends ListFragment {
 
@@ -29,7 +27,7 @@ public class ListViewFragment extends ListFragment {
     }
 
     private ListAdapter getRepositoryAdapter() {
-        return new RepositoryListViewAdapter(this.getView().getContext(), R.layout.list_row, getStubArray());
+        return new RepositoryListViewAdapter(this.getView().getContext(), R.layout.list_row, null/*TODO: Set arrays*/);
     }
 
     @Override
@@ -43,18 +41,11 @@ public class ListViewFragment extends ListFragment {
         }
     }
 
-    private RepositoryView[] getStubArray() {
-        return RepositoryOfRepository.repositoryViews;
-    }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         RepositoryListViewAdapter adapter = (RepositoryListViewAdapter) getListAdapter();
-        mListener.onRepositorySelected(position, adapter.getItem(position).repositoryName);
-    }
-
-    public RepositoryView getRepositoryByPosition(int position) {
-        return ((RepositoryListViewAdapter) getListAdapter()).getItem(position);
+        mListener.onRepositorySelected(position, adapter.getItem(position).getFullName());
     }
 
     public interface OnRepositorySelectedListener {

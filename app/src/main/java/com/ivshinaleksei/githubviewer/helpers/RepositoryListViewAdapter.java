@@ -8,13 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.ivshinaleksei.githubviewer.R;
-import com.ivshinaleksei.githubviewer.domain.RepositoryView;
+import com.ivshinaleksei.githubviewer.domain.RepositoryPreview;
 
-public class RepositoryListViewAdapter extends ArrayAdapter<RepositoryView> {
+public class RepositoryListViewAdapter extends ArrayAdapter<RepositoryPreview> {
     private final Context context;
-    private final RepositoryView[] values;
+    private final RepositoryPreview[] values;
 
-    public RepositoryListViewAdapter(Context context, int textViewResourceId, RepositoryView[] values) {
+    public RepositoryListViewAdapter(Context context, int textViewResourceId, RepositoryPreview[] values) {
         super(context, textViewResourceId, values);
 
         this.context = context;
@@ -28,16 +28,13 @@ public class RepositoryListViewAdapter extends ArrayAdapter<RepositoryView> {
 
 
         TextView repoFullName = (TextView) rowView.findViewById(R.id.list_item_repoFullName);
-        repoFullName.setText(values[position].repositoryName);
+        repoFullName.setText(values[position].getFullName());
 
         TextView repoStars = (TextView) rowView.findViewById(R.id.list_item_repoStars);
-        repoStars.setText(values[position].stargazersCount + "");
+        repoStars.setText(values[position].getStargazersCount() + "");
 
         TextView repositoryLanguage = (TextView) rowView.findViewById(R.id.list_item_repoLanguage);
-        repositoryLanguage.setText(values[position].language);
-
-        TextView repoDescription = (TextView) rowView.findViewById(R.id.list_item_repoDescription);
-        repoDescription.setText(values[position].description);
+        repositoryLanguage.setText(values[position].getLanguage());
 
         return rowView;
     }
