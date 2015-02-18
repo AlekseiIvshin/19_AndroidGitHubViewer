@@ -6,5 +6,7 @@
     <string name="dateFormat">dd.MM.yyyy</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="failure">Failure</string>
+    <string name="success">Success</string>
 
 </resources>

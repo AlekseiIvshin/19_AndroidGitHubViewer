@@ -1,7 +1,12 @@
 package com.ivshinaleksei.githubviewer.domain;
 
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Date;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RepositoryFullInfoImpl implements RepositoryFullInfo {
     private final String fullName;
     private final String language;
@@ -13,6 +18,7 @@ public class RepositoryFullInfoImpl implements RepositoryFullInfo {
     private final String ownerAvatarUrl;
     private final String ownerUrl;
 
+    @JsonCreator
     public RepositoryFullInfoImpl(String fullName, String language, int stargazersCount, Date createdDate, String description, String repositoryUrl, String ownerLogin, String ownerAvatarUrl, String ownerUrl) {
         this.fullName = fullName;
         this.language = language;

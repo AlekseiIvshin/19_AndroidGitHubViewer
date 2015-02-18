@@ -57,7 +57,6 @@ public class ListViewFragment extends ListFragment {
                 mSelectionClause,
                 mSelectionArgs,
                 mSortOrder);
-
     }
 
     @Override

@@ -10,7 +10,7 @@ import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 public class RepositoryOpenHelper extends SQLiteOpenHelper{
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_TABLE_NAME="repositories";
+    public static final String DATABASE_TABLE_NAME="repositories";
     private static final String REPOSITORIES_TABLE_CREATE =
             "create table "+DATABASE_TABLE_NAME+" ("+
                     RepositoryContract.Columns._ID+" INTEGER PRIMARY KEY, " +

@@ -13,6 +13,12 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.ivshinaleksei.githubviewer.network.ReposiotryPreviewListRequest;
+import com.ivshinaleksei.githubviewer.network.RepositoryPreviewRequestListener;
+import com.ivshinaleksei.githubviewer.network.RepositoryService;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.DurationInMillis;
+
 
 public class MainActivity extends ActionBarActivity implements ListViewFragment.OnRepositorySelectedListener {
 
@@ -25,8 +31,10 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     private CharSequence mDrawerTitle;
     private String viewedRepositoryFullName;
 
+    private SpiceManager spiceManager = new SpiceManager(RepositoryService.class);
 
     private ActionBarDrawerToggle mDrawerToggle;
+    private ReposiotryPreviewListRequest reposiotryPreviewListRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,37 +67,12 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
             }
         }
 
+        // TODO: delete "example" stub
+        reposiotryPreviewListRequest = new ReposiotryPreviewListRequest("example");
+
     }
 
-    private void initNavigationDrawer() {
-        mTitle = mDrawerTitle = getTitle();
 
-        ListView navigation = (ListView) findViewById(R.id.leftDrawer);
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-
-        mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                getSupportActionBar().setTitle(mTitle);
-                this.syncState();
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle(mDrawerTitle);
-                this.syncState();
-            }
-        };
-
-        navigation.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_nav_list_item_style, getResources().getStringArray(R.array.navigation)));
-
-        drawerLayout.setDrawerListener(mDrawerToggle);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -97,6 +80,19 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
         mDrawerToggle.syncState();
     }
 
+    @Override
+    protected void onStart() {
+        spiceManager.start(this);
+        super.onStart();
+        Log.v("MainActiviry.onStart","Execute repositoriesPreviews");
+        spiceManager.execute(reposiotryPreviewListRequest,"repositoriesPreviews", DurationInMillis.ONE_MINUTE,new RepositoryPreviewRequestListener());
+    }
+
+    @Override
+    protected void onStop() {
+        spiceManager.shouldStop();
+        super.onStop();
+    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -143,4 +139,35 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void initNavigationDrawer() {
+        mTitle = mDrawerTitle = getTitle();
+
+        ListView navigation = (ListView) findViewById(R.id.leftDrawer);
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                getSupportActionBar().setTitle(mTitle);
+                this.syncState();
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle(mDrawerTitle);
+                this.syncState();
+            }
+        };
+
+        navigation.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_nav_list_item_style, getResources().getStringArray(R.array.navigation)));
+
+        drawerLayout.setDrawerListener(mDrawerToggle);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+    }
+
 }

@@ -50,8 +50,10 @@ public class RepositoryContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        // TODO: Implement this to handle requests to insert a new row.
-        throw new UnsupportedOperationException("Not yet implemented");
+        db = repositoryOpenHelper.getWritableDatabase();
+        db.insert(RepositoryOpenHelper.DATABASE_TABLE_NAME,null,values);
+        // TODO: delete this stub
+        return null;
     }
 
 
