@@ -4,11 +4,14 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.ivshinaleksei.githubviewer.dao.RepositoryOpenHelper;
+
 
 public class RepositoryContentProvider extends ContentProvider {
 
@@ -21,9 +24,10 @@ public class RepositoryContentProvider extends ContentProvider {
 
 
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
     static {
-        sUriMatcher.addURI("com.ivshinaleksei.githubviewer.provider","repositories",REPOSITORY);
-        sUriMatcher.addURI("com.ivshinaleksei.githubviewer.provider","repositories/*",REPOSITORY_FULLNAME);
+        sUriMatcher.addURI("com.ivshinaleksei.githubviewer.provider", "repositories", REPOSITORY);
+        sUriMatcher.addURI("com.ivshinaleksei.githubviewer.provider", "repositories/*", REPOSITORY_FULLNAME);
     }
 
     public RepositoryContentProvider() {
@@ -41,6 +45,7 @@ public class RepositoryContentProvider extends ContentProvider {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
+
     @Override
     public String getType(Uri uri) {
         // TODO: Implement this to handle requests for the MIME type of the data
@@ -51,24 +56,47 @@ public class RepositoryContentProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         db = repositoryOpenHelper.getWritableDatabase();
-        db.insert(RepositoryOpenHelper.DATABASE_TABLE_NAME,null,values);
-        // TODO: delete this stub
-        return null;
+        long _id = db.insert(RepositoryOpenHelper.DATABASE_TABLE_NAME, null, values);
+        return new Uri.Builder().authority(RepositoryContract.AUTHORITY).appendPath(_id + "").build();
     }
 
+    @Override
+    public int bulkInsert(Uri uri, ContentValues[] values) {
+        db = repositoryOpenHelper.getWritableDatabase();
+        int count = 0;
+        // TODO: change to execSQL( many queries)
+        try {
+            db.beginTransaction();
+            for (ContentValues val : values) {
+                long _id = db.insertOrThrow(RepositoryOpenHelper.DATABASE_TABLE_NAME, null, val);
+                if (_id >= 0) {
+                    count++;
+                } else {
+                    Log.v("bulkInsert", "_ID = " + _id);
+                }
+            }
+        } catch (SQLException e) {
+            Log.e("RepositoryContentProvider", e.getMessage());
+        } finally {
+            db.endTransaction();
+        }
+        return count;
+    }
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-
-        switch (sUriMatcher.match(uri)){
+        switch (sUriMatcher.match(uri)) {
             case REPOSITORY:
+                Log.v("RepositoryContentProvider", "Search repositories");
                 db = repositoryOpenHelper.getReadableDatabase();
-                return db.query("repositories",projection,selection,selectionArgs,"","",sortOrder);
-            case REPOSITORY_FULLNAME:
-                db = repositoryOpenHelper.getReadableDatabase();
-                // TODO: change to find by id
-                return db.query("repositories",projection,selection,selectionArgs,"","",sortOrder);
+                Cursor cursor = db.query("repositories", projection, selection, selectionArgs, "", "", sortOrder);
+                Log.v("Query","Cursor.getCount() = "+cursor.getCount());
+                return cursor;
+//            case REPOSITORY_FULLNAME:
+//                db = repositoryOpenHelper.getReadableDatabase();
+//                // TODO: change to find by id
+//                return db.query("repositories",projection,selection,selectionArgs,"","",sortOrder);
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }

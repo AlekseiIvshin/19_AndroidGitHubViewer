@@ -1,12 +1,19 @@
 package com.ivshinaleksei.githubviewer.domain;
 
-// TODO: May be not required
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RepositoryOwnerImpl implements RepositoryOwner {
     private final String login;
     private final String avatarUrl;
     private final String url;
 
-    public RepositoryOwnerImpl(String login, String avatarUrl, String url) {
+    @JsonCreator
+    public RepositoryOwnerImpl(@JsonProperty("login") String login,
+                               @JsonProperty("avatar_url") String avatarUrl,
+                               @JsonProperty("url") String url) {
         this.login = login;
         this.avatarUrl = avatarUrl;
         this.url = url;

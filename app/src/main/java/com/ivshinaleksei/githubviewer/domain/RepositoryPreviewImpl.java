@@ -39,4 +39,13 @@ public class RepositoryPreviewImpl implements RepositoryPreview {
     public int getStargazersCount() {
         return stargazersCount;
     }
+
+    @Override
+    public String toString() {
+        return "RepositoryPreviewImpl{" +
+                "fullName='" + fullName + '\'' +
+                ", language='" + language + '\'' +
+                ", stargazersCount=" + stargazersCount +
+                '}';
+    }
 }

@@ -13,11 +13,14 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.ivshinaleksei.githubviewer.network.ReposiotryPreviewListRequest;
-import com.ivshinaleksei.githubviewer.network.RepositoryPreviewRequestListener;
+import com.ivshinaleksei.githubviewer.network.RepositoryList;
+import com.ivshinaleksei.githubviewer.network.RepositoryListRequest;
+import com.ivshinaleksei.githubviewer.network.RepositoryListRequestListener;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 
 public class MainActivity extends ActionBarActivity implements ListViewFragment.OnRepositorySelectedListener {
@@ -34,7 +37,7 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     private SpiceManager spiceManager = new SpiceManager(RepositoryService.class);
 
     private ActionBarDrawerToggle mDrawerToggle;
-    private ReposiotryPreviewListRequest reposiotryPreviewListRequest;
+    private RepositoryListRequest repositoryListRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +71,7 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
         }
 
         // TODO: delete "example" stub
-        reposiotryPreviewListRequest = new ReposiotryPreviewListRequest("example");
+        repositoryListRequest = new RepositoryListRequest("example");
 
     }
 
@@ -85,7 +88,7 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
         spiceManager.start(this);
         super.onStart();
         Log.v("MainActiviry.onStart","Execute repositoriesPreviews");
-        spiceManager.execute(reposiotryPreviewListRequest,"repositoriesPreviews", DurationInMillis.ONE_MINUTE,new RepositoryPreviewRequestListener());
+        spiceManager.execute(repositoryListRequest,"repositoriesPreviews", DurationInMillis.ONE_MINUTE,new RepositoryListRequestListener(getContentResolver()));
     }
 
     @Override
