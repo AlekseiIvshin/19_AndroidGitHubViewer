@@ -1,4 +1,4 @@
-package com.ivshinaleksei.githubviewer;
+package com.ivshinaleksei.githubviewer.providers;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -77,6 +77,7 @@ public class RepositoryContentProvider extends ContentProvider {
         // TODO: change to execSQL( many queries)
         try {
             db.beginTransaction();
+            db.execSQL("delete from "+RepositoryOpenHelper.REPOSITORY_TABLE_NAME+" where "+RepositoryContract.Columns._ID+">=0");
             for (ContentValues val : values) {
                 long _id = db.insertOrThrow(RepositoryOpenHelper.REPOSITORY_TABLE_NAME, null, val);
                 if (_id >= 0) {
