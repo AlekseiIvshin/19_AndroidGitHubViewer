@@ -8,5 +8,6 @@
     <string name="drawer_close">Close</string>
     <string name="failure">Failure</string>
     <string name="success">Success</string>
+    <string name="action.search">Search the repository</string>
 
 </resources>

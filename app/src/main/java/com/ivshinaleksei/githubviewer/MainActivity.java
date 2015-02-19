@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,8 +75,6 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
                 onRepositorySelected(mCurrentPos, viewedRepositoryFullName);
             }
         }
-
-
     }
 
 
@@ -89,14 +89,7 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     protected void onStart() {
         spiceManager.start(this);
         super.onStart();
-        Log.v("MainActiviry.onStart","Execute repositoriesPreviews");
-
-
-        // TODO: delete "example" stub
-        repositoryListRequest = new RepositoryListRequest("example");
-
-        spiceManager.execute(repositoryListRequest, "repositoriesPreviews", DurationInMillis.ONE_MINUTE, new RepositoryListRequestListener());
-
+        Log.v("MainActiviry.onStart", "Execute repositoriesPreviews");
     }
 
     @Override
@@ -121,6 +114,23 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                if(s.length()>=getResources().getInteger(R.integer.minQueryLength)) {
+                    search(s);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return true;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -147,10 +157,7 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
             return true;
         }
         switch (item.getItemId()){
-            case R.id.action_refresh:{
-                spiceManager.execute(repositoryListRequest, "repositoriesPreviews", DurationInMillis.ONE_MINUTE, new RepositoryListRequestListener());
-                return true;
-            }
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -186,6 +193,13 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
         getSupportActionBar().setHomeButtonEnabled(true);
     }
 
+
+    private void search(String aQuery) {
+        repositoryListRequest = new RepositoryListRequest(aQuery);
+        spiceManager.execute(repositoryListRequest, "repositoriesPreviews", DurationInMillis.ONE_MINUTE, new RepositoryListRequestListener());
+    }
+
+
     public final class RepositoryListRequestListener implements RequestListener<RepositoryList> {
 
         @Override
@@ -205,7 +219,7 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
 
         private ContentValues map(RepositoryFullInfo info){
             ContentValues values = new ContentValues();
-            values.put(RepositoryContract.Columns.FULL_NAME,info.getFullName());
+            values.put(RepositoryContract.Columns.FULL_NAME, info.getFullName());
             values.put(RepositoryContract.Columns.LANGUAGE,info.getLanguage());
             values.put(RepositoryContract.Columns.STARGAZERS_COUNT,info.getStargazersCount());
             values.put(RepositoryContract.Columns.CREATED_DATE,info.getCreatedDate().getTime()/1000);
