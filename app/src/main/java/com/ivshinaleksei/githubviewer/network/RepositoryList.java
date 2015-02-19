@@ -7,5 +7,10 @@ import java.util.ArrayList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RepositoryList {
+
     public ArrayList<RepositoryFullInfoImpl> items;
+
+    public RepositoryList(){
+        items = new ArrayList<>();
+    }
 }

@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
@@ -56,8 +57,17 @@ public class RepositoryContentProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         db = repositoryOpenHelper.getWritableDatabase();
-        long _id = db.insert(RepositoryOpenHelper.DATABASE_TABLE_NAME, null, values);
-        return new Uri.Builder().authority(RepositoryContract.AUTHORITY).appendPath(_id + "").build();
+        long _id;
+        try {
+            db.beginTransaction();
+            _id = db.insert(RepositoryOpenHelper.REPOSITORY_TABLE_NAME, null, values);
+            db.setTransactionSuccessful();
+        }finally {
+            db.endTransaction();
+        }
+        Uri resUri = new Uri.Builder().authority(RepositoryContract.AUTHORITY).appendPath(_id + "").build();
+        getContext().getContentResolver().notifyChange(resUri,null);
+        return resUri;
     }
 
     @Override
@@ -68,18 +78,20 @@ public class RepositoryContentProvider extends ContentProvider {
         try {
             db.beginTransaction();
             for (ContentValues val : values) {
-                long _id = db.insertOrThrow(RepositoryOpenHelper.DATABASE_TABLE_NAME, null, val);
+                long _id = db.insertOrThrow(RepositoryOpenHelper.REPOSITORY_TABLE_NAME, null, val);
                 if (_id >= 0) {
                     count++;
                 } else {
                     Log.v("bulkInsert", "_ID = " + _id);
                 }
             }
+            db.setTransactionSuccessful();
         } catch (SQLException e) {
             Log.e("RepositoryContentProvider", e.getMessage());
         } finally {
             db.endTransaction();
         }
+        getContext().getContentResolver().notifyChange(RepositoryContract.CONTENT_URI,null);
         return count;
     }
 
@@ -88,10 +100,9 @@ public class RepositoryContentProvider extends ContentProvider {
                         String[] selectionArgs, String sortOrder) {
         switch (sUriMatcher.match(uri)) {
             case REPOSITORY:
-                Log.v("RepositoryContentProvider", "Search repositories");
                 db = repositoryOpenHelper.getReadableDatabase();
-                Cursor cursor = db.query("repositories", projection, selection, selectionArgs, "", "", sortOrder);
-                Log.v("Query","Cursor.getCount() = "+cursor.getCount());
+                Cursor cursor = db.query(RepositoryOpenHelper.REPOSITORY_TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                cursor.setNotificationUri(getContext().getContentResolver(),RepositoryContract.CONTENT_URI);
                 return cursor;
 //            case REPOSITORY_FULLNAME:
 //                db = repositoryOpenHelper.getReadableDatabase();

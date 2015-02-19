@@ -1,5 +1,7 @@
 package com.ivshinaleksei.githubviewer;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -12,10 +14,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
+import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
+import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
 import com.ivshinaleksei.githubviewer.network.RepositoryList;
 import com.ivshinaleksei.githubviewer.network.RepositoryListRequest;
-import com.ivshinaleksei.githubviewer.network.RepositoryListRequestListener;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -23,7 +27,7 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 
-public class MainActivity extends ActionBarActivity implements ListViewFragment.OnRepositorySelectedListener {
+public class MainActivity extends ActionBarActivity implements ListViewFragment.OnRepositorySelectedListener{
 
     private static final String CURRENT_POSITION = "githubviewer.list.currentposition";
     private static final String REPOSITORY_FULL_NAME = "githubviewer.list.repository.fullname";
@@ -33,11 +37,11 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     private CharSequence mTitle;
     private CharSequence mDrawerTitle;
     private String viewedRepositoryFullName;
+    private RepositoryListRequest repositoryListRequest;
 
     private SpiceManager spiceManager = new SpiceManager(RepositoryService.class);
 
     private ActionBarDrawerToggle mDrawerToggle;
-    private RepositoryListRequest repositoryListRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +74,6 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
             }
         }
 
-        // TODO: delete "example" stub
-        repositoryListRequest = new RepositoryListRequest("example");
 
     }
 
@@ -88,7 +90,13 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
         spiceManager.start(this);
         super.onStart();
         Log.v("MainActiviry.onStart","Execute repositoriesPreviews");
-        spiceManager.execute(repositoryListRequest,"repositoriesPreviews", DurationInMillis.ONE_MINUTE,new RepositoryListRequestListener(getContentResolver()));
+
+
+        // TODO: delete "example" stub
+        repositoryListRequest = new RepositoryListRequest("example");
+
+        spiceManager.execute(repositoryListRequest, "repositoriesPreviews", DurationInMillis.ONE_MINUTE, new RepositoryListRequestListener());
+
     }
 
     @Override
@@ -113,7 +121,7 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -138,7 +146,12 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        // Handle your other action bar items...
+        switch (item.getItemId()){
+            case R.id.action_refresh:{
+                spiceManager.execute(repositoryListRequest, "repositoriesPreviews", DurationInMillis.ONE_MINUTE, new RepositoryListRequestListener());
+                return true;
+            }
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -173,4 +186,35 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
         getSupportActionBar().setHomeButtonEnabled(true);
     }
 
+    public final class RepositoryListRequestListener implements RequestListener<RepositoryList> {
+
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            Log.v("RepositoryPreviewRequestListener", "Failure");
+        }
+
+        @Override
+        public void onRequestSuccess(RepositoryList repositoryPreviews) {
+            ContentValues[] data = new ContentValues[repositoryPreviews.items.size()];
+            for(int i = 0;i<data.length;i++){
+                data[i]=map(repositoryPreviews.items.get(i));
+            }
+
+            int count = MainActivity.this.getContentResolver().bulkInsert(RepositoryContract.CONTENT_URI,data);
+        }
+
+        private ContentValues map(RepositoryFullInfo info){
+            ContentValues values = new ContentValues();
+            values.put(RepositoryContract.Columns.FULL_NAME,info.getFullName());
+            values.put(RepositoryContract.Columns.LANGUAGE,info.getLanguage());
+            values.put(RepositoryContract.Columns.STARGAZERS_COUNT,info.getStargazersCount());
+            values.put(RepositoryContract.Columns.CREATED_DATE,info.getCreatedDate().getTime()/1000);
+            values.put(RepositoryContract.Columns.DESCRIPTION,info.getDescription());
+            values.put(RepositoryContract.Columns.REPOSITORY_URL,info.getRepositoryUrl());
+            values.put(RepositoryContract.Columns.OWNER_LOGIN,info.getOwner().getOwnerLogin());
+            values.put(RepositoryContract.Columns.OWNER_AVATAR_URL,info.getOwner().getOwnerAvatarUrl());
+            values.put(RepositoryContract.Columns.OWNER_URL,info.getOwner().getOwnerUrl());
+            return values;
+        }
+    }
 }

@@ -1,12 +1,8 @@
 package com.ivshinaleksei.githubviewer.network;
 
-import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfoImpl;
 import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 
-/**
- * Created by Aleksei_Ivshin on 18/02/2015.
- */
-public class RepositoryListRequest extends RetrofitSpiceRequest<RepositoryList,GitHub> {
+public class RepositoryListRequest extends RetrofitSpiceRequest<RepositoryList, GitHub> {
     private final String query;
 
     public RepositoryListRequest(String aQuery) {

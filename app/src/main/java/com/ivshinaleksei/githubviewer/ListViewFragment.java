@@ -1,35 +1,41 @@
 package com.ivshinaleksei.githubviewer;
 
 import android.app.Activity;
+import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
+import com.ivshinaleksei.githubviewer.dao.RepositoryOpenHelper;
+import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
+import com.ivshinaleksei.githubviewer.network.RepositoryList;
+import com.ivshinaleksei.githubviewer.network.RepositoryListRequest;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.DurationInMillis;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 public class ListViewFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
-    private final int LOADER_ID = 0;
+    public static final int LOADER_ID = 0;
     private OnRepositorySelectedListener mListener;
     private SimpleCursorAdapter mCursorAdapter;
-    private CursorLoader cursorLoader;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        getLoaderManager().initLoader(LOADER_ID,null,this);
 
         String[] mWordListColumns =
                 {
@@ -51,6 +57,7 @@ public class ListViewFragment extends ListFragment implements LoaderManager.Load
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        getLoaderManager().initLoader(LOADER_ID,null,this);
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
@@ -106,4 +113,6 @@ public class ListViewFragment extends ListFragment implements LoaderManager.Load
     public interface OnRepositorySelectedListener {
         public void onRepositorySelected(int position, String repositoryFullName);
     }
+
+
 }
