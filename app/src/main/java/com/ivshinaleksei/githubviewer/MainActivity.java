@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,6 +21,7 @@ import android.widget.SimpleAdapter;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
+import com.ivshinaleksei.githubviewer.domain.impl.RepositoryCursorMapper;
 import com.ivshinaleksei.githubviewer.network.RepositoryList;
 import com.ivshinaleksei.githubviewer.network.RepositoryListRequest;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
@@ -36,10 +38,13 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
 
     private boolean mDualPane;
     private int mCurrentPos = -1;
+    private long mCurrentId = -1;
     private CharSequence mTitle;
     private CharSequence mDrawerTitle;
     private String viewedRepositoryFullName;
     private RepositoryListRequest repositoryListRequest;
+
+    private RepositoryCursorMapper repositoryCursorMapper = new RepositoryCursorMapper();
 
     private SpiceManager spiceManager = new SpiceManager(RepositoryService.class);
 
@@ -67,14 +72,14 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
             }
         }
 
-        if(savedInstanceState!=null) {
-            mCurrentPos = savedInstanceState.getInt(CURRENT_POSITION);
-            viewedRepositoryFullName = savedInstanceState.getString(REPOSITORY_FULL_NAME);
-            Log.v("MainActivity.OnCreate", "CurPosition=" + mCurrentPos + "; repoName=" + viewedRepositoryFullName);
-            if(viewedRepositoryFullName!=null && mCurrentPos>=0){
-                onRepositorySelected(mCurrentPos, viewedRepositoryFullName);
-            }
-        }
+//        if(savedInstanceState!=null) {
+//            mCurrentPos = savedInstanceState.getInt(CURRENT_POSITION);
+//            viewedRepositoryFullName = savedInstanceState.getString(REPOSITORY_FULL_NAME);
+//            Log.v("MainActivity.OnCreate", "CurPosition=" + mCurrentPos + "; repoName=" + viewedRepositoryFullName);
+//            if(viewedRepositoryFullName!=null && mCurrentPos>=0){
+//                onRepositorySelected(mCurrentPos, viewedRepositoryFullName);
+//            }
+//        }
     }
 
 
@@ -119,9 +124,10 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String s) {
-                if(s.length()>=getResources().getInteger(R.integer.minQueryLength)) {
-                    search(s);
+            public boolean onQueryTextSubmit(String aQuery) {
+                if(aQuery.length()>=getResources().getInteger(R.integer.minQueryLength)) {
+                    repositoryListRequest = new RepositoryListRequest(aQuery);
+                    spiceManager.execute(repositoryListRequest, "repositoriesPreviews", DurationInMillis.ONE_MINUTE, new RepositoryListRequestListener());
                 }
                 return true;
             }
@@ -135,17 +141,16 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     }
 
     @Override
-    public void onRepositorySelected(int position, String aRepositoryFullName) {
-        Log.v("MainActivity.onRepositorySelected", "CurPosition=" + mCurrentPos + "; repoName=" + viewedRepositoryFullName);
+    public void onRepositorySelected(int position,long id, Parcel aRepository) {
         mCurrentPos = position;
-        viewedRepositoryFullName = aRepositoryFullName;
+        mCurrentId = id;
         RepositoryDetailFragment detailFragment =
                 (RepositoryDetailFragment) getSupportFragmentManager().findFragmentById(R.id.repositoryDetailsFragment);
         if (detailFragment != null && mDualPane) {
-            detailFragment.updateView(viewedRepositoryFullName);
+            detailFragment.updateView(aRepository);
         } else {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            RepositoryDetailFragment newDetailFragment = RepositoryDetailFragment.newInstance(viewedRepositoryFullName);
+            RepositoryDetailFragment newDetailFragment = RepositoryDetailFragment.newInstance(aRepository);
             transaction.replace(R.id.contentFrame, newDetailFragment).addToBackStack(null).commit();
 
         }
@@ -156,10 +161,6 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        switch (item.getItemId()){
-
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -194,41 +195,22 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     }
 
 
-    private void search(String aQuery) {
-        repositoryListRequest = new RepositoryListRequest(aQuery);
-        spiceManager.execute(repositoryListRequest, "repositoriesPreviews", DurationInMillis.ONE_MINUTE, new RepositoryListRequestListener());
-    }
-
-
     public final class RepositoryListRequestListener implements RequestListener<RepositoryList> {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
             Log.v("RepositoryPreviewRequestListener", "Failure");
+            // TODO: add failure info
         }
 
         @Override
         public void onRequestSuccess(RepositoryList repositoryPreviews) {
             ContentValues[] data = new ContentValues[repositoryPreviews.items.size()];
             for(int i = 0;i<data.length;i++){
-                data[i]=map(repositoryPreviews.items.get(i));
+                data[i]=repositoryCursorMapper.marshalling(repositoryPreviews.items.get(i));
             }
-
-            int count = MainActivity.this.getContentResolver().bulkInsert(RepositoryContract.CONTENT_URI,data);
-        }
-
-        private ContentValues map(RepositoryFullInfo info){
-            ContentValues values = new ContentValues();
-            values.put(RepositoryContract.Columns.FULL_NAME, info.getFullName());
-            values.put(RepositoryContract.Columns.LANGUAGE,info.getLanguage());
-            values.put(RepositoryContract.Columns.STARGAZERS_COUNT,info.getStargazersCount());
-            values.put(RepositoryContract.Columns.CREATED_DATE,info.getCreatedDate().getTime()/1000);
-            values.put(RepositoryContract.Columns.DESCRIPTION,info.getDescription());
-            values.put(RepositoryContract.Columns.REPOSITORY_URL,info.getRepositoryUrl());
-            values.put(RepositoryContract.Columns.OWNER_LOGIN,info.getOwner().getOwnerLogin());
-            values.put(RepositoryContract.Columns.OWNER_AVATAR_URL,info.getOwner().getOwnerAvatarUrl());
-            values.put(RepositoryContract.Columns.OWNER_URL,info.getOwner().getOwnerUrl());
-            return values;
+            MainActivity.this.getContentResolver().bulkInsert(RepositoryContract.CONTENT_URI,data);
+            // TODO: add success info
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.ivshinaleksei.githubviewer.network;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfoImpl;
+import com.ivshinaleksei.githubviewer.domain.impl.RepositoryFullInfoImpl;
 
 import java.util.ArrayList;
 

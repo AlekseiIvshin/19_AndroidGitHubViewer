@@ -2,10 +2,10 @@ package com.ivshinaleksei.githubviewer;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.database.DatabaseUtils;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -18,20 +18,32 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
-import com.ivshinaleksei.githubviewer.dao.RepositoryOpenHelper;
 import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
-import com.ivshinaleksei.githubviewer.network.RepositoryList;
-import com.ivshinaleksei.githubviewer.network.RepositoryListRequest;
-import com.octo.android.robospice.SpiceManager;
-import com.octo.android.robospice.persistence.DurationInMillis;
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
+import com.ivshinaleksei.githubviewer.domain.impl.RepositoryCursorMapper;
 
-public class ListViewFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class ListViewFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int LOADER_ID = 0;
+    public static final String[] mProjection =
+            {
+                    RepositoryContract.Columns._ID,
+                    RepositoryContract.Columns.FULL_NAME,
+                    RepositoryContract.Columns.LANGUAGE,
+                    RepositoryContract.Columns.STARGAZERS_COUNT,
+                    RepositoryContract.Columns.CREATED_DATE,
+                    RepositoryContract.Columns.DESCRIPTION,
+                    RepositoryContract.Columns.REPOSITORY_URL,
+                    RepositoryContract.Columns.OWNER_LOGIN,
+                    RepositoryContract.Columns.OWNER_AVATAR_URL,
+                    RepositoryContract.Columns.OWNER_URL
+            };
+
     private OnRepositorySelectedListener mListener;
     private SimpleCursorAdapter mCursorAdapter;
+
+    private RepositoryCursorMapper repositoryCursorMapper = new RepositoryCursorMapper();
+
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -57,7 +69,7 @@ public class ListViewFragment extends ListFragment implements LoaderManager.Load
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getLoaderManager().initLoader(LOADER_ID,null,this);
+        getLoaderManager().initLoader(LOADER_ID, null, this);
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
@@ -76,26 +88,30 @@ public class ListViewFragment extends ListFragment implements LoaderManager.Load
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         // TODO: Stub. Set repository full name from anywhere
-        mListener.onRepositorySelected(position, "");
+        Cursor cursor = (Cursor) getListView().getItemAtPosition(position);
+        ContentValues values = new ContentValues();
+        DatabaseUtils.cursorRowToContentValues(cursor,values);
+        RepositoryFullInfo repositoryFullInfo = repositoryCursorMapper.get(cursor,values);
+        Log.v("onListItemClick", "CLicked at " + position);
+        if(repositoryFullInfo != null){
+            Parcel parcel = Parcel.obtain();
+            repositoryFullInfo.writeToParcel(parcel,0);
+            mListener.onRepositorySelected(position,id,parcel);
+        }
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id){
+        switch (id) {
             case LOADER_ID:
-                String[] mProjection =
-                        {
-                                RepositoryContract.Columns._ID,
-                                RepositoryContract.Columns.FULL_NAME,
-                                RepositoryContract.Columns.LANGUAGE,
-                                RepositoryContract.Columns.STARGAZERS_COUNT
-                        };
-                    return new CursorLoader(
+
+                return new CursorLoader(
                         getActivity(),
                         RepositoryContract.CONTENT_URI,
                         mProjection,
-                        null,null,null);
-            default:return null;
+                        null, null, null);
+            default:
+                return null;
         }
     }
 
@@ -111,7 +127,7 @@ public class ListViewFragment extends ListFragment implements LoaderManager.Load
 
 
     public interface OnRepositorySelectedListener {
-        public void onRepositorySelected(int position, String repositoryFullName);
+        public void onRepositorySelected(int position, long id, Parcel data);
     }
 
 

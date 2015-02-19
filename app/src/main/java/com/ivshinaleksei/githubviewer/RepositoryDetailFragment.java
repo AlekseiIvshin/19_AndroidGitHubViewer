@@ -1,6 +1,7 @@
 package com.ivshinaleksei.githubviewer;
 
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.ivshinaleksei.githubviewer.domain.RepositoryDetails;
 import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
+import com.ivshinaleksei.githubviewer.domain.impl.RepositoryFullInfoImpl;
 import com.ivshinaleksei.githubviewer.domain.RepositoryOwner;
 
 import java.text.DateFormat;
@@ -18,35 +20,10 @@ import java.text.SimpleDateFormat;
 
 public class RepositoryDetailFragment extends Fragment {
 
-    private String repositoryFullName;
-
-    public static final String REPOSITORY_NAME = "githubviewer.repository.name";
-
-
-    public static RepositoryDetailFragment newInstance(String aRepositoryFullName) {
-        Log.v("RepositoryDetailsFragment", "Get new fragment instance");
+    public static RepositoryDetailFragment newInstance(Parcel aRepository) {
         RepositoryDetailFragment detailFragment = new RepositoryDetailFragment();
-        Bundle newFragmentArguments = new Bundle();
-        newFragmentArguments.putString(REPOSITORY_NAME, aRepositoryFullName);
-        detailFragment.setArguments(newFragmentArguments);
+        detailFragment.updateView(aRepository);
         return detailFragment;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(REPOSITORY_NAME, repositoryFullName);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Bundle args = getArguments();
-        if(args!=null){
-            update(args.getString(REPOSITORY_NAME));
-        } else {
-            update(repositoryFullName);
-        }
     }
 
     @Override
@@ -55,24 +32,16 @@ public class RepositoryDetailFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_repository_detail, container, false);
     }
 
-    public void updateView(String aRepositoryFullName) {
-        if(aRepositoryFullName!=null && !aRepositoryFullName.equalsIgnoreCase(repositoryFullName)){
-            update(aRepositoryFullName);
-        }
-    }
-
-    private void update(String aRepositoryFullName) {
-        repositoryFullName = aRepositoryFullName;
-        // TODO: Add getting info from content provider
-        RepositoryFullInfo details = null;
-        if(details!=null){
-            showDetails(details);
+    public void updateView(Parcel aRepository) {
+        if(aRepository!=null){
+            RepositoryFullInfo transported = RepositoryFullInfoImpl.CREATOR.createFromParcel(aRepository);
+            showDetails(transported);
         }
     }
 
     public void showDetails(RepositoryFullInfo details){
-        showOwnerCard((RepositoryOwner)details);
-        showRepositoryCard((RepositoryDetails) details);
+        showOwnerCard(details.getOwner());
+        showRepositoryCard(details);
     }
 
     public void showOwnerCard(RepositoryOwner owner){
@@ -102,7 +71,6 @@ public class RepositoryDetailFragment extends Fragment {
         TextView repoDescription = (TextView)getActivity().findViewById(R.id.details_repoDescription);
         repoDescription.setText(details.getDescription());
     }
-
 
 
 }
