@@ -20,10 +20,24 @@ import java.text.SimpleDateFormat;
 
 public class RepositoryDetailFragment extends Fragment {
 
-    public static RepositoryDetailFragment newInstance(Parcel aRepository) {
+    private static final String REPOSIOTRY_DETAILS = "com.ivshinaleksei.githubviewer.repository.details";
+
+    public static RepositoryDetailFragment newInstance(RepositoryFullInfoImpl aRepository) {
         RepositoryDetailFragment detailFragment = new RepositoryDetailFragment();
-        detailFragment.updateView(aRepository);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(REPOSIOTRY_DETAILS,aRepository);
+        detailFragment.setArguments(bundle);
         return detailFragment;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(getArguments()!=null)
+        {
+            RepositoryFullInfoImpl info = getArguments().getParcelable(REPOSIOTRY_DETAILS);
+            updateView(info);
+        }
     }
 
     @Override
@@ -32,20 +46,13 @@ public class RepositoryDetailFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_repository_detail, container, false);
     }
 
-    public void updateView(Parcel aRepository) {
-        if(aRepository!=null){
-            RepositoryFullInfo transported = RepositoryFullInfoImpl.CREATOR.createFromParcel(aRepository);
-            showDetails(transported);
-        }
-    }
-
-    public void showDetails(RepositoryFullInfo details){
+    public void updateView(RepositoryFullInfo details){
         showOwnerCard(details.getOwner());
         showRepositoryCard(details);
     }
 
     public void showOwnerCard(RepositoryOwner owner){
-        ImageView ownerAvatar = (ImageView) getActivity().findViewById(R.id.ownerAvatar);
+        ImageView ownerAvatar = (ImageView) getActivity().findViewById(R.id.details_ownerAvatar);
         TextView ownerLogin = (TextView) getActivity().findViewById(R.id.details_ownerLogin);
         ownerLogin.setText(owner.getOwnerLogin());
 

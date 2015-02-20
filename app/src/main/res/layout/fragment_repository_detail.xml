@@ -9,7 +9,7 @@
         tools:context="com.ivshinaleksei.githubviewer.RepositoryDetailFragment">
 
         <ImageView
-            android:id="@+id/ownerAvatar"
+            android:id="@id/details.ownerAvatar"
             style="@style/AppTheme.RepositoryDetails.Owner.Avatar"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
@@ -18,14 +18,14 @@
         <TextView
             android:id="@id/details.ownerLogin"
             style="@style/AppTheme.RepositoryDetails.Owner.Login"
-            android:layout_toRightOf="@id/ownerAvatar"
+            android:layout_toRightOf="@id/details.ownerAvatar"
             tools:text="OwnerLogin" />
 
         <TextView
             android:id="@id/details.repoFullName"
             style="@style/AppTheme.RepositoryDetails.RepoName"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/ownerAvatar"
+            android:layout_below="@id/details.ownerAvatar"
             tools:text="Repository/Full name" />
 
         <TextView

@@ -22,6 +22,7 @@ import android.widget.SimpleAdapter;
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
 import com.ivshinaleksei.githubviewer.domain.impl.RepositoryCursorMapper;
+import com.ivshinaleksei.githubviewer.domain.impl.RepositoryFullInfoImpl;
 import com.ivshinaleksei.githubviewer.network.RepositoryList;
 import com.ivshinaleksei.githubviewer.network.RepositoryListRequest;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
@@ -141,7 +142,7 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     }
 
     @Override
-    public void onRepositorySelected(int position,long id, Parcel aRepository) {
+    public void onRepositorySelected(int position,long id, RepositoryFullInfoImpl aRepository) {
         mCurrentPos = position;
         mCurrentId = id;
         RepositoryDetailFragment detailFragment =

@@ -20,6 +20,7 @@ import android.widget.ListView;
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
 import com.ivshinaleksei.githubviewer.domain.impl.RepositoryCursorMapper;
+import com.ivshinaleksei.githubviewer.domain.impl.RepositoryFullInfoImpl;
 
 public class ListViewFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -91,12 +92,10 @@ public class ListViewFragment extends ListFragment implements LoaderManager.Load
         Cursor cursor = (Cursor) getListView().getItemAtPosition(position);
         ContentValues values = new ContentValues();
         DatabaseUtils.cursorRowToContentValues(cursor,values);
-        RepositoryFullInfo repositoryFullInfo = repositoryCursorMapper.get(cursor,values);
+        RepositoryFullInfoImpl repositoryFullInfo = repositoryCursorMapper.get(cursor,values);
         Log.v("onListItemClick", "CLicked at " + position);
         if(repositoryFullInfo != null){
-            Parcel parcel = Parcel.obtain();
-            repositoryFullInfo.writeToParcel(parcel,0);
-            mListener.onRepositorySelected(position,id,parcel);
+            mListener.onRepositorySelected(position,id,repositoryFullInfo);
         }
     }
 
@@ -127,7 +126,7 @@ public class ListViewFragment extends ListFragment implements LoaderManager.Load
 
 
     public interface OnRepositorySelectedListener {
-        public void onRepositorySelected(int position, long id, Parcel data);
+        public void onRepositorySelected(int position, long id, RepositoryFullInfoImpl data);
     }
 
 

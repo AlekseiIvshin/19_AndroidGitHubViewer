@@ -14,9 +14,9 @@ import java.util.Date;
 /**
  * Created by Aleksei_Ivshin on 19/02/2015.
  */
-public class RepositoryCursorMapper implements CursorMapper<RepositoryFullInfo> {
+public class RepositoryCursorMapper implements CursorMapper<RepositoryFullInfoImpl> {
     @Override
-    public RepositoryFullInfo get(Cursor cursor,ContentValues values) {
+    public RepositoryFullInfoImpl get(Cursor cursor,ContentValues values) {
         String login = values.getAsString(RepositoryContract.Columns.OWNER_LOGIN);
         String avatarUrl = values.getAsString(RepositoryContract.Columns.OWNER_AVATAR_URL);
         String ownerUrl = values.getAsString(RepositoryContract.Columns.OWNER_URL);
@@ -31,7 +31,7 @@ public class RepositoryCursorMapper implements CursorMapper<RepositoryFullInfo> 
     }
 
     @Override
-    public ContentValues marshalling(RepositoryFullInfo value) {
+    public ContentValues marshalling(RepositoryFullInfoImpl value) {
         ContentValues values = new ContentValues();
         values.put(RepositoryContract.Columns.FULL_NAME, value.getFullName());
         values.put(RepositoryContract.Columns.LANGUAGE,value.getLanguage());
