@@ -1,11 +1,11 @@
 package com.ivshinaleksei.githubviewer;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.util.LruCache;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -17,10 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
-import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
 import com.ivshinaleksei.githubviewer.domain.impl.RepositoryCursorMapper;
 import com.ivshinaleksei.githubviewer.domain.impl.RepositoryFullInfoImpl;
 import com.ivshinaleksei.githubviewer.network.RepositoryList;
@@ -30,19 +28,20 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.squareup.okhttp.internal.DiskLruCache;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity implements ListViewFragment.OnRepositorySelectedListener{
 
     private static final String CURRENT_POSITION = "githubviewer.list.currentposition";
-    private static final String REPOSITORY_FULL_NAME = "githubviewer.list.repository.fullname";
 
     private boolean mDualPane;
     private int mCurrentPos = -1;
-    private long mCurrentId = -1;
     private CharSequence mTitle;
     private CharSequence mDrawerTitle;
-    private String viewedRepositoryFullName;
     private RepositoryListRequest repositoryListRequest;
 
     private RepositoryCursorMapper repositoryCursorMapper = new RepositoryCursorMapper();
@@ -72,15 +71,6 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
                 transaction.commit();
             }
         }
-
-//        if(savedInstanceState!=null) {
-//            mCurrentPos = savedInstanceState.getInt(CURRENT_POSITION);
-//            viewedRepositoryFullName = savedInstanceState.getString(REPOSITORY_FULL_NAME);
-//            Log.v("MainActivity.OnCreate", "CurPosition=" + mCurrentPos + "; repoName=" + viewedRepositoryFullName);
-//            if(viewedRepositoryFullName!=null && mCurrentPos>=0){
-//                onRepositorySelected(mCurrentPos, viewedRepositoryFullName);
-//            }
-//        }
     }
 
 
@@ -114,7 +104,6 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(CURRENT_POSITION, mCurrentPos);
-        outState.putString(REPOSITORY_FULL_NAME, viewedRepositoryFullName);
     }
 
     @Override
@@ -144,7 +133,6 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     @Override
     public void onRepositorySelected(int position,long id, RepositoryFullInfoImpl aRepository) {
         mCurrentPos = position;
-        mCurrentId = id;
         RepositoryDetailFragment detailFragment =
                 (RepositoryDetailFragment) getSupportFragmentManager().findFragmentById(R.id.repositoryDetailsFragment);
         if (detailFragment != null && mDualPane) {
@@ -196,6 +184,7 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     }
 
 
+
     public final class RepositoryListRequestListener implements RequestListener<RepositoryList> {
 
         @Override
@@ -207,11 +196,21 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
         @Override
         public void onRequestSuccess(RepositoryList repositoryPreviews) {
             ContentValues[] data = new ContentValues[repositoryPreviews.items.size()];
+            List<String> avatars = new ArrayList<>(repositoryPreviews.items.size());
+            String avatar = null;
             for(int i = 0;i<data.length;i++){
                 data[i]=repositoryCursorMapper.marshalling(repositoryPreviews.items.get(i));
+                if((avatar = data[i].getAsString(RepositoryContract.Columns.OWNER_AVATAR_URL))!=null && avatar.trim().length()>0){
+                    avatars.add(avatar);
+                }
             }
             MainActivity.this.getContentResolver().bulkInsert(RepositoryContract.CONTENT_URI,data);
+            cachingImages(avatars);
             // TODO: add success info
+        }
+
+        public void cachingImages(List<String> url){
+
         }
     }
 }

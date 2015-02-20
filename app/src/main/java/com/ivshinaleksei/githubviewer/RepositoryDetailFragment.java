@@ -1,9 +1,8 @@
 package com.ivshinaleksei.githubviewer;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,9 @@ import com.ivshinaleksei.githubviewer.domain.RepositoryDetails;
 import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
 import com.ivshinaleksei.githubviewer.domain.impl.RepositoryFullInfoImpl;
 import com.ivshinaleksei.githubviewer.domain.RepositoryOwner;
+import com.ivshinaleksei.githubviewer.utils.MyAbsBitmapLoader;
+import com.ivshinaleksei.githubviewer.utils.MyBitmapCacheManager;
+import com.ivshinaleksei.githubviewer.utils.MyCacheManager;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,7 +27,7 @@ public class RepositoryDetailFragment extends Fragment {
     public static RepositoryDetailFragment newInstance(RepositoryFullInfoImpl aRepository) {
         RepositoryDetailFragment detailFragment = new RepositoryDetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(REPOSIOTRY_DETAILS,aRepository);
+        bundle.putParcelable(REPOSIOTRY_DETAILS, aRepository);
         detailFragment.setArguments(bundle);
         return detailFragment;
     }
@@ -33,8 +35,7 @@ public class RepositoryDetailFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if(getArguments()!=null)
-        {
+        if (getArguments() != null) {
             RepositoryFullInfoImpl info = getArguments().getParcelable(REPOSIOTRY_DETAILS);
             updateView(info);
         }
@@ -46,21 +47,37 @@ public class RepositoryDetailFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_repository_detail, container, false);
     }
 
-    public void updateView(RepositoryFullInfo details){
+    public void updateView(RepositoryFullInfo details) {
         showOwnerCard(details.getOwner());
         showRepositoryCard(details);
     }
 
-    public void showOwnerCard(RepositoryOwner owner){
-        ImageView ownerAvatar = (ImageView) getActivity().findViewById(R.id.details_ownerAvatar);
+    public void showOwnerCard(RepositoryOwner owner) {
+        final ImageView ownerAvatar = (ImageView) getActivity().findViewById(R.id.details_ownerAvatar);
         TextView ownerLogin = (TextView) getActivity().findViewById(R.id.details_ownerLogin);
         ownerLogin.setText(owner.getOwnerLogin());
 
-        // TODO: its stub for avatar. Some wrong: image not scaled to need sizes
-        ownerAvatar.setImageResource(R.drawable.github_mark);
+        if (owner.getOwnerAvatarUrl() != null && owner.getOwnerAvatarUrl().trim().length() > 0) {
+            // Get image from cache or download from internet
+            new MyAbsBitmapLoader(){
+
+                @Override
+                protected void onPostExecute(Bitmap bitmap) {
+                    if (bitmap != null) {
+                        ownerAvatar.setImageBitmap(bitmap);
+                    } else {
+                        ownerAvatar.setImageResource(R.drawable.github_mark);
+                    }
+                }
+            }.execute(owner.getOwnerAvatarUrl());
+
+
+        } else {
+            ownerAvatar.setImageResource(R.drawable.github_mark);
+        }
     }
 
-    public void showRepositoryCard(RepositoryDetails details){
+    public void showRepositoryCard(RepositoryDetails details) {
         TextView repoName = (TextView) getActivity().findViewById(R.id.details_repoFullName);
         repoName.setText(details.getFullName());
 
@@ -75,9 +92,8 @@ public class RepositoryDetailFragment extends Fragment {
         TextView repositoryLanguage = (TextView) getActivity().findViewById(R.id.details_repoLanguage);
         repositoryLanguage.setText(details.getLanguage());
 
-        TextView repoDescription = (TextView)getActivity().findViewById(R.id.details_repoDescription);
+        TextView repoDescription = (TextView) getActivity().findViewById(R.id.details_repoDescription);
         repoDescription.setText(details.getDescription());
     }
-
 
 }
