@@ -2,10 +2,8 @@ package com.ivshinaleksei.githubviewer;
 
 import android.content.ContentValues;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.util.LruCache;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -28,13 +26,12 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-import com.squareup.okhttp.internal.DiskLruCache;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends ActionBarActivity implements ListViewFragment.OnRepositorySelectedListener{
+public class MainActivity extends ActionBarActivity implements ListViewFragment.OnRepositorySelectedListener {
 
     private static final String CURRENT_POSITION = "githubviewer.list.currentposition";
 
@@ -42,7 +39,6 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     private int mCurrentPos = -1;
     private CharSequence mTitle;
     private CharSequence mDrawerTitle;
-    private RepositoryListRequest repositoryListRequest;
 
     private RepositoryCursorMapper repositoryCursorMapper = new RepositoryCursorMapper();
 
@@ -72,7 +68,6 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
             }
         }
     }
-
 
 
     @Override
@@ -110,14 +105,14 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String aQuery) {
-                if(aQuery.length()>=getResources().getInteger(R.integer.minQueryLength)) {
-                    repositoryListRequest = new RepositoryListRequest(aQuery);
-                    spiceManager.execute(repositoryListRequest, "repositoriesPreviews", DurationInMillis.ONE_MINUTE, new RepositoryListRequestListener());
+                if (aQuery.length() >= getResources().getInteger(R.integer.minQueryLength)) {
+                    RepositoryListRequest repositoryListRequest = new RepositoryListRequest(aQuery);
+                    spiceManager.execute(repositoryListRequest, "repositoriesPreviews."+aQuery, DurationInMillis.ONE_MINUTE, new RepositoryListRequestListener());
                 }
                 return true;
             }
@@ -131,7 +126,7 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     }
 
     @Override
-    public void onRepositorySelected(int position,long id, RepositoryFullInfoImpl aRepository) {
+    public void onRepositorySelected(int position, long id, RepositoryFullInfoImpl aRepository) {
         mCurrentPos = position;
         RepositoryDetailFragment detailFragment =
                 (RepositoryDetailFragment) getSupportFragmentManager().findFragmentById(R.id.repositoryDetailsFragment);
@@ -184,7 +179,6 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     }
 
 
-
     public final class RepositoryListRequestListener implements RequestListener<RepositoryList> {
 
         @Override
@@ -196,21 +190,11 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
         @Override
         public void onRequestSuccess(RepositoryList repositoryPreviews) {
             ContentValues[] data = new ContentValues[repositoryPreviews.items.size()];
-            List<String> avatars = new ArrayList<>(repositoryPreviews.items.size());
-            String avatar = null;
-            for(int i = 0;i<data.length;i++){
-                data[i]=repositoryCursorMapper.marshalling(repositoryPreviews.items.get(i));
-                if((avatar = data[i].getAsString(RepositoryContract.Columns.OWNER_AVATAR_URL))!=null && avatar.trim().length()>0){
-                    avatars.add(avatar);
-                }
+            for (int i = 0; i < data.length; i++) {
+                data[i] = repositoryCursorMapper.marshalling(repositoryPreviews.items.get(i));
             }
-            MainActivity.this.getContentResolver().bulkInsert(RepositoryContract.CONTENT_URI,data);
-            cachingImages(avatars);
+            MainActivity.this.getContentResolver().bulkInsert(RepositoryContract.CONTENT_URI, data);
             // TODO: add success info
-        }
-
-        public void cachingImages(List<String> url){
-
         }
     }
 }

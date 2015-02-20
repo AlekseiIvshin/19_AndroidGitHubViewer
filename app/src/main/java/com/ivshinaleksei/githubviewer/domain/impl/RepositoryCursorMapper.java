@@ -23,7 +23,7 @@ public class RepositoryCursorMapper implements CursorMapper<RepositoryFullInfoIm
         String fullName = values.getAsString(RepositoryContract.Columns.FULL_NAME);
         String language = values.getAsString(RepositoryContract.Columns.LANGUAGE);
         int stargazersCount = values.getAsInteger(RepositoryContract.Columns.STARGAZERS_COUNT);
-        long createdDate = values.getAsLong(RepositoryContract.Columns.CREATED_DATE);
+        long createdDate = values.getAsLong(RepositoryContract.Columns.CREATED_DATE)*1000;
         String description = values.getAsString(RepositoryContract.Columns.DESCRIPTION);
         String repositoryUrl = values.getAsString(RepositoryContract.Columns.REPOSITORY_URL);
         RepositoryOwnerImpl owner = new RepositoryOwnerImpl(login,avatarUrl,ownerUrl);

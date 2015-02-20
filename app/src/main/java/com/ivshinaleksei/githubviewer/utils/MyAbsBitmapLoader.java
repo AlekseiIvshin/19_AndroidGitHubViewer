@@ -14,12 +14,12 @@ public abstract class MyAbsBitmapLoader extends AsyncTask<String, Void, Bitmap> 
     protected Bitmap doInBackground(String... params) {
         Bitmap bitmap=null;
         if (params.length > 0) {
-            bitmap = MyCacheManager.getInstance().get(params[0]);
+            bitmap = MyBitmapCacheManagerImpl.getInstance().get(params[0]);
             // TODO: if bitmap is null download from net and add to cache
             if(bitmap==null){
                 bitmap = getBitmapFromUrl(params[0]);
                 if(bitmap!=null){
-                    MyCacheManager.getInstance().set(params[0],bitmap);
+                    MyBitmapCacheManagerImpl.getInstance().set(params[0],bitmap);
                 }
             }
         }

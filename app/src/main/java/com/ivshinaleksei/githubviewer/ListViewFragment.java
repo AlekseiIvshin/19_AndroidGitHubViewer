@@ -104,7 +104,6 @@ public class ListViewFragment extends ListFragment implements LoaderManager.Load
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_ID:
-
                 return new CursorLoader(
                         getActivity(),
                         RepositoryContract.CONTENT_URI,

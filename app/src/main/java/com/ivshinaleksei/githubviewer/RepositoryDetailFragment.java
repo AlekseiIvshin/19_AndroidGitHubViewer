@@ -14,20 +14,18 @@ import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
 import com.ivshinaleksei.githubviewer.domain.impl.RepositoryFullInfoImpl;
 import com.ivshinaleksei.githubviewer.domain.RepositoryOwner;
 import com.ivshinaleksei.githubviewer.utils.MyAbsBitmapLoader;
-import com.ivshinaleksei.githubviewer.utils.MyBitmapCacheManager;
-import com.ivshinaleksei.githubviewer.utils.MyCacheManager;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class RepositoryDetailFragment extends Fragment {
 
-    private static final String REPOSIOTRY_DETAILS = "com.ivshinaleksei.githubviewer.repository.details";
+    private static final String REPOSITORY_DETAILS = "com.ivshinaleksei.githubviewer.repository.details";
 
     public static RepositoryDetailFragment newInstance(RepositoryFullInfoImpl aRepository) {
         RepositoryDetailFragment detailFragment = new RepositoryDetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(REPOSIOTRY_DETAILS, aRepository);
+        bundle.putParcelable(REPOSITORY_DETAILS, aRepository);
         detailFragment.setArguments(bundle);
         return detailFragment;
     }
@@ -36,7 +34,7 @@ public class RepositoryDetailFragment extends Fragment {
     public void onStart() {
         super.onStart();
         if (getArguments() != null) {
-            RepositoryFullInfoImpl info = getArguments().getParcelable(REPOSIOTRY_DETAILS);
+            RepositoryFullInfoImpl info = getArguments().getParcelable(REPOSITORY_DETAILS);
             updateView(info);
         }
     }
@@ -57,6 +55,9 @@ public class RepositoryDetailFragment extends Fragment {
         TextView ownerLogin = (TextView) getActivity().findViewById(R.id.details_ownerLogin);
         ownerLogin.setText(owner.getOwnerLogin());
 
+
+        ownerAvatar.setImageResource(R.drawable.github_mark);
+
         if (owner.getOwnerAvatarUrl() != null && owner.getOwnerAvatarUrl().trim().length() > 0) {
             // Get image from cache or download from internet
             new MyAbsBitmapLoader(){
@@ -65,15 +66,9 @@ public class RepositoryDetailFragment extends Fragment {
                 protected void onPostExecute(Bitmap bitmap) {
                     if (bitmap != null) {
                         ownerAvatar.setImageBitmap(bitmap);
-                    } else {
-                        ownerAvatar.setImageResource(R.drawable.github_mark);
                     }
                 }
             }.execute(owner.getOwnerAvatarUrl());
-
-
-        } else {
-            ownerAvatar.setImageResource(R.drawable.github_mark);
         }
     }
 

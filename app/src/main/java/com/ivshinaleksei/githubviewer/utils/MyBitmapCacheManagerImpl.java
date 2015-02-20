@@ -3,15 +3,15 @@ package com.ivshinaleksei.githubviewer.utils;
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
 
-public class MyCacheManager implements MyBitmapCacheManager {
+public class MyBitmapCacheManagerImpl implements MyBitmapCacheManager {
 
-    private static MyCacheManager manager;
+    private static MyBitmapCacheManagerImpl manager;
 
-    public static MyCacheManager getInstance() {
+    public static MyBitmapCacheManagerImpl getInstance() {
         if (manager == null) {
-            synchronized (MyCacheManager.class) {
+            synchronized (MyBitmapCacheManagerImpl.class) {
                 if (manager == null) {
-                    manager = new MyCacheManager();
+                    manager = new MyBitmapCacheManagerImpl();
                 }
             }
         }
@@ -22,7 +22,7 @@ public class MyCacheManager implements MyBitmapCacheManager {
     private LruCache<String, Bitmap> mMemoryCache;
 
 
-    private MyCacheManager() {
+    private MyBitmapCacheManagerImpl() {
         initMemoryCache();
     }
 
