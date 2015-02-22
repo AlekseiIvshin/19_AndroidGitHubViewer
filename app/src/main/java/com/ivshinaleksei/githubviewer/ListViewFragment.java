@@ -5,21 +5,17 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CursorAdapter;
 import android.widget.ListView;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
-import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
 import com.ivshinaleksei.githubviewer.domain.impl.RepositoryCursorMapper;
 import com.ivshinaleksei.githubviewer.domain.impl.RepositoryFullInfoImpl;
 
@@ -44,8 +40,6 @@ public class ListViewFragment extends ListFragment implements LoaderManager.Load
     private SimpleCursorAdapter mCursorAdapter;
 
     private RepositoryCursorMapper repositoryCursorMapper = new RepositoryCursorMapper();
-
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -89,15 +83,7 @@ public class ListViewFragment extends ListFragment implements LoaderManager.Load
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        // TODO: Stub. Set repository full name from anywhere
-        Cursor cursor = (Cursor) getListView().getItemAtPosition(position);
-        ContentValues values = new ContentValues();
-        DatabaseUtils.cursorRowToContentValues(cursor,values);
-        RepositoryFullInfoImpl repositoryFullInfo = repositoryCursorMapper.get(cursor,values);
-        Log.v("onListItemClick", "CLicked at " + position);
-        if(repositoryFullInfo != null){
-            mListener.onRepositorySelected(position,id,repositoryFullInfo);
-        }
+        showSelectedRepository(position);
     }
 
     @Override
@@ -124,10 +110,22 @@ public class ListViewFragment extends ListFragment implements LoaderManager.Load
         mCursorAdapter.changeCursor(null);
     }
 
-
-    public interface OnRepositorySelectedListener {
-        public void onRepositorySelected(int position, long id, RepositoryFullInfoImpl data);
+    private void showSelectedRepository(int position){
+        RepositoryFullInfoImpl repositoryFullInfo = getRepositoryInfoByPosition(position);
+        if(repositoryFullInfo != null){
+            mListener.onRepositorySelected(position,repositoryFullInfo);
+        }
     }
 
+    public interface OnRepositorySelectedListener {
+        public void onRepositorySelected(int position,  RepositoryFullInfoImpl data);
+    }
+
+    public RepositoryFullInfoImpl getRepositoryInfoByPosition(int position){
+        Cursor cursor = (Cursor) getListView().getItemAtPosition(position);
+        ContentValues values = new ContentValues();
+        DatabaseUtils.cursorRowToContentValues(cursor,values);
+        return repositoryCursorMapper.get(cursor,values);
+    }
 
 }
