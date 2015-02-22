@@ -28,7 +28,7 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 
-public class MainActivity extends ActionBarActivity implements ListViewFragment.OnRepositorySelectedListener {
+public class MainActivity extends ActionBarActivity implements RepositoryListFragment.OnRepositorySelectedListener {
 
 
     public static final String CURRENT_POSITION = "githubviewer.list.currentposition";
@@ -61,7 +61,7 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
         initNavigationDrawer();
 
         if (findViewById(R.id.contentFrame) != null) {
-            ListViewFragment listViewFragment = new ListViewFragment();
+            RepositoryListFragment listViewFragment = new RepositoryListFragment();
             if (mCurrentPos != 0) {
                 Bundle b = new Bundle();
                 b.putInt(CURRENT_POSITION, mCurrentPos);

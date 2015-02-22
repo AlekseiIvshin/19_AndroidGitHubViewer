@@ -6,6 +6,8 @@
     <item name="listView" type="id"/>
     <item name="repositoryDetailsFragment" type="id"/>
     <item name="contentFrame" type="id"/>
+    <item name="repository.list.view" type="id"/>
+    <item name="repository.list.container" type="id"/>
 
     <!--Navigation drawer-->
     <!-- TODO: change id to this in drawaer_nav_list_item_style.xml IF to be need to customize listView -->

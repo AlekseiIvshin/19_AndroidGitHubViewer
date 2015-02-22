@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/AppTheme.RepositoryList.Item">
+    style="@style/AppTheme.RepositoryList.Item"
+    android:id="@id/repository.list.container">
 
     <TextView
         android:id="@id/list.item.repoFullName"
@@ -15,14 +16,6 @@
         android:layout_toLeftOf="@id/list.item.repoStarsImage"
         tools:text="Language"/>
 
-
-    <!-- TODO: Delete if not required
-    <TextView-->
-        <!--android:id="@id/list.item.repoDescription"-->
-        <!--style="@style/AppTheme.RepositoryList.Item.Description"-->
-        <!--android:layout_below="@id/list.item.repoFullName"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--tools:text="Repository Description DDDDDDDDDDDDDDDD DDDDDEEEEEEEEESCIFOAS FGNAO GSNA"/>-->
 
     <ImageView
         android:id="@id/list.item.repoStarsImage"

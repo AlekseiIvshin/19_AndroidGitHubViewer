@@ -54,7 +54,7 @@ public class ListViewFragment extends ListFragment implements LoaderManager.Load
         int[] mWordListItem = {R.id.list_item_repoFullName, R.id.list_item_repoLanguage, R.id.list_item_repoStars};
         mCursorAdapter = new SimpleCursorAdapter(
                 getActivity(),
-                R.layout.list_row,
+                R.layout.repository_list_row_view,
                 null,
                 mWordListColumns,
                 mWordListItem,
@@ -66,7 +66,7 @@ public class ListViewFragment extends ListFragment implements LoaderManager.Load
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getLoaderManager().initLoader(LOADER_ID, null, this);
-        return inflater.inflate(R.layout.fragment_list, container, false);
+        return inflater.inflate(R.layout.repository_list_view, container, false);
     }
 
     @Override
