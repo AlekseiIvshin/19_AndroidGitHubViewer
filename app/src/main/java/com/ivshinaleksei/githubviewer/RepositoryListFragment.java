@@ -22,7 +22,7 @@ public class RepositoryListFragment extends Fragment {
 
     private OnRepositorySelectedListener mListener;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private MyRecyclerViewAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
@@ -34,16 +34,6 @@ public class RepositoryListFragment extends Fragment {
             throw new ClassCastException(activity.toString()
                     + " must implement OnHeadlineSelectedListener");
         }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.repository_list_view);
-//        mLayoutManager = new LinearLayoutManager(getActivity());
-//        mRecyclerView.setLayoutManager(mLayoutManager);
-//        mAdapter = new MyRecyclerViewAdapter(new ArrayList<RepositoryPreview>());
-//        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -60,8 +50,9 @@ public class RepositoryListFragment extends Fragment {
         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.repository_list_view);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new MyRecyclerViewAdapter(new ArrayList<RepositoryPreview>());
+        mAdapter = new MyRecyclerViewAdapter(getActivity(),mListener);
         mRecyclerView.setAdapter(mAdapter);
+        getLoaderManager().initLoader(MyRecyclerViewAdapter.LOADER_ID, null, mAdapter);
     }
 
     public interface OnRepositorySelectedListener {
