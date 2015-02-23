@@ -2,9 +2,11 @@ package com.ivshinaleksei.githubviewer.ui.repository.list;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -32,7 +34,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private Cursor mCursor;
     private RepositoryListFragment.OnRepositorySelectedListener selectedItemListener;
 
-    private Context context;public static final String[] mProjection =
+    private Context context;
+    public static final String[] mProjection =
             {
                     RepositoryContract.Columns._ID,
                     RepositoryContract.Columns.FULL_NAME,
@@ -46,6 +49,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                     RepositoryContract.Columns.OWNER_URL
             };
 
+
     private RepositoryCursorMapper repositoryCursorMapper = new RepositoryCursorMapper();
 
     public MyRecyclerViewAdapter(Context context, RepositoryListFragment.OnRepositorySelectedListener listner){
@@ -56,30 +60,20 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup,final int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.repository_list_row_view,viewGroup,false);
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedItemListener.onRepositorySelected(i,getRepositoryInfoByPosition(i));
-            }
-        });
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(ViewHolder viewHolder, final int i) {
         if(!mCursor.moveToPosition(i)){
             throw new IllegalStateException("couldn't move cursor to position " + i);}
-        RepositoryPreview preview = getRepositoryInfoByPosition(i);
-        viewHolder.starsCounts.setText(preview.getStargazersCount()+"");
-        viewHolder.repositoryLanguage.setText(preview.getLanguage());
-        viewHolder.repositoryName.setText(preview.getFullName());
+        RepositoryFullInfoImpl preview = getRepositoryInfoByPosition(i);
+        viewHolder.setItem(preview);
     }
 
     @Override
     public int getItemCount() {
-        Log.v("MyRecyclerViewAdapter", "GetCount custor: " + mCursor);
         if(mCursor != null){
-            Log.v("MyRecyclerViewAdapter", "GetCount custor count: " + mCursor.getCount());
             return mCursor.getCount();
         }
         return 0;
@@ -115,13 +109,30 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             old.close();
         }
     }
-
+// TODO: Add observers
     public Cursor swapCursor(Cursor newCursor) {
         if (newCursor == mCursor) {
             return null;
         }
         Cursor oldCursor = mCursor;
+//        if (oldCursor != null) {
+//            if (mChangeObserver != null) oldCursor.unregisterContentObserver(mChangeObserver);
+//            if (mDataSetObserver != null) oldCursor.unregisterDataSetObserver(mDataSetObserver);
+//        }
         mCursor = newCursor;
+//        if (newCursor != null) {
+//            if (mChangeObserver != null) newCursor.registerContentObserver(mChangeObserver);
+//            if (mDataSetObserver != null) newCursor.registerDataSetObserver(mDataSetObserver);
+//            mRowIDColumn = newCursor.getColumnIndexOrThrow("_id");
+//            mDataValid = true;
+//            // notify the observers about the new cursor
+//            notifyDataSetChanged();
+//        } else {
+//            mRowIDColumn = -1;
+//            mDataValid = false;
+//            // notify the observers about the lack of a data set
+//            notifyDataSetInvalidated();
+//        }
         return oldCursor;
     }
 
@@ -142,11 +153,18 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             repositoryName = (TextView) itemView.findViewById(R.id.list_item_repoFullName);
             repositoryLanguage = (TextView) itemView.findViewById(R.id.list_item_repoLanguage);
             starsCounts = (TextView) itemView.findViewById(R.id.list_item_repoStars);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-
+            mCursor.moveToPosition(getPosition());
+            selectedItemListener.onRepositorySelected(getPosition(),getRepositoryInfoByPosition(getPosition()));
+}
+        public void setItem(RepositoryFullInfoImpl item){
+            starsCounts.setText(item.getStargazersCount()+"");
+            repositoryLanguage.setText(item.getLanguage());
+            repositoryName.setText(item.getFullName());
         }
     }
 
