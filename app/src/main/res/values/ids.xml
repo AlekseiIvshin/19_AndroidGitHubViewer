@@ -30,7 +30,9 @@
     <item name="details.ownerLogin" type="id"/>
     <item name="details.ownerAvatar" type="id"/>
     <item name="details.ownerUrl" type="id"/>
-
+    <!-- Repository details containers -->
+    <item name="details.cards.owner" type="id"/>
+    <item name="details.cards.repository" type="id"/>
     <!-- Action bar-->
     <item name="action.search" type="id"/>
 </resources>
