@@ -8,6 +8,11 @@
         <item name="actionBarStyle">@style/AppTheme.ActionBar</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="AppTheme.toolbar" parent="AppTheme.ActionBar">
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="AppTheme.Main" parent="AppTheme">

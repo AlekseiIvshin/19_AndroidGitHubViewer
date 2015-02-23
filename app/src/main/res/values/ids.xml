@@ -35,4 +35,6 @@
     <item name="details.cards.repository" type="id"/>
     <!-- Action bar-->
     <item name="action.search" type="id"/>
+    <!-- Toolbar -->
+    <item name="toolbar" type="id"/>
 </resources>
