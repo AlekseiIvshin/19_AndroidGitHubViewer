@@ -77,6 +77,9 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             transaction.commit();
         }
 
+        if(getSupportFragmentManager().findFragmentById(R.id.repositoryDetailsFragment)!=null && mCurrentInfo ==null){
+            getSupportFragmentManager().beginTransaction().hide(getSupportFragmentManager().findFragmentById(R.id.repositoryDetailsFragment)).commit();
+        }
         if (mCurrentInfo != null) {
             onRepositorySelected(mCurrentPos, mCurrentInfo);
         }
@@ -150,6 +153,9 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         RepositoryDetailFragment detailFragment =
                 (RepositoryDetailFragment) getSupportFragmentManager().findFragmentById(R.id.repositoryDetailsFragment);
         if (detailFragment != null && mDualPane) {
+            if(detailFragment.isHidden()) {
+                getSupportFragmentManager().beginTransaction().show(detailFragment).commit();
+            }
             detailFragment.updateView(aRepository);
         } else {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
