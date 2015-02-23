@@ -8,7 +8,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
@@ -17,20 +16,15 @@ import com.ivshinaleksei.githubviewer.dao.RepositoryOpenHelper;
 
 public class RepositoryContentProvider extends ContentProvider {
 
-    private RepositoryOpenHelper repositoryOpenHelper;
-
-    SQLiteDatabase db;
-
     private static final int REPOSITORY = 1;
     private static final int REPOSITORY_FULLNAME = 2;
-
-
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-
     static {
         sUriMatcher.addURI("com.ivshinaleksei.githubviewer.provider", "repositories", REPOSITORY);
         sUriMatcher.addURI("com.ivshinaleksei.githubviewer.provider", "repositories/*", REPOSITORY_FULLNAME);
     }
+    SQLiteDatabase db;
+    private RepositoryOpenHelper repositoryOpenHelper;
 
     public RepositoryContentProvider() {
     }
@@ -86,27 +80,27 @@ public class RepositoryContentProvider extends ContentProvider {
                 RepositoryContract.Columns.OWNER_URL +
                 ") VALUES(?,?,?,?,?,?,?,?,?);";
         SQLiteStatement statement = db.compileStatement(sql);
-        int count=0;
+        int count = 0;
         try {
             db.beginTransaction();
             db.execSQL("delete from " + RepositoryOpenHelper.REPOSITORY_TABLE_NAME + " where " + RepositoryContract.Columns._ID + ">=0");
             for (ContentValues val : values) {
                 statement.clearBindings();
                 statement.bindString(1, val.getAsString(RepositoryContract.Columns.FULL_NAME));
-                statement.bindString(2, value(val,RepositoryContract.Columns.LANGUAGE,""));
+                statement.bindString(2, value(val, RepositoryContract.Columns.LANGUAGE, ""));
                 statement.bindLong(3, val.getAsInteger(RepositoryContract.Columns.STARGAZERS_COUNT));
                 statement.bindLong(4, val.getAsLong(RepositoryContract.Columns.CREATED_DATE));
-                statement.bindString(5, value(val,RepositoryContract.Columns.DESCRIPTION,""));
+                statement.bindString(5, value(val, RepositoryContract.Columns.DESCRIPTION, ""));
                 statement.bindString(6, val.getAsString(RepositoryContract.Columns.REPOSITORY_URL));
                 statement.bindString(7, val.getAsString(RepositoryContract.Columns.OWNER_LOGIN));
-                statement.bindString(8, value(val,RepositoryContract.Columns.OWNER_AVATAR_URL,""));
+                statement.bindString(8, value(val, RepositoryContract.Columns.OWNER_AVATAR_URL, ""));
                 statement.bindString(9, val.getAsString(RepositoryContract.Columns.OWNER_URL));
                 statement.execute();
                 count++;
             }
             db.setTransactionSuccessful();
         } catch (SQLException e) {
-            Log.e("RepositoryContentProvider","At "+count+" insert: "+ e.getMessage());
+            Log.e("RepositoryContentProvider", "At " + count + " insert: " + e.getMessage());
             return -1;
         } finally {
             db.endTransaction();
@@ -136,9 +130,9 @@ public class RepositoryContentProvider extends ContentProvider {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    private String value(ContentValues val, String column, String defaultValue){
+    private String value(ContentValues val, String column, String defaultValue) {
         String res = val.getAsString(column);
-        if(res == null){
+        if (res == null) {
             return defaultValue;
         }
         return res;

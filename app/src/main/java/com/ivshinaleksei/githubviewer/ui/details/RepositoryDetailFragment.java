@@ -1,4 +1,4 @@
-package com.ivshinaleksei.githubviewer;
+package com.ivshinaleksei.githubviewer.ui.details;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ivshinaleksei.githubviewer.R;
 import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
 import com.ivshinaleksei.githubviewer.domain.RepositoryOwner;
 import com.ivshinaleksei.githubviewer.utils.MyAbsBitmapLoader;

@@ -16,6 +16,7 @@
         <item name="android:maxWidth">@dimen/OwnerAvatarMaxWidth</item>
         <item name="android:minWidth">@dimen/OwnerAvatarMinWidth</item>
     </style>
+
     <style name="AppTheme.RepositoryDetails.Owner.Login" parent="Theme.AppCompat">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

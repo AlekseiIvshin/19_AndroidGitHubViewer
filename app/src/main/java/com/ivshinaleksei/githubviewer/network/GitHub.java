@@ -5,5 +5,5 @@ import retrofit.http.Query;
 
 public interface GitHub {
     @GET("/search/repositories")
-    RepositoryList repositories(@Query("q")String query);
+    RepositoryList repositories(@Query("q") String query);
 }

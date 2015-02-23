@@ -24,13 +24,15 @@ import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
 import com.ivshinaleksei.githubviewer.network.RepositoryList;
 import com.ivshinaleksei.githubviewer.network.RepositoryListRequest;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
+import com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment;
+import com.ivshinaleksei.githubviewer.ui.list.RepositoryListFragment;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 
-public class MainActivity extends ActionBarActivity implements RepositoryListFragment.OnRepositorySelectedListener{
+public class MainActivity extends ActionBarActivity implements RepositoryListFragment.OnRepositorySelectedListener {
 
 
     public static final String CURRENT_POSITION = "githubviewer.list.currentposition";
@@ -77,7 +79,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             transaction.commit();
         }
 
-        if(getSupportFragmentManager().findFragmentById(R.id.repositoryDetailsFragment)!=null && mCurrentInfo ==null){
+        if (getSupportFragmentManager().findFragmentById(R.id.repositoryDetailsFragment) != null && mCurrentInfo == null) {
             getSupportFragmentManager().beginTransaction().hide(getSupportFragmentManager().findFragmentById(R.id.repositoryDetailsFragment)).commit();
         }
         if (mCurrentInfo != null) {
@@ -153,7 +155,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         RepositoryDetailFragment detailFragment =
                 (RepositoryDetailFragment) getSupportFragmentManager().findFragmentById(R.id.repositoryDetailsFragment);
         if (detailFragment != null && mDualPane) {
-            if(detailFragment.isHidden()) {
+            if (detailFragment.isHidden()) {
                 getSupportFragmentManager().beginTransaction().show(detailFragment).commit();
             }
             detailFragment.updateView(aRepository);

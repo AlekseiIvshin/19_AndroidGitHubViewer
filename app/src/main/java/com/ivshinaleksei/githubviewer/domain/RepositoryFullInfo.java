@@ -11,6 +11,15 @@ import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RepositoryFullInfo implements Parcelable {
+    public static final Parcelable.Creator<RepositoryFullInfo> CREATOR = new Parcelable.Creator<RepositoryFullInfo>() {
+        public RepositoryFullInfo createFromParcel(Parcel source) {
+            return new RepositoryFullInfo(source);
+        }
+
+        public RepositoryFullInfo[] newArray(int size) {
+            return new RepositoryFullInfo[size];
+        }
+    };
     @JsonProperty("full_name")
     public String fullName;
     @JsonProperty("language")
@@ -26,17 +35,28 @@ public class RepositoryFullInfo implements Parcelable {
     @JsonProperty("owner")
     public RepositoryOwner repositoryOwner;
 
+    public RepositoryFullInfo() {
+    }
 
-    public RepositoryFullInfo(){}
-
-    public RepositoryFullInfo(String fullName, String language, int stargazersCount, Date date, String description, String repositoryUrl, RepositoryOwner owner){
+    public RepositoryFullInfo(String fullName, String language, int stargazersCount, Date date, String description, String repositoryUrl, RepositoryOwner owner) {
         this.fullName = fullName;
-        this.language=language;
-        this.stargazersCount =stargazersCount;
-        this.createdDate=date;
-        this.description=description;
-        this.repositoryUrl=repositoryUrl;
-        this.repositoryOwner=owner;
+        this.language = language;
+        this.stargazersCount = stargazersCount;
+        this.createdDate = date;
+        this.description = description;
+        this.repositoryUrl = repositoryUrl;
+        this.repositoryOwner = owner;
+    }
+
+    private RepositoryFullInfo(Parcel in) {
+        this.fullName = in.readString();
+        this.language = in.readString();
+        this.stargazersCount = in.readInt();
+        long tmpCreatedDate = in.readLong();
+        this.createdDate = tmpCreatedDate == -1 ? null : new Date(tmpCreatedDate);
+        this.description = in.readString();
+        this.repositoryUrl = in.readString();
+        this.repositoryOwner = in.readParcelable(RepositoryOwner.class.getClassLoader());
     }
 
     @Override
@@ -54,25 +74,4 @@ public class RepositoryFullInfo implements Parcelable {
         dest.writeString(this.repositoryUrl);
         dest.writeParcelable(this.repositoryOwner, flags);
     }
-
-    private RepositoryFullInfo(Parcel in) {
-        this.fullName = in.readString();
-        this.language = in.readString();
-        this.stargazersCount = in.readInt();
-        long tmpCreatedDate = in.readLong();
-        this.createdDate = tmpCreatedDate == -1 ? null : new Date(tmpCreatedDate);
-        this.description = in.readString();
-        this.repositoryUrl = in.readString();
-        this.repositoryOwner = in.readParcelable(RepositoryOwner.class.getClassLoader());
-    }
-
-    public static final Parcelable.Creator<RepositoryFullInfo> CREATOR = new Parcelable.Creator<RepositoryFullInfo>() {
-        public RepositoryFullInfo createFromParcel(Parcel source) {
-            return new RepositoryFullInfo(source);
-        }
-
-        public RepositoryFullInfo[] newArray(int size) {
-            return new RepositoryFullInfo[size];
-        }
-    };
 }

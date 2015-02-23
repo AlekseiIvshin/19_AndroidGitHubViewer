@@ -10,7 +10,7 @@ public class RepositoryList {
 
     public ArrayList<RepositoryFullInfo> items;
 
-    public RepositoryList(){
+    public RepositoryList() {
         items = new ArrayList<>();
     }
 }
