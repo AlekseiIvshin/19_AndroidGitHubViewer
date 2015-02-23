@@ -6,6 +6,8 @@
     <item name="listView" type="id"/>
     <item name="repositoryDetailsFragment" type="id"/>
     <item name="contentFrame" type="id"/>
+    <item name="repository.list.view" type="id"/>
+    <item name="repository.list.container" type="id"/>
 
     <!--Navigation drawer-->
     <!-- TODO: change id to this in drawaer_nav_list_item_style.xml IF to be need to customize listView -->
@@ -28,7 +30,11 @@
     <item name="details.ownerLogin" type="id"/>
     <item name="details.ownerAvatar" type="id"/>
     <item name="details.ownerUrl" type="id"/>
-
+    <!-- Repository details containers -->
+    <item name="details.cards.owner" type="id"/>
+    <item name="details.cards.repository" type="id"/>
     <!-- Action bar-->
     <item name="action.search" type="id"/>
+    <!-- Toolbar -->
+    <item name="toolbar" type="id"/>
 </resources>

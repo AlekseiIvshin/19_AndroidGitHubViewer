@@ -3,17 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp">
+    android:id="@id/repository.list.container">
 
-    <ListView
-        android:id="@id/android:list"
-        android:drawSelectorOnTop="false"
-        style="@style/AppTheme.NavDrawer.List"/>
-
-    <TextView
-        android:id="@id/android:empty"
+    <android.support.v7.widget.RecyclerView
+        android:id="@id/repository.list.view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="No data" />
+        android:scrollbars="vertical"/>
 </LinearLayout>

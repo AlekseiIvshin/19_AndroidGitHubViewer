@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,14 +28,12 @@ import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
-import java.util.ArrayList;
-import java.util.List;
+
+public class MainActivity extends ActionBarActivity implements RepositoryListFragment.OnRepositorySelectedListener {
 
 
-public class MainActivity extends ActionBarActivity implements ListViewFragment.OnRepositorySelectedListener {
-
-    private static final String CURRENT_POSITION = "githubviewer.list.currentposition";
-
+    public static final String CURRENT_POSITION = "githubviewer.list.currentposition";
+    public static final String SELECTED_REPOSITORY = "githubviewer.list.repository";
     private boolean mDualPane;
     private int mCurrentPos = -1;
     private CharSequence mTitle;
@@ -46,29 +45,45 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
 
     private ActionBarDrawerToggle mDrawerToggle;
 
+    private RepositoryFullInfoImpl currentInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (savedInstanceState != null) {
+            mCurrentPos = savedInstanceState.getInt(CURRENT_POSITION);
+            currentInfo = savedInstanceState.getParcelable(SELECTED_REPOSITORY);
+        }
 
         mDualPane = (Configuration.ORIENTATION_LANDSCAPE == getResources().getConfiguration().orientation);
-
 
         initNavigationDrawer();
 
         if (findViewById(R.id.contentFrame) != null) {
-
-            if (savedInstanceState == null || mCurrentPos < 0) {
-                ListViewFragment listViewFragment = new ListViewFragment();
-
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-                transaction.replace(R.id.contentFrame, listViewFragment);
-                transaction.commit();
+            RepositoryListFragment listViewFragment = new RepositoryListFragment();
+            if (mCurrentPos != 0) {
+                Bundle b = new Bundle();
+                b.putInt(CURRENT_POSITION, mCurrentPos);
+                listViewFragment.setArguments(b);
             }
-        }
-    }
 
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+            transaction.replace(R.id.contentFrame, listViewFragment).addToBackStack(null);
+            transaction.commit();
+//            }
+
+        }
+
+        if (currentInfo != null) {
+            onRepositorySelected(mCurrentPos, currentInfo);
+        }
+
+
+    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -80,7 +95,6 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     protected void onStart() {
         spiceManager.start(this);
         super.onStart();
-        Log.v("MainActiviry.onStart", "Execute repositoriesPreviews");
     }
 
     @Override
@@ -99,6 +113,7 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(CURRENT_POSITION, mCurrentPos);
+        outState.putParcelable(SELECTED_REPOSITORY, currentInfo);
     }
 
     @Override
@@ -112,7 +127,7 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
             public boolean onQueryTextSubmit(String aQuery) {
                 if (aQuery.length() >= getResources().getInteger(R.integer.minQueryLength)) {
                     RepositoryListRequest repositoryListRequest = new RepositoryListRequest(aQuery);
-                    spiceManager.execute(repositoryListRequest, "repositoriesPreviews."+aQuery, DurationInMillis.ONE_MINUTE, new RepositoryListRequestListener());
+                    spiceManager.execute(repositoryListRequest, "repositoriesPreviews." + aQuery, DurationInMillis.ONE_MINUTE, new RepositoryListRequestListener());
                 }
                 return true;
             }
@@ -126,7 +141,8 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     }
 
     @Override
-    public void onRepositorySelected(int position, long id, RepositoryFullInfoImpl aRepository) {
+    public void onRepositorySelected(int position, RepositoryFullInfoImpl aRepository) {
+        currentInfo = aRepository;
         mCurrentPos = position;
         RepositoryDetailFragment detailFragment =
                 (RepositoryDetailFragment) getSupportFragmentManager().findFragmentById(R.id.repositoryDetailsFragment);
@@ -149,7 +165,8 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
     }
 
     private void initNavigationDrawer() {
-        mTitle = mDrawerTitle = getTitle();
+        mTitle = getTitle();
+        mDrawerTitle = getString(R.string.drawer_close_text);
 
         ListView navigation = (ListView) findViewById(R.id.leftDrawer);
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
@@ -162,9 +179,12 @@ public class MainActivity extends ActionBarActivity implements ListViewFragment.
                 this.syncState();
             }
 
+            //closeDrawerContentDescRes
+
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+
                 getSupportActionBar().setTitle(mDrawerTitle);
                 this.syncState();
             }

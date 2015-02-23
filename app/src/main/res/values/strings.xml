@@ -6,8 +6,10 @@
     <string name="dateFormat">dd.MM.yyyy</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="drawer_close_text">Close</string>
     <string name="failure">Failure</string>
     <string name="success">Success</string>
     <string name="action.search">Search the repository</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
