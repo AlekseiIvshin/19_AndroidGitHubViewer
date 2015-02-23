@@ -17,8 +17,6 @@ public class RepositoryListFragment extends Fragment {
 
     private OnRepositorySelectedListener mListener;
     private RecyclerView mRecyclerView;
-    private MyRecyclerViewAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     public void onAttach(Activity activity) {
@@ -43,9 +41,9 @@ public class RepositoryListFragment extends Fragment {
     public void onStart() {
         super.onStart();
         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.repository_list_view);
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new MyRecyclerViewAdapter(getActivity(),mListener);
+        MyRecyclerViewAdapter mAdapter = new MyRecyclerViewAdapter(getActivity(), mListener);
         mRecyclerView.setAdapter(mAdapter);
         getLoaderManager().initLoader(MyRecyclerViewAdapter.LOADER_ID, null, mAdapter);
     }

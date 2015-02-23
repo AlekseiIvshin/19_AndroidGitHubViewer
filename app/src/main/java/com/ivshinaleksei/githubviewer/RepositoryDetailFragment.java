@@ -28,6 +28,13 @@ public class RepositoryDetailFragment extends Fragment {
         return detailFragment;
     }
 
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_repository_detail, container, false);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -35,12 +42,6 @@ public class RepositoryDetailFragment extends Fragment {
             RepositoryFullInfo info = getArguments().getParcelable(REPOSITORY_DETAILS);
             updateView(info);
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_repository_detail, container, false);
     }
 
     public void updateView(RepositoryFullInfo details) {

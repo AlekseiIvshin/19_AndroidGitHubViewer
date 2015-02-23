@@ -26,7 +26,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     public static final int LOADER_ID = 0;
     private Cursor mCursor;
-    private RepositoryListFragment.OnRepositorySelectedListener selectedItemListener;
+    private RepositoryListFragment.OnRepositorySelectedListener mSelectedItemListener;
 
     private Context context;
     public static final String[] mProjection =
@@ -48,7 +48,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     public MyRecyclerViewAdapter(Context context, RepositoryListFragment.OnRepositorySelectedListener listner){
         this.context = context;
-        this.selectedItemListener = listner;
+        this.mSelectedItemListener = listner;
     }
 
     @Override
@@ -153,7 +153,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         @Override
         public void onClick(View v) {
             mCursor.moveToPosition(getPosition());
-            selectedItemListener.onRepositorySelected(getPosition(),getRepositoryInfoByPosition());
+            mSelectedItemListener.onRepositorySelected(getPosition(), getRepositoryInfoByPosition());
 }
         public void setItem(RepositoryFullInfo item){
             starsCounts.setText(item.stargazersCount+"");
