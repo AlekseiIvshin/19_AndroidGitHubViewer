@@ -165,7 +165,8 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
     }
 
     private void initNavigationDrawer() {
-        mTitle = mDrawerTitle = getTitle();
+        mTitle = getTitle();
+        mDrawerTitle = getString(R.string.drawer_close_text);
 
         ListView navigation = (ListView) findViewById(R.id.leftDrawer);
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
@@ -178,9 +179,12 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
                 this.syncState();
             }
 
+            //closeDrawerContentDescRes
+
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+
                 getSupportActionBar().setTitle(mDrawerTitle);
                 this.syncState();
             }
