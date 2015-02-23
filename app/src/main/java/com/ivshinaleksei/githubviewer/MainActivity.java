@@ -18,8 +18,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
-import com.ivshinaleksei.githubviewer.domain.impl.RepositoryCursorMapper;
-import com.ivshinaleksei.githubviewer.domain.impl.RepositoryFullInfoImpl;
+import com.ivshinaleksei.githubviewer.domain.CursorMapper;
+import com.ivshinaleksei.githubviewer.domain.RepositoryCursorMapper;
+import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
 import com.ivshinaleksei.githubviewer.network.RepositoryList;
 import com.ivshinaleksei.githubviewer.network.RepositoryListRequest;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
@@ -39,13 +40,13 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
     private CharSequence mTitle;
     private CharSequence mDrawerTitle;
 
-    private RepositoryCursorMapper repositoryCursorMapper = new RepositoryCursorMapper();
+    private CursorMapper<RepositoryFullInfo> repositoryCursorMapper = new RepositoryCursorMapper();
 
     private SpiceManager spiceManager = new SpiceManager(RepositoryService.class);
 
     private ActionBarDrawerToggle mDrawerToggle;
 
-    private RepositoryFullInfoImpl currentInfo;
+    private RepositoryFullInfo currentInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,15 +75,11 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 
             transaction.replace(R.id.contentFrame, listViewFragment).addToBackStack(null);
             transaction.commit();
-//            }
-
         }
 
         if (currentInfo != null) {
             onRepositorySelected(mCurrentPos, currentInfo);
         }
-
-
     }
 
     @Override
@@ -97,11 +94,6 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         super.onStart();
     }
 
-    @Override
-    protected void onStop() {
-        spiceManager.shouldStop();
-        super.onStop();
-    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -141,7 +133,18 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
     }
 
     @Override
-    public void onRepositorySelected(int position, RepositoryFullInfoImpl aRepository) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        spiceManager.shouldStop();
+        super.onStop();
+    }
+
+    @Override
+    public void onRepositorySelected(int position, RepositoryFullInfo aRepository) {
         currentInfo = aRepository;
         mCurrentPos = position;
         RepositoryDetailFragment detailFragment =
@@ -154,14 +157,6 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             transaction.replace(R.id.contentFrame, newDetailFragment).addToBackStack(null).commit();
 
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void initNavigationDrawer() {
@@ -179,8 +174,6 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
                 this.syncState();
             }
 
-            //closeDrawerContentDescRes
-
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -197,7 +190,6 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
     }
-
 
     public final class RepositoryListRequestListener implements RequestListener<RepositoryList> {
 

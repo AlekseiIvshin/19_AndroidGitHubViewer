@@ -9,14 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.ivshinaleksei.githubviewer.R;
-import com.ivshinaleksei.githubviewer.domain.RepositoryPreview;
-import com.ivshinaleksei.githubviewer.domain.impl.RepositoryFullInfoImpl;
+import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
 import com.ivshinaleksei.githubviewer.ui.repository.list.MyRecyclerViewAdapter;
-
-import java.util.ArrayList;
 
 public class RepositoryListFragment extends Fragment {
 
@@ -56,7 +51,7 @@ public class RepositoryListFragment extends Fragment {
     }
 
     public interface OnRepositorySelectedListener {
-        public void onRepositorySelected(int position,  RepositoryFullInfoImpl data);
+        public void onRepositorySelected(int position,  RepositoryFullInfo data);
     }
 
 }

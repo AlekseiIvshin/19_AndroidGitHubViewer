@@ -3,7 +3,6 @@ package com.ivshinaleksei.githubviewer.dao;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 
@@ -12,8 +11,9 @@ public class RepositoryOpenHelper extends SQLiteOpenHelper{
     private static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME="githubviewer.db";
     public static final String REPOSITORY_TABLE_NAME="repository";
+
     private static final String REPOSITORIES_TABLE_CREATE =
-            "create table "+REPOSITORY_TABLE_NAME+" ("+
+            "CREATE TABLE "+REPOSITORY_TABLE_NAME+" ("+
                     RepositoryContract.Columns._ID+" INTEGER PRIMARY KEY, " +
                     RepositoryContract.Columns.FULL_NAME+" TEXT UNIQUE, " +
                     RepositoryContract.Columns.LANGUAGE+" TEXT," +

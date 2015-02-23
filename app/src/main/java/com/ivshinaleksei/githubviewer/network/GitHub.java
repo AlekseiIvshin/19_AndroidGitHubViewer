@@ -1,7 +1,5 @@
 package com.ivshinaleksei.githubviewer.network;
 
-import com.ivshinaleksei.githubviewer.domain.RepositoryPreview;
-
 import retrofit.http.GET;
 import retrofit.http.Query;
 

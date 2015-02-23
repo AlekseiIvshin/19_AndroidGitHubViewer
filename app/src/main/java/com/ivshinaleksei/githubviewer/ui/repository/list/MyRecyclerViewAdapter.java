@@ -2,17 +2,13 @@ package com.ivshinaleksei.githubviewer.ui.repository.list;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +17,9 @@ import android.widget.TextView;
 import com.ivshinaleksei.githubviewer.R;
 import com.ivshinaleksei.githubviewer.RepositoryListFragment;
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
-import com.ivshinaleksei.githubviewer.domain.RepositoryPreview;
-import com.ivshinaleksei.githubviewer.domain.impl.RepositoryCursorMapper;
-import com.ivshinaleksei.githubviewer.domain.impl.RepositoryFullInfoImpl;
-
-import java.util.List;
+import com.ivshinaleksei.githubviewer.domain.CursorMapper;
+import com.ivshinaleksei.githubviewer.domain.RepositoryCursorMapper;
+import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> implements LoaderManager.LoaderCallbacks<Cursor>  {
 
@@ -50,7 +44,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             };
 
 
-    private RepositoryCursorMapper repositoryCursorMapper = new RepositoryCursorMapper();
+    private CursorMapper<RepositoryFullInfo> repositoryCursorMapper = new RepositoryCursorMapper();
 
     public MyRecyclerViewAdapter(Context context, RepositoryListFragment.OnRepositorySelectedListener listner){
         this.context = context;
@@ -67,7 +61,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     public void onBindViewHolder(ViewHolder viewHolder, final int i) {
         if(!mCursor.moveToPosition(i)){
             throw new IllegalStateException("couldn't move cursor to position " + i);}
-        RepositoryFullInfoImpl preview = getRepositoryInfoByPosition(i);
+        RepositoryFullInfo preview = getRepositoryInfoByPosition();
         viewHolder.setItem(preview);
     }
 
@@ -136,7 +130,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         return oldCursor;
     }
 
-    public RepositoryFullInfoImpl getRepositoryInfoByPosition(int position){
+    public RepositoryFullInfo getRepositoryInfoByPosition(){
         ContentValues values = new ContentValues();
         DatabaseUtils.cursorRowToContentValues(mCursor, values);
         return repositoryCursorMapper.get(mCursor,values);
@@ -159,12 +153,12 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         @Override
         public void onClick(View v) {
             mCursor.moveToPosition(getPosition());
-            selectedItemListener.onRepositorySelected(getPosition(),getRepositoryInfoByPosition(getPosition()));
+            selectedItemListener.onRepositorySelected(getPosition(),getRepositoryInfoByPosition());
 }
-        public void setItem(RepositoryFullInfoImpl item){
-            starsCounts.setText(item.getStargazersCount()+"");
-            repositoryLanguage.setText(item.getLanguage());
-            repositoryName.setText(item.getFullName());
+        public void setItem(RepositoryFullInfo item){
+            starsCounts.setText(item.stargazersCount+"");
+            repositoryLanguage.setText(item.language);
+            repositoryName.setText(item.fullName);
         }
     }
 
