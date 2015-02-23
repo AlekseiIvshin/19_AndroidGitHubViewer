@@ -2,17 +2,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:textColor">@color/mainTextColor</item>
         <item name="android:textSize">@dimen/mainTextSize</item>
-        <item name="actionBarStyle">@style/AppTheme.ActionBar</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="windowActionBar">false</item>
     </style>
 
-    <style name="AppTheme.toolbar" parent="AppTheme.ActionBar">
-        <item name="android:textColor">@android:color/white</item>
+    <style name="AppTheme.Toolbar" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="theme">@style/ThemeOverlay.AppTheme.ActionBar</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="ThemeOverlay.AppTheme.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">@color/titleTextColor</item>
     </style>
 
     <style name="AppTheme.Main" parent="AppTheme">
@@ -20,18 +25,7 @@
         <item name="android:layout_height">match_parent</item>
     </style>
 
-    <style name="AppTheme.ActionBar" parent="@style/Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/primary</item>
-        <!-- Support library compatibility -->
-        <item name="titleTextStyle">@style/AppTheme.ActionBar.TitleText</item>
-        <item name="background">@color/primary</item>
-        <item name="elevation">4dp</item>
-    </style>
-
-    <style name="AppTheme.ActionBar.TitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/titleTextColor</item>
-    </style>
-    
+    <!-- Navigation drawer -->
     <style name="AppTheme.NavDrawer" parent="@style/Theme.AppCompat">
         <item name="android:layout_width">240dp</item>
         <item name="android:layout_height">match_parent</item>
