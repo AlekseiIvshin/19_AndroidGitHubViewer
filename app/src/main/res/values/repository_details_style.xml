@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="AppTheme.RepositoryDetails.Cards" parent="@style/Theme.AppCompat">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/defaultVerticalMargin</item>
+    </style>
+
     <style name="AppTheme.RepositoryDetails.Owner.Avatar" parent="Theme.AppCompat">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -10,12 +16,12 @@
         <item name="android:maxWidth">@dimen/OwnerAvatarMaxWidth</item>
         <item name="android:minWidth">@dimen/OwnerAvatarMinWidth</item>
     </style>
+
     <style name="AppTheme.RepositoryDetails.Owner.Login" parent="Theme.AppCompat">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/titleTextSize</item>
-        <item name="android:background">@drawable/repository_list_item</item>
+        <item name="android:textSize">@dimen/headlineTextSize</item>
         <item name="android:padding">@dimen/defaultPadding</item>
     </style>
 
@@ -23,8 +29,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/titleTextSize</item>
-        <item name="android:background">@drawable/repository_list_item</item>
+        <item name="android:textSize">@dimen/headlineTextSize</item>
         <item name="android:padding">@dimen/defaultPadding</item>
     </style>
 
@@ -64,5 +69,6 @@
         <item name="android:textSize">@dimen/mainTextSize</item>
         <item name="android:layout_marginLeft">@dimen/defaultPadding</item>
         <item name="android:layout_marginTop">@dimen/defaultPadding</item>
+        <item name="android:layout_marginBottom">@dimen/defaultPadding</item>
     </style>
 </resources>

@@ -4,5 +4,6 @@ import android.graphics.Bitmap;
 
 public interface MyBitmapCacheManager {
     Bitmap get(String key);
-    void set(String key,Bitmap bitmap);
+
+    void set(String key, Bitmap bitmap);
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@id/repository.list.container"
     style="@style/AppTheme.RepositoryList.Item">
 
     <TextView
@@ -8,30 +9,24 @@
         style="@style/AppTheme.RepositoryList.Item.RepoName"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/list.item.repoLanguage"
-        tools:text="Repository/Full name"/>
+        tools:text="Repository/Full name" />
+
     <TextView
         android:id="@id/list.item.repoLanguage"
         style="@style/AppTheme.RepositoryList.Item.RepoLanguage"
         android:layout_toLeftOf="@id/list.item.repoStarsImage"
-        tools:text="Language"/>
+        tools:text="Language" />
 
-
-    <!-- TODO: Delete if not required
-    <TextView-->
-        <!--android:id="@id/list.item.repoDescription"-->
-        <!--style="@style/AppTheme.RepositoryList.Item.Description"-->
-        <!--android:layout_below="@id/list.item.repoFullName"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--tools:text="Repository Description DDDDDDDDDDDDDDDD DDDDDEEEEEEEEESCIFOAS FGNAO GSNA"/>-->
 
     <ImageView
         android:id="@id/list.item.repoStarsImage"
         style="@style/AppTheme.RepositoryList.Item.StarsImage"
-        android:layout_toLeftOf="@id/list.item.repoStars"/>
+        android:layout_toLeftOf="@id/list.item.repoStars" />
+
     <TextView
         android:id="@id/list.item.repoStars"
         style="@style/AppTheme.RepositoryList.Item.Stars"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        tools:text="NNN"/>
+        tools:text="NNN" />
 </RelativeLayout>

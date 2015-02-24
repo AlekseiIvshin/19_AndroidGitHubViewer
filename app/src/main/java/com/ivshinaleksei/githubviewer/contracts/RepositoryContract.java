@@ -8,7 +8,7 @@ public class RepositoryContract {
     public static final String AUTHORITY = "com.ivshinaleksei.githubviewer.provider";
     public static final String PATH = "repositories";
     public static final Uri CONTENT_URI =
-            Uri.parse("content://" + AUTHORITY+"//"+PATH);
+            Uri.parse("content://" + AUTHORITY + "//" + PATH);
 
     public static class Columns implements BaseColumns {
         public static final String FULL_NAME = "fullName";
