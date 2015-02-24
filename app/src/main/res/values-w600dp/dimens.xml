@@ -5,4 +5,6 @@
     <dimen name="ownerAvatarMinHeight">150dp</dimen>
     <dimen name="ownerAvatarMaxWidth">200dp</dimen>
     <dimen name="ownerAvatarMinWidth">150dp</dimen>
+
+    <dimen name="activity_horizontal_margin">32dp</dimen>
 </resources>

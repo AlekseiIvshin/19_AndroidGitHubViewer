@@ -2,6 +2,7 @@ package com.ivshinaleksei.githubviewer.ui.list;
 
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,13 +17,15 @@ import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
 public class RepositoryListFragment extends Fragment {
 
 
-    private static final String sCurrentPosition = RepositoryListFragment.class.getSimpleName()+".current.position";
+    private static final String sPreferencesFileName = RepositoryListFragment.class.getSimpleName() + "_prefs";
+    private static final String sCurrentPosition = RepositoryListFragment.class.getSimpleName() + ".current.position";
 
     private OnRepositorySelectedListener mListener;
     private RecyclerView mRecyclerView;
+    private MyRecyclerViewAdapter mAdapter;
     private int mCurrentPosition;
 
-    public static RepositoryListFragment newInstance(int currentPositoon){
+    public static RepositoryListFragment newInstance(int currentPositoon) {
         RepositoryListFragment repositoryListFragment = new RepositoryListFragment();
         if (currentPositoon != 0) {
             Bundle b = new Bundle();
@@ -58,14 +61,41 @@ public class RepositoryListFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mCurrentPosition = arguments.getInt(sCurrentPosition);
+        } else {
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(sPreferencesFileName, 0);
+            mCurrentPosition = sharedPreferences.getInt(sCurrentPosition, -1);
+        }
+
+        if (mCurrentPosition >= 0) {
+            mAdapter.moveCursorTo(mCurrentPosition);
+            mListener.onRepositorySelected(mCurrentPosition, RepositoryInfo.getFromCursor(mAdapter.getCursor()));
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recyclerViewRepositoryList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
-        MyRecyclerViewAdapter adapter = new MyRecyclerViewAdapter(getActivity(), mListener);
-        mRecyclerView.setAdapter(adapter);
-        getLoaderManager().initLoader(MyRecyclerViewAdapter.LOADER_ID, null, adapter);
+        mAdapter = new MyRecyclerViewAdapter(getActivity(), mListener);
+        mRecyclerView.setAdapter(mAdapter);
+        getLoaderManager().initLoader(MyRecyclerViewAdapter.LOADER_ID, null, mAdapter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mCurrentPosition >= 0) {
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(sPreferencesFileName, 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(sCurrentPosition, mCurrentPosition);
+        }
     }
 
     public interface OnRepositorySelectedListener {

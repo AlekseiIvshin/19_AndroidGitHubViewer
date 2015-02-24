@@ -28,9 +28,11 @@ public class RepositoryContentProvider extends ContentProvider {
             RepositoryContract.RepositoryInfo.OWNER_LOGIN + "," +
             RepositoryContract.RepositoryInfo.OWNER_AVATAR_URL +
             ") VALUES(?,?,?,?,?,?,?);";
+
     static {
         sUriMatcher.addURI("com.ivshinaleksei.githubviewer.provider", "repositories", REPOSITORY);
     }
+
     SQLiteDatabase db;
     private RepositoryOpenHelper repositoryOpenHelper;
 

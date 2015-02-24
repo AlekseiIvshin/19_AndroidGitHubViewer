@@ -19,7 +19,8 @@ import java.text.SimpleDateFormat;
 
 public class RepositoryDetailFragment extends Fragment {
 
-    private static final String sRepositoryDetails = RepositoryDetailFragment.class.getSimpleName()+".repository.details";
+    private static final String sRepositoryDetails = RepositoryDetailFragment.class.getSimpleName() + ".repository.details";
+    private DateFormat mDateFormat = new SimpleDateFormat(getResources().getString(R.string.dateFormat));
 
     public static RepositoryDetailFragment newInstance(RepositoryInfo aRepository) {
         RepositoryDetailFragment detailFragment = new RepositoryDetailFragment();
@@ -79,10 +80,8 @@ public class RepositoryDetailFragment extends Fragment {
         TextView repoStars = (TextView) getActivity().findViewById(R.id.details_repoStars);
         repoStars.setText(details.stargazersCount + "");
 
-        DateFormat dateFormat = new SimpleDateFormat(getResources().getString(R.string.dateFormat));
-
         TextView createdDate = (TextView) getActivity().findViewById(R.id.details_createdDate);
-        createdDate.setText(getString(R.string.details_labels_created)+" "+dateFormat.format(details.createdDate));
+        createdDate.setText(getString(R.string.details_labels_created, mDateFormat.format(details.createdDate)));
 
         TextView repositoryLanguage = (TextView) getActivity().findViewById(R.id.details_repoLanguage);
         repositoryLanguage.setText(details.language);

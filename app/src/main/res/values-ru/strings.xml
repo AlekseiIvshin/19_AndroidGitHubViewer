@@ -2,8 +2,9 @@
 <resources>
     <string name="appName">GitHubViewer</string>
     <string name="dateFormat">dd.MM.yyyy</string>
-    <string name="details.labels.created">Создан</string>
+    <string name="details.labels.created">Создан %s</string>
     <string name="drawerCloseTitleText">Закрыть</string>
-    <string name="loadRepositoriesInfo.failure">Ошибка</string>
+    <string name="loadRepositoriesInfo.failure">Ошибка: %s</string>
     <string name="loadRepositoriesInfo.success">Успешно</string>
-    <string name="actionSearch">Поиск репозитория</string></resources>
+    <string name="actionSearch">Поиск репозитория</string>
+</resources>

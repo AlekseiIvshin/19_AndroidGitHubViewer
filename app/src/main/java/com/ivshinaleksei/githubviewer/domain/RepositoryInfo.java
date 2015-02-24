@@ -5,13 +5,21 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.BaseColumns;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
+import com.j256.ormlite.field.DatabaseField;
+import com.tojc.ormlite.android.annotation.AdditionalAnnotation;
+
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 import java.util.Date;
 
+@Root
+@AdditionalAnnotation.Contract
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RepositoryInfo implements Parcelable {
     public static final Parcelable.Creator<RepositoryInfo> CREATOR = new Parcelable.Creator<RepositoryInfo>() {
@@ -23,16 +31,30 @@ public class RepositoryInfo implements Parcelable {
             return new RepositoryInfo[size];
         }
     };
+    @DatabaseField(columnName = BaseColumns._ID, generatedId = true)
+    public int id;
+
+    @Element
     @JsonProperty("full_name")
     public String fullName;
+
+    @Element
     @JsonProperty("language")
     public String language;
+
+    @Element
     @JsonProperty("stargazers_count")
     public int stargazersCount;
+
+    @Element
     @JsonProperty("created_at")
     public Date createdDate;
+
+    @Element
     @JsonProperty("description")
     public String description;
+
+    @Element
     @JsonProperty("owner")
     public RepositoryOwner repositoryOwner;
 
@@ -58,7 +80,7 @@ public class RepositoryInfo implements Parcelable {
         this.repositoryOwner = in.readParcelable(RepositoryOwner.class.getClassLoader());
     }
 
-    public static RepositoryInfo getFromCursor(Cursor cursor){
+    public static RepositoryInfo getFromCursor(Cursor cursor) {
         int iOwnerLogin = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.OWNER_LOGIN);
         int iOwnerAvatarUrl = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.OWNER_AVATAR_URL);
         int iRepositoryFullName = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.FULL_NAME);
@@ -76,7 +98,7 @@ public class RepositoryInfo implements Parcelable {
         String description = cursor.getString(iDescription);
 
         RepositoryOwner owner = new RepositoryOwner(login, avatarUrl);
-        return new RepositoryInfo(fullName, language, stargazersCount, new Date(createdDate), description,  owner);
+        return new RepositoryInfo(fullName, language, stargazersCount, new Date(createdDate), description, owner);
     }
 
     public ContentValues marshalling() {

@@ -1,7 +1,7 @@
 package com.ivshinaleksei.githubviewer.network.request;
 
-import com.ivshinaleksei.githubviewer.network.BaseRepositorySearchRequest;
 import com.ivshinaleksei.githubviewer.domain.RepositoryList;
+import com.ivshinaleksei.githubviewer.network.BaseRepositorySearchRequest;
 
 public class SortedRepositorySearchRequest extends BaseRepositorySearchRequest {
     private final String query;

@@ -20,7 +20,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
 
     public static final int LOADER_ID = 0;
-    public static final String[] mProjection =
+    private static final String[] sProjection =
             {
                     RepositoryContract.RepositoryInfo._ID,
                     RepositoryContract.RepositoryInfo.FULL_NAME,
@@ -70,7 +70,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                 return new CursorLoader(
                         mContext,
                         RepositoryContract.CONTENT_URI,
-                        mProjection,
+                        sProjection,
                         null, null, null);
             default:
                 return null;
@@ -103,6 +103,16 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         Cursor oldCursor = mCursor;
         mCursor = newCursor;
         return oldCursor;
+    }
+
+    public Cursor getCursor() {
+        return mCursor;
+    }
+
+    public void moveCursorTo(int position) {
+        if (!mCursor.moveToPosition(position)) {
+            throw new IllegalStateException("couldn't move cursor to position " + position);
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

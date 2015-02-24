@@ -1,6 +1,7 @@
 package com.ivshinaleksei.githubviewer;
 
-import android.content.ContentValues;
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -15,14 +16,16 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
-import com.ivshinaleksei.githubviewer.network.BaseRepositorySearchRequest;
 import com.ivshinaleksei.githubviewer.domain.RepositoryList;
+import com.ivshinaleksei.githubviewer.network.BaseRepositorySearchRequest;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
 import com.ivshinaleksei.githubviewer.network.request.builder.SortedRepositorySearchRequestBuilder;
 import com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment;
@@ -32,11 +35,17 @@ import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.io.IOException;
+import java.io.StringWriter;
+
 
 public class MainActivity extends ActionBarActivity implements RepositoryListFragment.OnRepositorySelectedListener {
 
     // TODO: see to code convention
-    private static final String SELECTED_REPOSITORY = "githubviewer.list.repository";
+    private static final String sSelectedRepository = MainActivity.class.getName() + ".selected.repository";
+    private static final String sCurrentSavedRepository = "savedRepository";
+    private static final String sRepositoryRequestCacheKey = "repositories";
+    private static final String sSharedPreferencesName = "prefsFile";
 
     private boolean mDualPane;
     private int mCurrentPos = -1;
@@ -54,16 +63,17 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (savedInstanceState != null) {
-            mCurrentInfo = savedInstanceState.getParcelable(SELECTED_REPOSITORY);
+            mCurrentInfo = savedInstanceState.getParcelable(sSelectedRepository);
         }
 
         mDualPane = (findViewById(R.id.contentFrame) == null);
 
         initNavigationDrawer();
 
+
         if (!mDualPane) {
             // TODO: check on "work?"
-            if(getSupportFragmentManager().findFragmentById(R.id.contentFrame)==null) {
+            if (getSupportFragmentManager().findFragmentById(R.id.contentFrame) == null) {
                 RepositoryListFragment listViewFragment = RepositoryListFragment.newInstance(mCurrentPos);
 
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -72,12 +82,23 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             }
         }
 
+        if (mCurrentInfo != null) {
+            onRepositorySelected(mCurrentPos, mCurrentInfo);
+        } else {
+            SharedPreferences sharedPreferences = getSharedPreferences(sSharedPreferencesName, 0);
+            String savedValue = sharedPreferences.getString(sCurrentSavedRepository, null);
+            if (savedValue != null) {
+                try {
+                    mCurrentInfo = new ObjectMapper().readValue(sharedPreferences.getString(sCurrentSavedRepository, ""), RepositoryInfo.class);
+                } catch (IOException e) {
+                }
+            }
+        }
+
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentRepositoryDetails) != null && mCurrentInfo == null) {
             getSupportFragmentManager().beginTransaction().hide(getSupportFragmentManager().findFragmentById(R.id.fragmentRepositoryDetails)).commit();
         }
-        if (mCurrentInfo != null) {
-            onRepositorySelected(mCurrentPos, mCurrentInfo);
-        }
+
     }
 
     @Override
@@ -92,6 +113,20 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         super.onStart();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mCurrentInfo != null) {
+            SharedPreferences sharedPreferences = getSharedPreferences(sSharedPreferencesName, 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            StringWriter writer = new StringWriter();
+            try {
+                new ObjectMapper().writeValue(writer, mCurrentInfo);
+            } catch (IOException e) {
+            }
+            editor.putString(sCurrentSavedRepository, writer.toString());
+        }
+    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -102,7 +137,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(SELECTED_REPOSITORY, mCurrentInfo);
+        outState.putParcelable(sSelectedRepository, mCurrentInfo);
     }
 
     @Override
@@ -115,8 +150,22 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query.length() >= getResources().getInteger(R.integer.minQueryLength)) {
-                    BaseRepositorySearchRequest repositoryListRequest = new SortedRepositorySearchRequestBuilder(query).sortBy("stars").order("desc").build();
-                    mSpiceManager.execute(repositoryListRequest, "repositoriesPreviews." + query, DurationInMillis.ONE_MINUTE, new RepositoryListRequestListener());
+                    InputMethodManager inputMethodManager = (InputMethodManager) MainActivity.this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(MainActivity.this.getCurrentFocus().getWindowToken(), 0);
+                    ProgressBar mProgress = (ProgressBar) findViewById(R.id.progressBar);
+                    if (mProgress != null) {
+                        mProgress.setVisibility(View.VISIBLE);
+                    }
+                    BaseRepositorySearchRequest repositoryListRequest =
+                            new SortedRepositorySearchRequestBuilder(query)
+                                    .sortBy("stars")
+                                    .order("desc")
+                                    .build();
+                    mSpiceManager.execute(
+                            repositoryListRequest,
+                            sRepositoryRequestCacheKey,
+                            DurationInMillis.ONE_MINUTE,
+                            new RepositorySearchRequestListener());
                 }
                 return true;
             }
@@ -185,7 +234,9 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             }
         };
 
-        navigation.setAdapter(new ArrayAdapter<>(this, R.layout.list_item_drawer_navigation, getResources().getStringArray(R.array.navigation)));
+        navigation.setAdapter(
+                new ArrayAdapter<>(this, R.layout.list_item_drawer_navigation,
+                        getResources().getStringArray(R.array.navigation)));
 
         drawerLayout.setDrawerListener(mDrawerToggle);
 
@@ -193,25 +244,33 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         getSupportActionBar().setHomeButtonEnabled(true);
     }
 
-    public final class RepositoryListRequestListener implements RequestListener<RepositoryList> {
+    public final class RepositorySearchRequestListener implements RequestListener<RepositoryList> {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
-            Log.v("RepositoryPreviewRequestListener", "Failure");
+            Log.v(MainActivity.class.getSimpleName(), "Failure");
 
             int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(MainActivity.this, getString(R.string.loadRepositoriesInfo_failure, spiceException.getMessage()), duration);
+            Toast toast = Toast.makeText(
+                    MainActivity.this,
+                    getString(R.string.loadRepositoriesInfo_failure, spiceException.getMessage()),
+                    duration);
             toast.setGravity(Gravity.TOP, 0, getResources().getInteger(R.integer.toastOffsetY));
             toast.show();
+            ProgressBar mProgress = (ProgressBar) findViewById(R.id.progressBar);
+            if (mProgress != null) {
+                mProgress.setVisibility(View.GONE);
+            }
         }
 
         @Override
         public void onRequestSuccess(RepositoryList repositoryPreviews) {
-            ContentValues[] data = new ContentValues[repositoryPreviews.items.size()];
-            for (int i = 0; i < data.length; i++) {
-                data[i] = repositoryPreviews.items.get(i).marshalling();
+            Log.v(MainActivity.class.getSimpleName(), "Success");
+            ProgressBar mProgress = (ProgressBar) findViewById(R.id.progressBar);
+            if (mProgress != null) {
+                mProgress.setVisibility(View.GONE);
             }
-            MainActivity.this.getContentResolver().bulkInsert(RepositoryContract.CONTENT_URI, data);
         }
+
     }
 }

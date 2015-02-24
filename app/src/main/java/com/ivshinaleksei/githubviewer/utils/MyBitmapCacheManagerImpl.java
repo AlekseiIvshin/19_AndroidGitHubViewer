@@ -6,6 +6,11 @@ import android.support.v4.util.LruCache;
 public class MyBitmapCacheManagerImpl implements MyBitmapCacheManager {
 
     private static MyBitmapCacheManagerImpl manager;
+    private LruCache<String, Bitmap> mMemoryCache;
+
+    private MyBitmapCacheManagerImpl() {
+        initMemoryCache();
+    }
 
     public static MyBitmapCacheManager getInstance() {
         if (manager == null) {
@@ -16,12 +21,6 @@ public class MyBitmapCacheManagerImpl implements MyBitmapCacheManager {
             }
         }
         return manager;
-    }
-
-    private LruCache<String, Bitmap> mMemoryCache;
-
-    private MyBitmapCacheManagerImpl() {
-        initMemoryCache();
     }
 
     @Override
