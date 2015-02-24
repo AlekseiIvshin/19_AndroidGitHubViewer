@@ -19,9 +19,19 @@ public class RepositoryContentProvider extends ContentProvider {
     private static final int REPOSITORY = 1;
     private static final int REPOSITORY_FULLNAME = 2;
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    private static final String INSERT_QUERY = "INSERT INTO " + RepositoryOpenHelper.REPOSITORY_TABLE_NAME + "(" +
+            RepositoryContract.Columns.FULL_NAME + "," +
+            RepositoryContract.Columns.LANGUAGE + "," +
+            RepositoryContract.Columns.STARGAZERS_COUNT + "," +
+            RepositoryContract.Columns.CREATED_DATE + "," +
+            RepositoryContract.Columns.DESCRIPTION + "," +
+            RepositoryContract.Columns.REPOSITORY_URL + "," +
+            RepositoryContract.Columns.OWNER_LOGIN + "," +
+            RepositoryContract.Columns.OWNER_AVATAR_URL + "," +
+            RepositoryContract.Columns.OWNER_URL +
+            ") VALUES(?,?,?,?,?,?,?,?,?);";
     static {
         sUriMatcher.addURI("com.ivshinaleksei.githubviewer.provider", "repositories", REPOSITORY);
-        sUriMatcher.addURI("com.ivshinaleksei.githubviewer.provider", "repositories/*", REPOSITORY_FULLNAME);
     }
     SQLiteDatabase db;
     private RepositoryOpenHelper repositoryOpenHelper;
@@ -68,18 +78,7 @@ public class RepositoryContentProvider extends ContentProvider {
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
         db = repositoryOpenHelper.getWritableDatabase();
-        String sql = "INSERT INTO " + RepositoryOpenHelper.REPOSITORY_TABLE_NAME + "(" +
-                RepositoryContract.Columns.FULL_NAME + "," +
-                RepositoryContract.Columns.LANGUAGE + "," +
-                RepositoryContract.Columns.STARGAZERS_COUNT + "," +
-                RepositoryContract.Columns.CREATED_DATE + "," +
-                RepositoryContract.Columns.DESCRIPTION + "," +
-                RepositoryContract.Columns.REPOSITORY_URL + "," +
-                RepositoryContract.Columns.OWNER_LOGIN + "," +
-                RepositoryContract.Columns.OWNER_AVATAR_URL + "," +
-                RepositoryContract.Columns.OWNER_URL +
-                ") VALUES(?,?,?,?,?,?,?,?,?);";
-        SQLiteStatement statement = db.compileStatement(sql);
+        SQLiteStatement statement = db.compileStatement(INSERT_QUERY);
         int count = 0;
         try {
             db.beginTransaction();
@@ -99,13 +98,13 @@ public class RepositoryContentProvider extends ContentProvider {
                 count++;
             }
             db.setTransactionSuccessful();
+            getContext().getContentResolver().notifyChange(RepositoryContract.CONTENT_URI, null);
         } catch (SQLException e) {
             Log.e("RepositoryContentProvider", "At " + count + " insert: " + e.getMessage());
             return -1;
         } finally {
             db.endTransaction();
         }
-        getContext().getContentResolver().notifyChange(RepositoryContract.CONTENT_URI, null);
         return count;
     }
 

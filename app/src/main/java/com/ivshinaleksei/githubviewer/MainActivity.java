@@ -11,11 +11,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.ivshinaleksei.githubviewer.domain.RepositoryCursorMapper;
@@ -129,6 +131,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
                 return true;
             }
         });
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -201,7 +204,11 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         @Override
         public void onRequestFailure(SpiceException spiceException) {
             Log.v("RepositoryPreviewRequestListener", "Failure");
-            // TODO: add failure info
+
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(MainActivity.this, getString(R.string.loadRepositoriesInfo_failure)+": "+spiceException.getMessage(), duration);
+            toast.setGravity(Gravity.TOP,0,getResources().getInteger(R.integer.toastOffsetY));
+            toast.show();
         }
 
         @Override
@@ -211,7 +218,6 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
                 data[i] = RepositoryCursorMapper.getInstance().marshalling(repositoryPreviews.items.get(i));
             }
             MainActivity.this.getContentResolver().bulkInsert(RepositoryContract.CONTENT_URI, data);
-            // TODO: add success info
         }
     }
 }
