@@ -3,7 +3,7 @@
 
     <string name="appName">GitHubViewer</string>
     <string name="dateFormat">dd.MM.yyyy</string>
-    <string name="repository.details.titles.created">Created on</string>
+    <string name="details.labels.created">Created on</string>
     <string name="drawerOpen">Open</string>
     <string name="drawerClose">Close</string>
     <string name="drawerCloseTitleText">Close</string>

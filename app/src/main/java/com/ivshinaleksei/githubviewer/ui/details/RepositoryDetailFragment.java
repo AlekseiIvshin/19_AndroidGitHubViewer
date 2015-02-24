@@ -16,7 +16,6 @@ import com.ivshinaleksei.githubviewer.utils.MyBitmapLoader;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.TimeZone;
 
 public class RepositoryDetailFragment extends Fragment {
 
@@ -83,7 +82,7 @@ public class RepositoryDetailFragment extends Fragment {
         DateFormat dateFormat = new SimpleDateFormat(getResources().getString(R.string.dateFormat));
 
         TextView createdDate = (TextView) getActivity().findViewById(R.id.details_createdDate);
-        createdDate.setText(getString(R.string.repository_details_titles_created)+" "+dateFormat.format(details.createdDate));
+        createdDate.setText(getString(R.string.details_labels_created)+" "+dateFormat.format(details.createdDate));
 
         TextView repositoryLanguage = (TextView) getActivity().findViewById(R.id.details_repoLanguage);
         repositoryLanguage.setText(details.language);
