@@ -8,6 +8,32 @@ import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import java.util.Date;
 
 public class RepositoryCursorMapper implements CursorMapper<RepositoryFullInfo> {
+    private static RepositoryCursorMapper mapper;
+    public static RepositoryCursorMapper getInstance(){
+        if(mapper==null){
+            synchronized (RepositoryCursorMapper.class){
+                if(mapper==null){
+                    mapper = new RepositoryCursorMapper();
+                }
+            }
+        }
+        return  mapper;
+    }
+
+    public static void release(){
+        if(mapper!=null){
+            synchronized (RepositoryCursorMapper.class){
+                if(mapper!=null){
+                    mapper = null;
+                }
+            }
+        }
+    }
+
+    private RepositoryCursorMapper(){
+
+    }
+
     @Override
     public RepositoryFullInfo get(ContentValues values) {
         String login = values.getAsString(RepositoryContract.Columns.OWNER_LOGIN);

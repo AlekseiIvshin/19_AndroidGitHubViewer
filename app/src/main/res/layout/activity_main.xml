@@ -6,10 +6,7 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@id/toolbar"
-        style="@style/AppTheme.Toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize" />
+        style="@style/AppTheme.Toolbar"/>
 
     <android.support.v4.widget.DrawerLayout
         android:id="@id/drawerLayout"
@@ -18,12 +15,13 @@
         tools:context=".MainActivity">
 
         <ListView
-            android:id="@id/leftDrawer"
+            android:id="@id/leftNavigationDrawer"
             style="@style/AppTheme.NavDrawer" />
 
         <FrameLayout
             android:id="@id/contentFrame"
-            style="@style/AppTheme.Main" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
     </android.support.v4.widget.DrawerLayout>
 

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="drawerLayout" type="id" />
-    <item name="leftDrawer" type="id" />
-    <item name="listFragment" type="id" />
-    <item name="listView" type="id" />
-    <item name="repositoryDetailsFragment" type="id" />
-    <item name="contentFrame" type="id" />
-    <item name="repository.list.view" type="id" />
-    <item name="repository.list.container" type="id" />
 
-    <!--Navigation drawer-->
-    <!-- TODO: change id to this in drawaer_nav_list_item_style.xml IF to be need to customize listView -->
-    <item name="navDrawerItem" type="id" />
+    <item name="recyclerViewRepositoryList" type="id" />
+
+    <!-- Navigation drawer -->
+    <item name="drawerLayout" type="id" />
+    <item name="leftNavigationDrawer" type="id" />
+
+    <!-- Fragments -->
+    <item name="fragmentRepositoryList" type="id" />
+    <item name="fragmentRepositoryDetails" type="id" />
+    <item name="contentFrame" type="id" />
 
     <!-- Repository list views id -->
     <item name="list.item.repoFullName" type="id" />
@@ -19,22 +18,19 @@
     <item name="list.item.repoLanguage" type="id" />
     <item name="list.item.repoStars" type="id" />
     <item name="list.item.repoStarsImage" type="id" />
+
     <!-- Repository details views id -->
     <item name="details.repoFullName" type="id" />
     <item name="details.repoDescription" type="id" />
     <item name="details.repoLanguage" type="id" />
     <item name="details.repoStars" type="id" />
     <item name="details.repoStarsImage" type="id" />
-    <item name="details.repoUrl" type="id" />
     <item name="details.createdDate" type="id" />
     <item name="details.ownerLogin" type="id" />
     <item name="details.ownerAvatar" type="id" />
-    <item name="details.ownerUrl" type="id" />
-    <!-- Repository details containers -->
-    <item name="details.cards.owner" type="id" />
-    <item name="details.cards.repository" type="id" />
-    <!-- Action bar-->
-    <item name="action.search" type="id" />
+
     <!-- Toolbar -->
     <item name="toolbar" type="id" />
+    <item name="action.search" type="id" />
+
 </resources>

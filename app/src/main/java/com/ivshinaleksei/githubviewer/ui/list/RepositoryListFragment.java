@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ivshinaleksei.githubviewer.R;
+import com.ivshinaleksei.githubviewer.domain.RepositoryCursorMapper;
 import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
 
 public class RepositoryListFragment extends Fragment {
@@ -33,19 +34,25 @@ public class RepositoryListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.repository_list_view, container, false);
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.repository_list_view);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewRepositoryList);
         return rootView;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.repository_list_view);
+        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recyclerViewRepositoryList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         MyRecyclerViewAdapter mAdapter = new MyRecyclerViewAdapter(getActivity(), mListener);
         mRecyclerView.setAdapter(mAdapter);
         getLoaderManager().initLoader(MyRecyclerViewAdapter.LOADER_ID, null, mAdapter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        RepositoryCursorMapper.release();
     }
 
     public interface OnRepositorySelectedListener {

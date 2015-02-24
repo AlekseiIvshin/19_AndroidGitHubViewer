@@ -18,14 +18,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
-import com.ivshinaleksei.githubviewer.domain.CursorMapper;
 import com.ivshinaleksei.githubviewer.domain.RepositoryCursorMapper;
 import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
 import com.ivshinaleksei.githubviewer.network.RepositoryList;
 import com.ivshinaleksei.githubviewer.network.RepositoryListRequest;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
 import com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment;
-import com.ivshinaleksei.githubviewer.ui.list.MyRecyclerViewAdapter;
 import com.ivshinaleksei.githubviewer.ui.list.RepositoryListFragment;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -42,10 +40,6 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
     private boolean mDualPane;
     private int mCurrentPos = -1;
     private RepositoryFullInfo mCurrentInfo;
-    private CharSequence mTitle;
-    private CharSequence mDrawerTitle;
-
-    private CursorMapper<RepositoryFullInfo> mRepositoryCursorMapper = new RepositoryCursorMapper();
 
     private SpiceManager mSpiceManager = new SpiceManager(RepositoryService.class);
 
@@ -80,8 +74,8 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             transaction.commit();
         }
 
-        if (getSupportFragmentManager().findFragmentById(R.id.repositoryDetailsFragment) != null && mCurrentInfo == null) {
-            getSupportFragmentManager().beginTransaction().hide(getSupportFragmentManager().findFragmentById(R.id.repositoryDetailsFragment)).commit();
+        if (getSupportFragmentManager().findFragmentById(R.id.fragmentRepositoryDetails) != null && mCurrentInfo == null) {
+            getSupportFragmentManager().beginTransaction().hide(getSupportFragmentManager().findFragmentById(R.id.fragmentRepositoryDetails)).commit();
         }
         if (mCurrentInfo != null) {
             onRepositorySelected(mCurrentPos, mCurrentInfo);
@@ -145,6 +139,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 
     @Override
     protected void onStop() {
+        RepositoryCursorMapper.release();
         mSpiceManager.shouldStop();
         super.onStop();
     }
@@ -154,7 +149,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         mCurrentInfo = aRepository;
         mCurrentPos = position;
         RepositoryDetailFragment detailFragment =
-                (RepositoryDetailFragment) getSupportFragmentManager().findFragmentById(R.id.repositoryDetailsFragment);
+                (RepositoryDetailFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentRepositoryDetails);
         if (detailFragment != null && mDualPane) {
             if (detailFragment.isHidden()) {
                 getSupportFragmentManager().beginTransaction().show(detailFragment).commit();
@@ -169,13 +164,14 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
     }
 
     private void initNavigationDrawer() {
-        mTitle = getTitle();
-        mDrawerTitle = getString(R.string.drawer_close_text);
 
-        ListView navigation = (ListView) findViewById(R.id.leftDrawer);
+        final CharSequence mTitle = getTitle();
+        final CharSequence mDrawerTitle = getString(R.string.drawerCloseTitleText);
+
+        ListView navigation = (ListView) findViewById(R.id.leftNavigationDrawer);
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {
+        mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawerOpen, R.string.drawerClose) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
@@ -212,7 +208,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         public void onRequestSuccess(RepositoryList repositoryPreviews) {
             ContentValues[] data = new ContentValues[repositoryPreviews.items.size()];
             for (int i = 0; i < data.length; i++) {
-                data[i] = mRepositoryCursorMapper.marshalling(repositoryPreviews.items.get(i));
+                data[i] = RepositoryCursorMapper.getInstance().marshalling(repositoryPreviews.items.get(i));
             }
             MainActivity.this.getContentResolver().bulkInsert(RepositoryContract.CONTENT_URI, data);
             // TODO: add success info

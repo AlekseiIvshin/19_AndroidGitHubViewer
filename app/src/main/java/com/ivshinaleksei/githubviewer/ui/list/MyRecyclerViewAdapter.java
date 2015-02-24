@@ -40,7 +40,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private Cursor mCursor;
     private RepositoryListFragment.OnRepositorySelectedListener mSelectedItemListener;
     private Context context;
-    private CursorMapper<RepositoryFullInfo> repositoryCursorMapper = new RepositoryCursorMapper();
+    private CursorMapper<RepositoryFullInfo> repositoryCursorMapper = RepositoryCursorMapper.getInstance();
 
     public MyRecyclerViewAdapter(Context context, RepositoryListFragment.OnRepositorySelectedListener listner) {
         this.context = context;

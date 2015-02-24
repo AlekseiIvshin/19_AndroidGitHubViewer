@@ -6,10 +6,7 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@id/toolbar"
-        style="@style/AppTheme.Toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize" />
+        style="@style/AppTheme.Toolbar" />
 
     <android.support.v4.widget.DrawerLayout
         android:id="@id/drawerLayout"
@@ -18,18 +15,19 @@
         tools:context=".MainActivity">
 
         <LinearLayout
-            style="@style/AppTheme.Main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <fragment
-                android:id="@id/listFragment"
+                android:id="@id/fragmentRepositoryList"
                 android:name="com.ivshinaleksei.githubviewer.ui.list.RepositoryListFragment"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <fragment
-                android:id="@id/repositoryDetailsFragment"
+                android:id="@id/fragmentRepositoryDetails"
                 android:name="com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -37,7 +35,7 @@
         </LinearLayout>
 
         <ListView
-            android:id="@id/leftDrawer"
+            android:id="@id/leftNavigationDrawer"
             style="@style/AppTheme.NavDrawer" />
     </android.support.v4.widget.DrawerLayout>
 </LinearLayout>

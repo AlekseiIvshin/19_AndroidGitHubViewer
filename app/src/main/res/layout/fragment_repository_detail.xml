@@ -10,7 +10,6 @@
         android:padding="@dimen/defaultHorizontalMargin">
 
         <android.support.v7.widget.CardView
-            android:id="@id/details.cards.owner"
             style="@style/AppTheme.RepositoryDetails.Cards"
             android:layout_width="match_parent">
 
@@ -35,7 +34,6 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:id="@id/details.cards.repository"
             style="@style/AppTheme.RepositoryDetails.Cards">
 
             <RelativeLayout

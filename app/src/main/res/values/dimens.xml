@@ -2,14 +2,17 @@
     <dimen name="defaultVerticalMargin">16dp</dimen>
     <dimen name="defaultHorizontalMargin">16dp</dimen>
     <dimen name="defaultPadding">16dp</dimen>
+    <dimen name="dividerHeight">8dp</dimen>
+
+    <!-- Text sizes -->
     <dimen name="mainTextSize">16dp</dimen>
     <dimen name="titleTextSize">20sp</dimen>
     <dimen name="headlineTextSize">24sp</dimen>
-    <dimen name="dividerHeight">8dp</dimen>
 
     <!-- Image sizes-->
-    <dimen name="OwnerAvatarMaxHeight">100dp</dimen>
-    <dimen name="OwnerAvatarMinHeight">100dp</dimen>
-    <dimen name="OwnerAvatarMaxWidth">100dp</dimen>
-    <dimen name="OwnerAvatarMinWidth">100dp</dimen>
+    <dimen name="ownerAvatarMaxHeight">100dp</dimen>
+    <dimen name="ownerAvatarMinHeight">100dp</dimen>
+    <dimen name="ownerAvatarMaxWidth">100dp</dimen>
+    <dimen name="ownerAvatarMinWidth">100dp</dimen>
+
 </resources>
