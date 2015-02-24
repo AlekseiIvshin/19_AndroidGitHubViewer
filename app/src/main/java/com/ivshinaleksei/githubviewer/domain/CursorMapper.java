@@ -4,7 +4,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 public interface CursorMapper<T> {
-    T get(Cursor cursor, ContentValues values);
+    T get(ContentValues values);
+
+
+    T get(Cursor cursor);
 
     ContentValues marshalling(T value);
 }

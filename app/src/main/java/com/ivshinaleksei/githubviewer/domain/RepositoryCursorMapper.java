@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class RepositoryCursorMapper implements CursorMapper<RepositoryFullInfo> {
     @Override
-    public RepositoryFullInfo get(Cursor cursor, ContentValues values) {
+    public RepositoryFullInfo get(ContentValues values) {
         String login = values.getAsString(RepositoryContract.Columns.OWNER_LOGIN);
         String avatarUrl = values.getAsString(RepositoryContract.Columns.OWNER_AVATAR_URL);
         String ownerUrl = values.getAsString(RepositoryContract.Columns.OWNER_URL);
@@ -19,6 +19,32 @@ public class RepositoryCursorMapper implements CursorMapper<RepositoryFullInfo> 
         long createdDate = values.getAsLong(RepositoryContract.Columns.CREATED_DATE) * 1000;
         String description = values.getAsString(RepositoryContract.Columns.DESCRIPTION);
         String repositoryUrl = values.getAsString(RepositoryContract.Columns.REPOSITORY_URL);
+        RepositoryOwner owner = new RepositoryOwner(login, avatarUrl, ownerUrl);
+        return new RepositoryFullInfo(fullName, language, stargazersCount, new Date(createdDate), description, repositoryUrl, owner);
+    }
+
+    @Override
+    public RepositoryFullInfo get(Cursor cursor) {
+        int iOwnerLogin = cursor.getColumnIndex(RepositoryContract.Columns.OWNER_LOGIN);
+        int iOwnerAvatarUrl = cursor.getColumnIndex(RepositoryContract.Columns.OWNER_AVATAR_URL);
+        int iOwnerUrl = cursor.getColumnIndex(RepositoryContract.Columns.OWNER_URL);
+        int iRepositoryFullName = cursor.getColumnIndex(RepositoryContract.Columns.FULL_NAME);
+        int iLanguage = cursor.getColumnIndex(RepositoryContract.Columns.LANGUAGE);
+        int iStargazersCount = cursor.getColumnIndex(RepositoryContract.Columns.STARGAZERS_COUNT);
+        int iCreatedDate = cursor.getColumnIndex(RepositoryContract.Columns.CREATED_DATE);
+        int iDescription = cursor.getColumnIndex(RepositoryContract.Columns.DESCRIPTION);
+        int iRepositoryUrl = cursor.getColumnIndex(RepositoryContract.Columns.REPOSITORY_URL);
+
+        String login = cursor.getString(iOwnerLogin);
+        String avatarUrl = cursor.getString(iOwnerAvatarUrl);
+        String ownerUrl = cursor.getString(iOwnerUrl);
+        String fullName = cursor.getString(iRepositoryFullName);
+        String language = cursor.getString(iLanguage);
+        int stargazersCount = cursor.getInt(iStargazersCount);
+        long createdDate = cursor.getLong(iCreatedDate) * 1000;
+        String description = cursor.getString(iDescription);
+        String repositoryUrl = cursor.getString(iRepositoryUrl);
+
         RepositoryOwner owner = new RepositoryOwner(login, avatarUrl, ownerUrl);
         return new RepositoryFullInfo(fullName, language, stargazersCount, new Date(createdDate), description, repositoryUrl, owner);
     }

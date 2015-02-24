@@ -112,9 +112,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     }
 
     public RepositoryFullInfo getRepositoryInfoByPosition() {
-        ContentValues values = new ContentValues();
-        DatabaseUtils.cursorRowToContentValues(mCursor, values);
-        return repositoryCursorMapper.get(mCursor, values);
+        return repositoryCursorMapper.get(mCursor);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
