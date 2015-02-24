@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.ivshinaleksei.githubviewer.R;
 import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
 import com.ivshinaleksei.githubviewer.domain.RepositoryOwner;
-import com.ivshinaleksei.githubviewer.utils.MyAbsBitmapLoader;
+import com.ivshinaleksei.githubviewer.utils.MyBitmapLoader;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -60,7 +60,7 @@ public class RepositoryDetailFragment extends Fragment {
 
         if (owner.avatarUrl != null && owner.avatarUrl.trim().length() > 0) {
             // Get image from cache or download from internet
-            new MyAbsBitmapLoader() {
+            new MyBitmapLoader() {
 
                 @Override
                 protected void onPostExecute(Bitmap bitmap) {

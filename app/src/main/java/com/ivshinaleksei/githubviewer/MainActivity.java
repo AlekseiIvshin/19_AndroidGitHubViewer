@@ -25,6 +25,7 @@ import com.ivshinaleksei.githubviewer.network.RepositoryList;
 import com.ivshinaleksei.githubviewer.network.RepositoryListRequest;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
 import com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment;
+import com.ivshinaleksei.githubviewer.ui.list.MyRecyclerViewAdapter;
 import com.ivshinaleksei.githubviewer.ui.list.RepositoryListFragment;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -67,16 +68,16 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         initNavigationDrawer();
 
         if (!mDualPane) {
-                RepositoryListFragment listViewFragment = new RepositoryListFragment();
-                if (mCurrentPos != 0) {
-                    Bundle b = new Bundle();
-                    b.putInt(CURRENT_POSITION, mCurrentPos);
-                    listViewFragment.setArguments(b);
-                }
+            RepositoryListFragment listViewFragment = new RepositoryListFragment();
+            if (mCurrentPos != 0) {
+                Bundle b = new Bundle();
+                b.putInt(CURRENT_POSITION, mCurrentPos);
+                listViewFragment.setArguments(b);
+            }
 
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.contentFrame, listViewFragment).addToBackStack(null);
-                transaction.commit();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.contentFrame, listViewFragment);
+            transaction.commit();
         }
 
         if (getSupportFragmentManager().findFragmentById(R.id.repositoryDetailsFragment) != null && mCurrentInfo == null) {

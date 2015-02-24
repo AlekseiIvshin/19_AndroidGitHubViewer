@@ -107,24 +107,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             return null;
         }
         Cursor oldCursor = mCursor;
-//        if (oldCursor != null) {
-//            if (mChangeObserver != null) oldCursor.unregisterContentObserver(mChangeObserver);
-//            if (mDataSetObserver != null) oldCursor.unregisterDataSetObserver(mDataSetObserver);
-//        }
         mCursor = newCursor;
-//        if (newCursor != null) {
-//            if (mChangeObserver != null) newCursor.registerContentObserver(mChangeObserver);
-//            if (mDataSetObserver != null) newCursor.registerDataSetObserver(mDataSetObserver);
-//            mRowIDColumn = newCursor.getColumnIndexOrThrow("_id");
-//            mDataValid = true;
-//            // notify the observers about the new cursor
-//            notifyDataSetChanged();
-//        } else {
-//            mRowIDColumn = -1;
-//            mDataValid = false;
-//            // notify the observers about the lack of a data set
-//            notifyDataSetInvalidated();
-//        }
         return oldCursor;
     }
 

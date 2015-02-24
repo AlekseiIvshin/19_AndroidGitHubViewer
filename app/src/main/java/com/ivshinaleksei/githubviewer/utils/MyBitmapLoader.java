@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-public abstract class MyAbsBitmapLoader extends AsyncTask<String, Void, Bitmap> {
+public abstract class MyBitmapLoader extends AsyncTask<String, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(String... params) {
         Bitmap bitmap = null;
@@ -36,4 +36,7 @@ public abstract class MyAbsBitmapLoader extends AsyncTask<String, Void, Bitmap> 
         }
 
     }
+
+    @Override
+    protected abstract void onPostExecute(Bitmap bitmap);
 }
