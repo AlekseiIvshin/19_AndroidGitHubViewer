@@ -10,7 +10,9 @@ public class RepositoryContract {
     public static final Uri CONTENT_URI =
             Uri.parse("content://" + AUTHORITY + "//" + PATH);
 
-    public static class Columns implements BaseColumns {
+    public static class RepositoryInfo implements BaseColumns {
+        public static final String TABLE_NAME = "repository";
+
         public static final String FULL_NAME = "fullName";
         public static final String LANGUAGE = "language";
         public static final String STARGAZERS_COUNT = "stargazersCount";

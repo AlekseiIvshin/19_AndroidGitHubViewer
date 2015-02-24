@@ -1,25 +1,20 @@
 package com.ivshinaleksei.githubviewer.ui.list;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ivshinaleksei.githubviewer.R;
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
-import com.ivshinaleksei.githubviewer.domain.CursorMapper;
-import com.ivshinaleksei.githubviewer.domain.RepositoryCursorMapper;
-import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
+import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -27,28 +22,27 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     public static final int LOADER_ID = 0;
     public static final String[] mProjection =
             {
-                    RepositoryContract.Columns._ID,
-                    RepositoryContract.Columns.FULL_NAME,
-                    RepositoryContract.Columns.LANGUAGE,
-                    RepositoryContract.Columns.STARGAZERS_COUNT,
-                    RepositoryContract.Columns.CREATED_DATE,
-                    RepositoryContract.Columns.DESCRIPTION,
-                    RepositoryContract.Columns.OWNER_LOGIN,
-                    RepositoryContract.Columns.OWNER_AVATAR_URL
+                    RepositoryContract.RepositoryInfo._ID,
+                    RepositoryContract.RepositoryInfo.FULL_NAME,
+                    RepositoryContract.RepositoryInfo.LANGUAGE,
+                    RepositoryContract.RepositoryInfo.STARGAZERS_COUNT,
+                    RepositoryContract.RepositoryInfo.CREATED_DATE,
+                    RepositoryContract.RepositoryInfo.DESCRIPTION,
+                    RepositoryContract.RepositoryInfo.OWNER_LOGIN,
+                    RepositoryContract.RepositoryInfo.OWNER_AVATAR_URL
             };
     private Cursor mCursor;
     private RepositoryListFragment.OnRepositorySelectedListener mSelectedItemListener;
-    private Context context;
-    private CursorMapper<RepositoryFullInfo> repositoryCursorMapper = RepositoryCursorMapper.getInstance();
+    private Context mContext;
 
-    public MyRecyclerViewAdapter(Context context, RepositoryListFragment.OnRepositorySelectedListener listner) {
-        this.context = context;
-        this.mSelectedItemListener = listner;
+    public MyRecyclerViewAdapter(Context context, RepositoryListFragment.OnRepositorySelectedListener listener) {
+        this.mContext = context;
+        this.mSelectedItemListener = listener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, final int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.repository_list_row_view, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_repository, viewGroup, false);
         return new ViewHolder(v);
     }
 
@@ -57,7 +51,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         if (!mCursor.moveToPosition(i)) {
             throw new IllegalStateException("couldn't move cursor to position " + i);
         }
-        RepositoryFullInfo preview = getRepositoryInfoByPosition();
+        RepositoryInfo preview = RepositoryInfo.getFromCursor(mCursor);
         viewHolder.setItem(preview);
     }
 
@@ -74,7 +68,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         switch (id) {
             case LOADER_ID:
                 return new CursorLoader(
-                        context,
+                        mContext,
                         RepositoryContract.CONTENT_URI,
                         mProjection,
                         null, null, null);
@@ -111,10 +105,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         return oldCursor;
     }
 
-    public RepositoryFullInfo getRepositoryInfoByPosition() {
-        return repositoryCursorMapper.get(mCursor);
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView repositoryName;
@@ -132,10 +122,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         @Override
         public void onClick(View v) {
             mCursor.moveToPosition(getPosition());
-            mSelectedItemListener.onRepositorySelected(getPosition(), getRepositoryInfoByPosition());
+            mSelectedItemListener.onRepositorySelected(getPosition(), RepositoryInfo.getFromCursor(mCursor));
         }
 
-        public void setItem(RepositoryFullInfo item) {
+        public void setItem(RepositoryInfo item) {
             starsCounts.setText(item.stargazersCount + "");
             repositoryLanguage.setText(item.language);
             repositoryName.setText(item.fullName);

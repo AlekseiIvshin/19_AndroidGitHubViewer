@@ -7,7 +7,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:padding">@dimen/defaultHorizontalMargin</item>
-        <item name="android:background">@drawable/repository_list_item</item>
+        <item name="android:background">@drawable/list_item_repository</item>
     </style>
 
     <style name="AppTheme.RepositoryList.Item.RepoName" parent="Theme.AppCompat">

@@ -11,13 +11,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ivshinaleksei.githubviewer.R;
-import com.ivshinaleksei.githubviewer.domain.RepositoryCursorMapper;
-import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
+import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
 
 public class RepositoryListFragment extends Fragment {
 
+
+    private static final String sCurrentPosition = RepositoryListFragment.class.getSimpleName()+".current.position";
+
     private OnRepositorySelectedListener mListener;
     private RecyclerView mRecyclerView;
+    private int mCurrentPosition;
+
+    public static RepositoryListFragment newInstance(int currentPositoon){
+        RepositoryListFragment repositoryListFragment = new RepositoryListFragment();
+        if (currentPositoon != 0) {
+            Bundle b = new Bundle();
+            b.putInt(sCurrentPosition, currentPositoon);
+            repositoryListFragment.setArguments(b);
+        }
+        return repositoryListFragment;
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -31,9 +44,15 @@ public class RepositoryListFragment extends Fragment {
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.repository_list_view, container, false);
+        View rootView = inflater.inflate(R.layout.list_repository, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewRepositoryList);
         return rootView;
     }
@@ -42,21 +61,15 @@ public class RepositoryListFragment extends Fragment {
     public void onStart() {
         super.onStart();
         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recyclerViewRepositoryList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        MyRecyclerViewAdapter mAdapter = new MyRecyclerViewAdapter(getActivity(), mListener);
-        mRecyclerView.setAdapter(mAdapter);
-        getLoaderManager().initLoader(MyRecyclerViewAdapter.LOADER_ID, null, mAdapter);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        RepositoryCursorMapper.release();
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(layoutManager);
+        MyRecyclerViewAdapter adapter = new MyRecyclerViewAdapter(getActivity(), mListener);
+        mRecyclerView.setAdapter(adapter);
+        getLoaderManager().initLoader(MyRecyclerViewAdapter.LOADER_ID, null, adapter);
     }
 
     public interface OnRepositorySelectedListener {
-        public void onRepositorySelected(int position, RepositoryFullInfo data);
+        public void onRepositorySelected(int position, RepositoryInfo data);
     }
 
 }

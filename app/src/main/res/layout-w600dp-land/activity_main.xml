@@ -4,12 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@id/toolbar"
-        style="@style/AppTheme.Toolbar" />
-
     <android.support.v4.widget.DrawerLayout
-        android:id="@id/drawerLayout"
+        android:id="@+id/drawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
@@ -19,15 +15,19 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
+            <android.support.v7.widget.Toolbar
+                android:id="@id/toolbar"
+                style="@style/AppTheme.Toolbar" />
+
             <fragment
-                android:id="@id/fragmentRepositoryList"
+                android:id="@+id/fragmentRepositoryList"
                 android:name="com.ivshinaleksei.githubviewer.ui.list.RepositoryListFragment"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <fragment
-                android:id="@id/fragmentRepositoryDetails"
+                android:id="@+id/fragmentRepositoryDetails"
                 android:name="com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

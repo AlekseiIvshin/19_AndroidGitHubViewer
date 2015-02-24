@@ -7,7 +7,7 @@
     <string name="drawerOpen">Open</string>
     <string name="drawerClose">Close</string>
     <string name="drawerCloseTitleText">Close</string>
-    <string name="loadRepositoriesInfo.failure">Failure</string>
+    <string name="loadRepositoriesInfo.failure">Failure: %s</string>
     <string name="loadRepositoriesInfo.success">Success</string>
     <string name="actionSearch">Search the repository</string>
 </resources>

@@ -1,9 +1,9 @@
 package com.ivshinaleksei.githubviewer.network.request;
 
-import com.ivshinaleksei.githubviewer.network.AbsRepositorySearchRequest;
-import com.ivshinaleksei.githubviewer.network.RepositoryList;
+import com.ivshinaleksei.githubviewer.network.BaseRepositorySearchRequest;
+import com.ivshinaleksei.githubviewer.domain.RepositoryList;
 
-public class SortedRepositorySearchRequest extends AbsRepositorySearchRequest {
+public class SortedRepositorySearchRequest extends BaseRepositorySearchRequest {
     private final String query;
     private final String sortedBy;
     private final String order;

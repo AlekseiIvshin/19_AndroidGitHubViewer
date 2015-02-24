@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ivshinaleksei.githubviewer.R;
-import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
+import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
 import com.ivshinaleksei.githubviewer.domain.RepositoryOwner;
 import com.ivshinaleksei.githubviewer.utils.MyBitmapLoader;
 
@@ -19,12 +19,12 @@ import java.text.SimpleDateFormat;
 
 public class RepositoryDetailFragment extends Fragment {
 
-    private static final String REPOSITORY_DETAILS = "com.ivshinaleksei.githubviewer.repository.details";
+    private static final String sRepositoryDetails = RepositoryDetailFragment.class.getSimpleName()+".repository.details";
 
-    public static RepositoryDetailFragment newInstance(RepositoryFullInfo aRepository) {
+    public static RepositoryDetailFragment newInstance(RepositoryInfo aRepository) {
         RepositoryDetailFragment detailFragment = new RepositoryDetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(REPOSITORY_DETAILS, aRepository);
+        bundle.putParcelable(sRepositoryDetails, aRepository);
         detailFragment.setArguments(bundle);
         return detailFragment;
     }
@@ -40,12 +40,12 @@ public class RepositoryDetailFragment extends Fragment {
     public void onStart() {
         super.onStart();
         if (getArguments() != null) {
-            RepositoryFullInfo info = getArguments().getParcelable(REPOSITORY_DETAILS);
+            RepositoryInfo info = getArguments().getParcelable(sRepositoryDetails);
             updateView(info);
         }
     }
 
-    public void updateView(RepositoryFullInfo details) {
+    public void updateView(RepositoryInfo details) {
         showOwnerCard(details.repositoryOwner);
         showRepositoryCard(details);
     }
@@ -72,7 +72,7 @@ public class RepositoryDetailFragment extends Fragment {
         }
     }
 
-    public void showRepositoryCard(RepositoryFullInfo details) {
+    public void showRepositoryCard(RepositoryInfo details) {
         TextView repoName = (TextView) getActivity().findViewById(R.id.details_repoFullName);
         repoName.setText(details.fullName);
 

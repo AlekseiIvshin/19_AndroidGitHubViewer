@@ -19,14 +19,14 @@ public class RepositoryContentProvider extends ContentProvider {
 
     private static final int REPOSITORY = 1;
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-    private static final String INSERT_QUERY = "INSERT INTO " + RepositoryOpenHelper.REPOSITORY_TABLE_NAME + "(" +
-            RepositoryContract.Columns.FULL_NAME + "," +
-            RepositoryContract.Columns.LANGUAGE + "," +
-            RepositoryContract.Columns.STARGAZERS_COUNT + "," +
-            RepositoryContract.Columns.CREATED_DATE + "," +
-            RepositoryContract.Columns.DESCRIPTION + "," +
-            RepositoryContract.Columns.OWNER_LOGIN + "," +
-            RepositoryContract.Columns.OWNER_AVATAR_URL +
+    private static final String INSERT_QUERY = "INSERT INTO " + RepositoryContract.RepositoryInfo.TABLE_NAME + "(" +
+            RepositoryContract.RepositoryInfo.FULL_NAME + "," +
+            RepositoryContract.RepositoryInfo.LANGUAGE + "," +
+            RepositoryContract.RepositoryInfo.STARGAZERS_COUNT + "," +
+            RepositoryContract.RepositoryInfo.CREATED_DATE + "," +
+            RepositoryContract.RepositoryInfo.DESCRIPTION + "," +
+            RepositoryContract.RepositoryInfo.OWNER_LOGIN + "," +
+            RepositoryContract.RepositoryInfo.OWNER_AVATAR_URL +
             ") VALUES(?,?,?,?,?,?,?);";
     static {
         sUriMatcher.addURI("com.ivshinaleksei.githubviewer.provider", "repositories", REPOSITORY);
@@ -60,15 +60,15 @@ public class RepositoryContentProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         db = repositoryOpenHelper.getWritableDatabase();
-        long _id;
+        long id;
         try {
             db.beginTransaction();
-            _id = db.insert(RepositoryOpenHelper.REPOSITORY_TABLE_NAME, null, values);
+            id = db.insert(RepositoryContract.RepositoryInfo.TABLE_NAME, null, values);
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
         }
-        Uri resUri = new Uri.Builder().authority(RepositoryContract.AUTHORITY).appendPath(_id + "").build();
+        Uri resUri = new Uri.Builder().authority(RepositoryContract.AUTHORITY).appendPath(id + "").build();
         getContext().getContentResolver().notifyChange(resUri, null);
         return resUri;
     }
@@ -80,16 +80,16 @@ public class RepositoryContentProvider extends ContentProvider {
         int count = 0;
         try {
             db.beginTransaction();
-            db.execSQL("delete from " + RepositoryOpenHelper.REPOSITORY_TABLE_NAME + " where " + RepositoryContract.Columns._ID + ">=0");
+            db.execSQL("delete from " + RepositoryContract.RepositoryInfo.TABLE_NAME + " where " + RepositoryContract.RepositoryInfo._ID + ">=0");
             for (ContentValues val : values) {
                 statement.clearBindings();
-                statement.bindString(1, val.getAsString(RepositoryContract.Columns.FULL_NAME));
-                statement.bindString(2, value(val, RepositoryContract.Columns.LANGUAGE, ""));
-                statement.bindLong(3, val.getAsInteger(RepositoryContract.Columns.STARGAZERS_COUNT));
-                statement.bindLong(4, val.getAsLong(RepositoryContract.Columns.CREATED_DATE));
-                statement.bindString(5, value(val, RepositoryContract.Columns.DESCRIPTION, ""));
-                statement.bindString(6, val.getAsString(RepositoryContract.Columns.OWNER_LOGIN));
-                statement.bindString(7, value(val, RepositoryContract.Columns.OWNER_AVATAR_URL, ""));
+                statement.bindString(1, val.getAsString(RepositoryContract.RepositoryInfo.FULL_NAME));
+                statement.bindString(2, value(val, RepositoryContract.RepositoryInfo.LANGUAGE, ""));
+                statement.bindLong(3, val.getAsInteger(RepositoryContract.RepositoryInfo.STARGAZERS_COUNT));
+                statement.bindLong(4, val.getAsLong(RepositoryContract.RepositoryInfo.CREATED_DATE));
+                statement.bindString(5, value(val, RepositoryContract.RepositoryInfo.DESCRIPTION, ""));
+                statement.bindString(6, val.getAsString(RepositoryContract.RepositoryInfo.OWNER_LOGIN));
+                statement.bindString(7, value(val, RepositoryContract.RepositoryInfo.OWNER_AVATAR_URL, ""));
                 statement.execute();
                 count++;
             }
@@ -110,7 +110,7 @@ public class RepositoryContentProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case REPOSITORY:
                 db = repositoryOpenHelper.getReadableDatabase();
-                Cursor cursor = db.query(RepositoryOpenHelper.REPOSITORY_TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                Cursor cursor = db.query(RepositoryContract.RepositoryInfo.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 cursor.setNotificationUri(getContext().getContentResolver(), RepositoryContract.CONTENT_URI);
                 return cursor;
             default:

@@ -1,6 +1,6 @@
 package com.ivshinaleksei.githubviewer.network.request.builder;
 
-import com.ivshinaleksei.githubviewer.network.AbsRepositorySearchRequest;
+import com.ivshinaleksei.githubviewer.network.BaseRepositorySearchRequest;
 import com.ivshinaleksei.githubviewer.network.request.SortedRepositorySearchRequest;
 
 public class SortedRepositorySearchRequestBuilder {
@@ -23,7 +23,7 @@ public class SortedRepositorySearchRequestBuilder {
         return this;
     }
 
-    public AbsRepositorySearchRequest build() {
+    public BaseRepositorySearchRequest build() {
         return new SortedRepositorySearchRequest(query, sortBy, order);
     }
 }

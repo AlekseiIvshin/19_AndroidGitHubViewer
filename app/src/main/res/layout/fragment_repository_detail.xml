@@ -1,7 +1,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:context="com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,18 +16,17 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment">
+                android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@id/details.ownerAvatar"
+                    android:id="@+id/details.ownerAvatar"
                     style="@style/AppTheme.RepositoryDetails.Owner.Avatar"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
                     tools:src="@drawable/github_mark" />
 
                 <TextView
-                    android:id="@id/details.ownerLogin"
+                    android:id="@+id/details.ownerLogin"
                     style="@style/AppTheme.RepositoryDetails.Owner.Login"
                     android:layout_toRightOf="@id/details.ownerAvatar"
                     tools:text="OwnerLogin" />
@@ -38,34 +38,33 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment">
+                android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@id/details.repoFullName"
+                    android:id="@+id/details.repoFullName"
                     style="@style/AppTheme.RepositoryDetails.RepoName"
                     android:layout_alignParentLeft="true"
                     tools:text="Repository/Full name" />
 
                 <TextView
-                    android:id="@id/details.createdDate"
+                    android:id="@+id/details.createdDate"
                     style="@style/AppTheme.RepositoryDetails.CreatedDate"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/details.repoFullName"
                     tools:text="dd/MM/yyyy" />
 
                 <TextView
-                    android:id="@id/details.repoLanguage"
+                    android:id="@+id/details.repoLanguage"
                     style="@style/AppTheme.RepositoryDetails.RepoLanguage"
                     android:layout_below="@id/details.repoFullName"
-                    android:layout_toLeftOf="@id/details.repoStarsImage"
+                    android:layout_toLeftOf="@+id/details.repoStarsImage"
                     tools:text="Language" />
 
                 <ImageView
                     android:id="@id/details.repoStarsImage"
                     style="@style/AppTheme.RepositoryDetails.StarsImage"
                     android:layout_below="@id/details.repoFullName"
-                    android:layout_toLeftOf="@id/details.repoStars" />
+                    android:layout_toLeftOf="@+id/details.repoStars" />
 
                 <TextView
                     android:id="@id/details.repoStars"
@@ -75,7 +74,7 @@
                     tools:text="NNN" />
 
                 <TextView
-                    android:id="@id/details.repoDescription"
+                    android:id="@+id/details.repoDescription"
                     style="@style/AppTheme.RepositoryDetails.Description"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/details.createdDate"

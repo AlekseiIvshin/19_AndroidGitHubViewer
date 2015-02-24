@@ -4,23 +4,23 @@
     style="@style/AppTheme.RepositoryList.Item">
 
     <TextView
-        android:id="@id/list.item.repoFullName"
+        android:id="@+id/list.item.repoFullName"
         style="@style/AppTheme.RepositoryList.Item.RepoName"
         android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@id/list.item.repoLanguage"
+        android:layout_toLeftOf="@+id/list.item.repoLanguage"
         tools:text="Repository/Full name" />
 
     <TextView
         android:id="@id/list.item.repoLanguage"
         style="@style/AppTheme.RepositoryList.Item.RepoLanguage"
-        android:layout_toLeftOf="@id/list.item.repoStarsImage"
+        android:layout_toLeftOf="@+id/list.item.repoStarsImage"
         tools:text="Language" />
 
 
     <ImageView
         android:id="@id/list.item.repoStarsImage"
         style="@style/AppTheme.RepositoryList.Item.StarsImage"
-        android:layout_toLeftOf="@id/list.item.repoStars" />
+        android:layout_toLeftOf="@+id/list.item.repoStars" />
 
     <TextView
         android:id="@id/list.item.repoStars"

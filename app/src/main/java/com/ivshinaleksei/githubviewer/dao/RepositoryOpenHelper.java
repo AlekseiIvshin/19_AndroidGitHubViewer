@@ -9,17 +9,16 @@ import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 public class RepositoryOpenHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "githubviewer.db";
-    public static final String REPOSITORY_TABLE_NAME = "repository";
     private static final String REPOSITORIES_TABLE_CREATE =
-            "CREATE TABLE " + REPOSITORY_TABLE_NAME + " (" +
-                    RepositoryContract.Columns._ID + " INTEGER PRIMARY KEY, " +
-                    RepositoryContract.Columns.FULL_NAME + " TEXT UNIQUE, " +
-                    RepositoryContract.Columns.LANGUAGE + " TEXT," +
-                    RepositoryContract.Columns.STARGAZERS_COUNT + " INTEGER, " +
-                    RepositoryContract.Columns.CREATED_DATE + " INTEGER," +
-                    RepositoryContract.Columns.DESCRIPTION + " TEXT," +
-                    RepositoryContract.Columns.OWNER_LOGIN + " TEXT, " +
-                    RepositoryContract.Columns.OWNER_AVATAR_URL + " TEXT);";
+            "CREATE TABLE " + RepositoryContract.RepositoryInfo.TABLE_NAME + " (" +
+                    RepositoryContract.RepositoryInfo._ID + " INTEGER PRIMARY KEY, " +
+                    RepositoryContract.RepositoryInfo.FULL_NAME + " TEXT UNIQUE, " +
+                    RepositoryContract.RepositoryInfo.LANGUAGE + " TEXT," +
+                    RepositoryContract.RepositoryInfo.STARGAZERS_COUNT + " INTEGER, " +
+                    RepositoryContract.RepositoryInfo.CREATED_DATE + " INTEGER," +
+                    RepositoryContract.RepositoryInfo.DESCRIPTION + " TEXT," +
+                    RepositoryContract.RepositoryInfo.OWNER_LOGIN + " TEXT, " +
+                    RepositoryContract.RepositoryInfo.OWNER_AVATAR_URL + " TEXT);";
     private static final int DATABASE_VERSION = 1;
 
     public RepositoryOpenHelper(Context context) {
@@ -34,7 +33,7 @@ public class RepositoryOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO: stubbed update
-        db.execSQL("DROP TABLE IF EXISTS " + REPOSITORY_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + RepositoryContract.RepositoryInfo.TABLE_NAME);
         onCreate(db);
     }
 

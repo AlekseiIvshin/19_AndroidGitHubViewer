@@ -20,10 +20,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
-import com.ivshinaleksei.githubviewer.domain.RepositoryCursorMapper;
-import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
-import com.ivshinaleksei.githubviewer.network.AbsRepositorySearchRequest;
-import com.ivshinaleksei.githubviewer.network.RepositoryList;
+import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
+import com.ivshinaleksei.githubviewer.network.BaseRepositorySearchRequest;
+import com.ivshinaleksei.githubviewer.domain.RepositoryList;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
 import com.ivshinaleksei.githubviewer.network.request.builder.SortedRepositorySearchRequestBuilder;
 import com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment;
@@ -36,13 +35,12 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 public class MainActivity extends ActionBarActivity implements RepositoryListFragment.OnRepositorySelectedListener {
 
-
-    public static final String CURRENT_POSITION = "githubviewer.list.currentposition";
-    public static final String SELECTED_REPOSITORY = "githubviewer.list.repository";
+    // TODO: see to code convention
+    private static final String SELECTED_REPOSITORY = "githubviewer.list.repository";
 
     private boolean mDualPane;
     private int mCurrentPos = -1;
-    private RepositoryFullInfo mCurrentInfo;
+    private RepositoryInfo mCurrentInfo;
 
     private SpiceManager mSpiceManager = new SpiceManager(RepositoryService.class);
 
@@ -56,7 +54,6 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (savedInstanceState != null) {
-            mCurrentPos = savedInstanceState.getInt(CURRENT_POSITION);
             mCurrentInfo = savedInstanceState.getParcelable(SELECTED_REPOSITORY);
         }
 
@@ -65,16 +62,14 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         initNavigationDrawer();
 
         if (!mDualPane) {
-            RepositoryListFragment listViewFragment = new RepositoryListFragment();
-            if (mCurrentPos != 0) {
-                Bundle b = new Bundle();
-                b.putInt(CURRENT_POSITION, mCurrentPos);
-                listViewFragment.setArguments(b);
-            }
+            // TODO: check on "work?"
+            if(getSupportFragmentManager().findFragmentById(R.id.contentFrame)==null) {
+                RepositoryListFragment listViewFragment = RepositoryListFragment.newInstance(mCurrentPos);
 
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.contentFrame, listViewFragment);
-            transaction.commit();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.contentFrame, listViewFragment);
+                transaction.commit();
+            }
         }
 
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentRepositoryDetails) != null && mCurrentInfo == null) {
@@ -107,7 +102,6 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(CURRENT_POSITION, mCurrentPos);
         outState.putParcelable(SELECTED_REPOSITORY, mCurrentInfo);
     }
 
@@ -119,10 +113,10 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String aQuery) {
-                if (aQuery.length() >= getResources().getInteger(R.integer.minQueryLength)) {
-                    AbsRepositorySearchRequest repositoryListRequest = new SortedRepositorySearchRequestBuilder(aQuery).sortBy("stars").order("desc").build();
-                    mSpiceManager.execute(repositoryListRequest, "repositoriesPreviews." + aQuery, DurationInMillis.ONE_MINUTE, new RepositoryListRequestListener());
+            public boolean onQueryTextSubmit(String query) {
+                if (query.length() >= getResources().getInteger(R.integer.minQueryLength)) {
+                    BaseRepositorySearchRequest repositoryListRequest = new SortedRepositorySearchRequestBuilder(query).sortBy("stars").order("desc").build();
+                    mSpiceManager.execute(repositoryListRequest, "repositoriesPreviews." + query, DurationInMillis.ONE_MINUTE, new RepositoryListRequestListener());
                 }
                 return true;
             }
@@ -143,13 +137,12 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 
     @Override
     protected void onStop() {
-        RepositoryCursorMapper.release();
         mSpiceManager.shouldStop();
         super.onStop();
     }
 
     @Override
-    public void onRepositorySelected(int position, RepositoryFullInfo aRepository) {
+    public void onRepositorySelected(int position, RepositoryInfo aRepository) {
         mCurrentInfo = aRepository;
         mCurrentPos = position;
         RepositoryDetailFragment detailFragment =
@@ -192,7 +185,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             }
         };
 
-        navigation.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_nav_list_item_style, getResources().getStringArray(R.array.navigation)));
+        navigation.setAdapter(new ArrayAdapter<>(this, R.layout.list_item_drawer_navigation, getResources().getStringArray(R.array.navigation)));
 
         drawerLayout.setDrawerListener(mDrawerToggle);
 
@@ -207,7 +200,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             Log.v("RepositoryPreviewRequestListener", "Failure");
 
             int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(MainActivity.this, getString(R.string.loadRepositoriesInfo_failure) + ": " + spiceException.getMessage(), duration);
+            Toast toast = Toast.makeText(MainActivity.this, getString(R.string.loadRepositoriesInfo_failure, spiceException.getMessage()), duration);
             toast.setGravity(Gravity.TOP, 0, getResources().getInteger(R.integer.toastOffsetY));
             toast.show();
         }
@@ -216,7 +209,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         public void onRequestSuccess(RepositoryList repositoryPreviews) {
             ContentValues[] data = new ContentValues[repositoryPreviews.items.size()];
             for (int i = 0; i < data.length; i++) {
-                data[i] = RepositoryCursorMapper.getInstance().marshalling(repositoryPreviews.items.get(i));
+                data[i] = repositoryPreviews.items.get(i).marshalling();
             }
             MainActivity.this.getContentResolver().bulkInsert(RepositoryContract.CONTENT_URI, data);
         }
