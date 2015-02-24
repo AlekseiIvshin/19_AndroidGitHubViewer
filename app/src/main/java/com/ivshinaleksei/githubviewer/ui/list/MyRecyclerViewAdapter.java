@@ -10,6 +10,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -87,11 +88,13 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         changeCursor(data);
+        notifyDataSetChanged();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         changeCursor(null);
+        notifyDataSetChanged();
     }
 
     public void changeCursor(Cursor newCursor) {
@@ -140,6 +143,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             repositoryLanguage.setText(item.language);
             repositoryName.setText(item.fullName);
         }
+
     }
 
 }
