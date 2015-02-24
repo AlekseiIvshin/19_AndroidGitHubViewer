@@ -14,4 +14,5 @@ public class RepositoryListRequest extends RetrofitSpiceRequest<RepositoryList, 
     public RepositoryList loadDataFromNetwork() throws Exception {
         return getService().repositories(query);
     }
+
 }

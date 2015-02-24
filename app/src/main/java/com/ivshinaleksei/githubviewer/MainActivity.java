@@ -62,21 +62,21 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             mCurrentInfo = savedInstanceState.getParcelable(SELECTED_REPOSITORY);
         }
 
-        mDualPane = (Configuration.ORIENTATION_LANDSCAPE == getResources().getConfiguration().orientation);
+        mDualPane = (findViewById(R.id.contentFrame) == null);
 
         initNavigationDrawer();
 
-        if (findViewById(R.id.contentFrame) != null) {
-            RepositoryListFragment listViewFragment = new RepositoryListFragment();
-            if (mCurrentPos != 0) {
-                Bundle b = new Bundle();
-                b.putInt(CURRENT_POSITION, mCurrentPos);
-                listViewFragment.setArguments(b);
-            }
+        if (!mDualPane) {
+                RepositoryListFragment listViewFragment = new RepositoryListFragment();
+                if (mCurrentPos != 0) {
+                    Bundle b = new Bundle();
+                    b.putInt(CURRENT_POSITION, mCurrentPos);
+                    listViewFragment.setArguments(b);
+                }
 
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.contentFrame, listViewFragment).addToBackStack(null);
-            transaction.commit();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.contentFrame, listViewFragment).addToBackStack(null);
+                transaction.commit();
         }
 
         if (getSupportFragmentManager().findFragmentById(R.id.repositoryDetailsFragment) != null && mCurrentInfo == null) {

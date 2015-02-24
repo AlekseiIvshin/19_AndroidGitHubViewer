@@ -8,8 +8,8 @@
     <dimen name="dividerHeight">8dp</dimen>
 
     <!-- Image sizes-->
-    <dimen name="OwnerAvatarMaxHeight">200dp</dimen>
-    <dimen name="OwnerAvatarMinHeight">150dp</dimen>
-    <dimen name="OwnerAvatarMaxWidth">200dp</dimen>
-    <dimen name="OwnerAvatarMinWidth">150dp</dimen>
+    <dimen name="OwnerAvatarMaxHeight">100dp</dimen>
+    <dimen name="OwnerAvatarMinHeight">100dp</dimen>
+    <dimen name="OwnerAvatarMaxWidth">100dp</dimen>
+    <dimen name="OwnerAvatarMinWidth">100dp</dimen>
 </resources>
