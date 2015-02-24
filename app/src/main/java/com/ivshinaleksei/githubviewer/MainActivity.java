@@ -22,9 +22,10 @@ import android.widget.Toast;
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.ivshinaleksei.githubviewer.domain.RepositoryCursorMapper;
 import com.ivshinaleksei.githubviewer.domain.RepositoryFullInfo;
+import com.ivshinaleksei.githubviewer.network.AbsRepositorySearchRequest;
 import com.ivshinaleksei.githubviewer.network.RepositoryList;
-import com.ivshinaleksei.githubviewer.network.RepositoryListRequest;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
+import com.ivshinaleksei.githubviewer.network.request.builder.SortedRepositorySearchRequestBuilder;
 import com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment;
 import com.ivshinaleksei.githubviewer.ui.list.RepositoryListFragment;
 import com.octo.android.robospice.SpiceManager;
@@ -120,7 +121,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             @Override
             public boolean onQueryTextSubmit(String aQuery) {
                 if (aQuery.length() >= getResources().getInteger(R.integer.minQueryLength)) {
-                    RepositoryListRequest repositoryListRequest = new RepositoryListRequest(aQuery);
+                    AbsRepositorySearchRequest repositoryListRequest = new SortedRepositorySearchRequestBuilder(aQuery).sortBy("stars").order("desc").build();
                     mSpiceManager.execute(repositoryListRequest, "repositoriesPreviews." + aQuery, DurationInMillis.ONE_MINUTE, new RepositoryListRequestListener());
                 }
                 return true;
@@ -206,8 +207,8 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             Log.v("RepositoryPreviewRequestListener", "Failure");
 
             int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(MainActivity.this, getString(R.string.loadRepositoriesInfo_failure)+": "+spiceException.getMessage(), duration);
-            toast.setGravity(Gravity.TOP,0,getResources().getInteger(R.integer.toastOffsetY));
+            Toast toast = Toast.makeText(MainActivity.this, getString(R.string.loadRepositoriesInfo_failure) + ": " + spiceException.getMessage(), duration);
+            toast.setGravity(Gravity.TOP, 0, getResources().getInteger(R.integer.toastOffsetY));
             toast.show();
         }
 
