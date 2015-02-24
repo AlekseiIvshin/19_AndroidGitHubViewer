@@ -8,6 +8,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
@@ -17,7 +18,6 @@ import com.ivshinaleksei.githubviewer.dao.RepositoryOpenHelper;
 public class RepositoryContentProvider extends ContentProvider {
 
     private static final int REPOSITORY = 1;
-    private static final int REPOSITORY_FULLNAME = 2;
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     private static final String INSERT_QUERY = "INSERT INTO " + RepositoryOpenHelper.REPOSITORY_TABLE_NAME + "(" +
             RepositoryContract.Columns.FULL_NAME + "," +
@@ -25,11 +25,9 @@ public class RepositoryContentProvider extends ContentProvider {
             RepositoryContract.Columns.STARGAZERS_COUNT + "," +
             RepositoryContract.Columns.CREATED_DATE + "," +
             RepositoryContract.Columns.DESCRIPTION + "," +
-            RepositoryContract.Columns.REPOSITORY_URL + "," +
             RepositoryContract.Columns.OWNER_LOGIN + "," +
-            RepositoryContract.Columns.OWNER_AVATAR_URL + "," +
-            RepositoryContract.Columns.OWNER_URL +
-            ") VALUES(?,?,?,?,?,?,?,?,?);";
+            RepositoryContract.Columns.OWNER_AVATAR_URL +
+            ") VALUES(?,?,?,?,?,?,?);";
     static {
         sUriMatcher.addURI("com.ivshinaleksei.githubviewer.provider", "repositories", REPOSITORY);
     }
@@ -76,7 +74,7 @@ public class RepositoryContentProvider extends ContentProvider {
     }
 
     @Override
-    public int bulkInsert(Uri uri, ContentValues[] values) {
+    public int bulkInsert(Uri uri, @NonNull ContentValues[] values) {
         db = repositoryOpenHelper.getWritableDatabase();
         SQLiteStatement statement = db.compileStatement(INSERT_QUERY);
         int count = 0;
@@ -90,10 +88,8 @@ public class RepositoryContentProvider extends ContentProvider {
                 statement.bindLong(3, val.getAsInteger(RepositoryContract.Columns.STARGAZERS_COUNT));
                 statement.bindLong(4, val.getAsLong(RepositoryContract.Columns.CREATED_DATE));
                 statement.bindString(5, value(val, RepositoryContract.Columns.DESCRIPTION, ""));
-                statement.bindString(6, val.getAsString(RepositoryContract.Columns.REPOSITORY_URL));
-                statement.bindString(7, val.getAsString(RepositoryContract.Columns.OWNER_LOGIN));
-                statement.bindString(8, value(val, RepositoryContract.Columns.OWNER_AVATAR_URL, ""));
-                statement.bindString(9, val.getAsString(RepositoryContract.Columns.OWNER_URL));
+                statement.bindString(6, val.getAsString(RepositoryContract.Columns.OWNER_LOGIN));
+                statement.bindString(7, value(val, RepositoryContract.Columns.OWNER_AVATAR_URL, ""));
                 statement.execute();
                 count++;
             }

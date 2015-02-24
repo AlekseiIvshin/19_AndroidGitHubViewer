@@ -33,10 +33,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                     RepositoryContract.Columns.STARGAZERS_COUNT,
                     RepositoryContract.Columns.CREATED_DATE,
                     RepositoryContract.Columns.DESCRIPTION,
-                    RepositoryContract.Columns.REPOSITORY_URL,
                     RepositoryContract.Columns.OWNER_LOGIN,
-                    RepositoryContract.Columns.OWNER_AVATAR_URL,
-                    RepositoryContract.Columns.OWNER_URL
+                    RepositoryContract.Columns.OWNER_AVATAR_URL
             };
     private Cursor mCursor;
     private RepositoryListFragment.OnRepositorySelectedListener mSelectedItemListener;

@@ -16,9 +16,7 @@ public class RepositoryContract {
         public static final String STARGAZERS_COUNT = "stargazersCount";
         public static final String CREATED_DATE = "createdDate";
         public static final String DESCRIPTION = "description";
-        public static final String REPOSITORY_URL = "repositoryUrl";
         public static final String OWNER_LOGIN = "ownerLogin";
         public static final String OWNER_AVATAR_URL = "ownerAvatarUrl";
-        public static final String OWNER_URL = "ownerUrl";
     }
 }

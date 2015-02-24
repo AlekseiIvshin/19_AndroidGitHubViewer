@@ -18,10 +18,8 @@ public class RepositoryOpenHelper extends SQLiteOpenHelper {
                     RepositoryContract.Columns.STARGAZERS_COUNT + " INTEGER, " +
                     RepositoryContract.Columns.CREATED_DATE + " INTEGER," +
                     RepositoryContract.Columns.DESCRIPTION + " TEXT," +
-                    RepositoryContract.Columns.REPOSITORY_URL + " TEXT, " +
                     RepositoryContract.Columns.OWNER_LOGIN + " TEXT, " +
-                    RepositoryContract.Columns.OWNER_AVATAR_URL + " TEXT, " +
-                    RepositoryContract.Columns.OWNER_URL + " TEXT );";
+                    RepositoryContract.Columns.OWNER_AVATAR_URL + " TEXT);";
     private static final int DATABASE_VERSION = 1;
 
     public RepositoryOpenHelper(Context context) {

@@ -7,7 +7,7 @@ public class MyBitmapCacheManagerImpl implements MyBitmapCacheManager {
 
     private static MyBitmapCacheManagerImpl manager;
 
-    public static MyBitmapCacheManagerImpl getInstance() {
+    public static MyBitmapCacheManager getInstance() {
         if (manager == null) {
             synchronized (MyBitmapCacheManagerImpl.class) {
                 if (manager == null) {
@@ -22,6 +22,21 @@ public class MyBitmapCacheManagerImpl implements MyBitmapCacheManager {
 
     private MyBitmapCacheManagerImpl() {
         initMemoryCache();
+    }
+
+    @Override
+    public Bitmap get(String key) {
+        Bitmap result = getBitmapFromMemoryCache(key);
+        if (result == null) {
+            // TODO: getFromdisk cach
+        }
+        return result;
+    }
+
+    @Override
+    public void set(String key, Bitmap bitmap) {
+        addBitmapToMemoryCache(key, bitmap);
+        // TODO: add to disk cache
     }
 
     private void initMemoryCache() {
@@ -46,18 +61,4 @@ public class MyBitmapCacheManagerImpl implements MyBitmapCacheManager {
         return mMemoryCache.get(key);
     }
 
-    @Override
-    public Bitmap get(String key) {
-        Bitmap result = getBitmapFromMemoryCache(key);
-        if (result == null) {
-            // TODO: getFromdisk cach
-        }
-        return result;
-    }
-
-    @Override
-    public void set(String key, Bitmap bitmap) {
-        addBitmapToMemoryCache(key, bitmap);
-        // TODO: add to disk cache
-    }
 }

@@ -30,21 +30,18 @@ public class RepositoryFullInfo implements Parcelable {
     public Date createdDate;
     @JsonProperty("description")
     public String description;
-    @JsonProperty("url")
-    public String repositoryUrl;
     @JsonProperty("owner")
     public RepositoryOwner repositoryOwner;
 
     public RepositoryFullInfo() {
     }
 
-    public RepositoryFullInfo(String fullName, String language, int stargazersCount, Date date, String description, String repositoryUrl, RepositoryOwner owner) {
+    public RepositoryFullInfo(String fullName, String language, int stargazersCount, Date date, String description, RepositoryOwner owner) {
         this.fullName = fullName;
         this.language = language;
         this.stargazersCount = stargazersCount;
         this.createdDate = date;
         this.description = description;
-        this.repositoryUrl = repositoryUrl;
         this.repositoryOwner = owner;
     }
 
@@ -55,7 +52,6 @@ public class RepositoryFullInfo implements Parcelable {
         long tmpCreatedDate = in.readLong();
         this.createdDate = tmpCreatedDate == -1 ? null : new Date(tmpCreatedDate);
         this.description = in.readString();
-        this.repositoryUrl = in.readString();
         this.repositoryOwner = in.readParcelable(RepositoryOwner.class.getClassLoader());
     }
 
@@ -71,7 +67,30 @@ public class RepositoryFullInfo implements Parcelable {
         dest.writeInt(this.stargazersCount);
         dest.writeLong(createdDate != null ? createdDate.getTime() : -1);
         dest.writeString(this.description);
-        dest.writeString(this.repositoryUrl);
         dest.writeParcelable(this.repositoryOwner, flags);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RepositoryFullInfo that = (RepositoryFullInfo) o;
+
+        if (!createdDate.equals(that.createdDate)) return false;
+        if (!fullName.equals(that.fullName)) return false;
+        if (language != null ? !language.equals(that.language) : that.language != null)
+            return false;
+        return repositoryOwner.equals(that.repositoryOwner);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = fullName.hashCode();
+        result = 31 * result + (language != null ? language.hashCode() : 0);
+        result = 31 * result + createdDate.hashCode();
+        result = 31 * result + repositoryOwner.hashCode();
+        return result;
     }
 }

@@ -21,22 +21,18 @@ public class RepositoryOwner implements Parcelable {
     public String login;
     @JsonProperty("avatar_url")
     public String avatarUrl;
-    @JsonProperty("url")
-    public String url;
 
     public RepositoryOwner() {
     }
 
-    public RepositoryOwner(String login, String avatarUrl, String ownerUrl) {
+    public RepositoryOwner(String login, String avatarUrl) {
         this.login = login;
         this.avatarUrl = avatarUrl;
-        this.url = ownerUrl;
     }
 
     private RepositoryOwner(Parcel in) {
         this.login = in.readString();
         this.avatarUrl = in.readString();
-        this.url = in.readString();
     }
 
     @Override
@@ -48,6 +44,21 @@ public class RepositoryOwner implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.login);
         dest.writeString(this.avatarUrl);
-        dest.writeString(this.url);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RepositoryOwner that = (RepositoryOwner) o;
+
+        return login.equals(that.login);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return login.hashCode();
     }
 }

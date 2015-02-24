@@ -38,41 +38,35 @@ public class RepositoryCursorMapper implements CursorMapper<RepositoryFullInfo> 
     public RepositoryFullInfo get(ContentValues values) {
         String login = values.getAsString(RepositoryContract.Columns.OWNER_LOGIN);
         String avatarUrl = values.getAsString(RepositoryContract.Columns.OWNER_AVATAR_URL);
-        String ownerUrl = values.getAsString(RepositoryContract.Columns.OWNER_URL);
         String fullName = values.getAsString(RepositoryContract.Columns.FULL_NAME);
         String language = values.getAsString(RepositoryContract.Columns.LANGUAGE);
         int stargazersCount = values.getAsInteger(RepositoryContract.Columns.STARGAZERS_COUNT);
         long createdDate = values.getAsLong(RepositoryContract.Columns.CREATED_DATE) * 1000;
         String description = values.getAsString(RepositoryContract.Columns.DESCRIPTION);
-        String repositoryUrl = values.getAsString(RepositoryContract.Columns.REPOSITORY_URL);
-        RepositoryOwner owner = new RepositoryOwner(login, avatarUrl, ownerUrl);
-        return new RepositoryFullInfo(fullName, language, stargazersCount, new Date(createdDate), description, repositoryUrl, owner);
+        RepositoryOwner owner = new RepositoryOwner(login, avatarUrl);
+        return new RepositoryFullInfo(fullName, language, stargazersCount, new Date(createdDate), description, owner);
     }
 
     @Override
     public RepositoryFullInfo get(Cursor cursor) {
         int iOwnerLogin = cursor.getColumnIndex(RepositoryContract.Columns.OWNER_LOGIN);
         int iOwnerAvatarUrl = cursor.getColumnIndex(RepositoryContract.Columns.OWNER_AVATAR_URL);
-        int iOwnerUrl = cursor.getColumnIndex(RepositoryContract.Columns.OWNER_URL);
         int iRepositoryFullName = cursor.getColumnIndex(RepositoryContract.Columns.FULL_NAME);
         int iLanguage = cursor.getColumnIndex(RepositoryContract.Columns.LANGUAGE);
         int iStargazersCount = cursor.getColumnIndex(RepositoryContract.Columns.STARGAZERS_COUNT);
         int iCreatedDate = cursor.getColumnIndex(RepositoryContract.Columns.CREATED_DATE);
         int iDescription = cursor.getColumnIndex(RepositoryContract.Columns.DESCRIPTION);
-        int iRepositoryUrl = cursor.getColumnIndex(RepositoryContract.Columns.REPOSITORY_URL);
 
         String login = cursor.getString(iOwnerLogin);
         String avatarUrl = cursor.getString(iOwnerAvatarUrl);
-        String ownerUrl = cursor.getString(iOwnerUrl);
         String fullName = cursor.getString(iRepositoryFullName);
         String language = cursor.getString(iLanguage);
         int stargazersCount = cursor.getInt(iStargazersCount);
         long createdDate = cursor.getLong(iCreatedDate) * 1000;
         String description = cursor.getString(iDescription);
-        String repositoryUrl = cursor.getString(iRepositoryUrl);
 
-        RepositoryOwner owner = new RepositoryOwner(login, avatarUrl, ownerUrl);
-        return new RepositoryFullInfo(fullName, language, stargazersCount, new Date(createdDate), description, repositoryUrl, owner);
+        RepositoryOwner owner = new RepositoryOwner(login, avatarUrl);
+        return new RepositoryFullInfo(fullName, language, stargazersCount, new Date(createdDate), description,  owner);
     }
 
     @Override
@@ -83,10 +77,8 @@ public class RepositoryCursorMapper implements CursorMapper<RepositoryFullInfo> 
         values.put(RepositoryContract.Columns.STARGAZERS_COUNT, value.stargazersCount);
         values.put(RepositoryContract.Columns.CREATED_DATE, value.createdDate.getTime() / 1000);
         values.put(RepositoryContract.Columns.DESCRIPTION, value.description);
-        values.put(RepositoryContract.Columns.REPOSITORY_URL, value.repositoryUrl);
         values.put(RepositoryContract.Columns.OWNER_LOGIN, value.repositoryOwner.login);
         values.put(RepositoryContract.Columns.OWNER_AVATAR_URL, value.repositoryOwner.avatarUrl);
-        values.put(RepositoryContract.Columns.OWNER_URL, value.repositoryOwner.url);
         return values;
     }
 }
