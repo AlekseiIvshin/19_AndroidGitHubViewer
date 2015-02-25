@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 import com.tojc.ormlite.android.annotation.AdditionalAnnotation;
 
 import org.simpleframework.xml.Element;
@@ -18,43 +19,43 @@ import org.simpleframework.xml.Root;
 
 import java.util.Date;
 
-@Root
-@AdditionalAnnotation.Contract
+@DatabaseTable(tableName = RepositoryContract.RepositoryInfo.TABLE_NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RepositoryInfo implements Parcelable {
-    public static final Parcelable.Creator<RepositoryInfo> CREATOR = new Parcelable.Creator<RepositoryInfo>() {
-        public RepositoryInfo createFromParcel(Parcel source) {
-            return new RepositoryInfo(source);
-        }
 
-        public RepositoryInfo[] newArray(int size) {
-            return new RepositoryInfo[size];
-        }
-    };
-    @DatabaseField(columnName = BaseColumns._ID, generatedId = true)
+    @DatabaseField(columnName = RepositoryContract.RepositoryInfo._ID, generatedId = true)
     public int id;
 
-    @Element
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "repositorylist_id")
+    public RepositoryList repositorylist;
+
+    @Element(required = false)
+    @DatabaseField(columnName = RepositoryContract.RepositoryInfo.FULL_NAME)
     @JsonProperty("full_name")
     public String fullName;
 
-    @Element
+    @Element(required = false)
+    @DatabaseField(columnName = RepositoryContract.RepositoryInfo.LANGUAGE)
     @JsonProperty("language")
     public String language;
 
-    @Element
+    @Element(required = false)
+    @DatabaseField(columnName = RepositoryContract.RepositoryInfo.STARGAZERS_COUNT)
     @JsonProperty("stargazers_count")
     public int stargazersCount;
 
-    @Element
+    @Element(required = false)
+    @DatabaseField(columnName = RepositoryContract.RepositoryInfo.CREATED_DATE)
     @JsonProperty("created_at")
     public Date createdDate;
 
-    @Element
+    @Element(required = false)
+    @DatabaseField(columnName = RepositoryContract.RepositoryInfo.DESCRIPTION)
     @JsonProperty("description")
     public String description;
 
-    @Element
+    @Element(required = false)
+    @DatabaseField(foreign = true)
     @JsonProperty("owner")
     public RepositoryOwner repositoryOwner;
 
@@ -81,8 +82,8 @@ public class RepositoryInfo implements Parcelable {
     }
 
     public static RepositoryInfo getFromCursor(Cursor cursor) {
-        int iOwnerLogin = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.OWNER_LOGIN);
-        int iOwnerAvatarUrl = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.OWNER_AVATAR_URL);
+        int iOwnerLogin = cursor.getColumnIndex(RepositoryContract.RepositoryOwner.OWNER_LOGIN);
+        int iOwnerAvatarUrl = cursor.getColumnIndex(RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL);
         int iRepositoryFullName = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.FULL_NAME);
         int iLanguage = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.LANGUAGE);
         int iStargazersCount = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.STARGAZERS_COUNT);
@@ -108,10 +109,20 @@ public class RepositoryInfo implements Parcelable {
         values.put(RepositoryContract.RepositoryInfo.STARGAZERS_COUNT, this.stargazersCount);
         values.put(RepositoryContract.RepositoryInfo.CREATED_DATE, this.createdDate.getTime() / 1000);
         values.put(RepositoryContract.RepositoryInfo.DESCRIPTION, this.description);
-        values.put(RepositoryContract.RepositoryInfo.OWNER_LOGIN, this.repositoryOwner.login);
-        values.put(RepositoryContract.RepositoryInfo.OWNER_AVATAR_URL, this.repositoryOwner.avatarUrl);
+        values.put(RepositoryContract.RepositoryOwner.OWNER_LOGIN, this.repositoryOwner.login);
+        values.put(RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL, this.repositoryOwner.avatarUrl);
         return values;
     }
+
+    public static final Parcelable.Creator<RepositoryInfo> CREATOR = new Parcelable.Creator<RepositoryInfo>() {
+        public RepositoryInfo createFromParcel(Parcel source) {
+            return new RepositoryInfo(source);
+        }
+
+        public RepositoryInfo[] newArray(int size) {
+            return new RepositoryInfo[size];
+        }
+    };
 
     @Override
     public int describeContents() {

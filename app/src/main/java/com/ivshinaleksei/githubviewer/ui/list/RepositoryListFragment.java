@@ -25,14 +25,8 @@ public class RepositoryListFragment extends Fragment {
     private MyRecyclerViewAdapter mAdapter;
     private int mCurrentPosition;
 
-    public static RepositoryListFragment newInstance(int currentPositoon) {
-        RepositoryListFragment repositoryListFragment = new RepositoryListFragment();
-        if (currentPositoon != 0) {
-            Bundle b = new Bundle();
-            b.putInt(sCurrentPosition, currentPositoon);
-            repositoryListFragment.setArguments(b);
-        }
-        return repositoryListFragment;
+    public static RepositoryListFragment newInstance() {
+        return new RepositoryListFragment();
     }
 
     @Override
@@ -73,7 +67,7 @@ public class RepositoryListFragment extends Fragment {
 
         if (mCurrentPosition >= 0) {
             mAdapter.moveCursorTo(mCurrentPosition);
-            mListener.onRepositorySelected(mCurrentPosition, RepositoryInfo.getFromCursor(mAdapter.getCursor()));
+            mListener.onRepositorySelected(RepositoryInfo.getFromCursor(mAdapter.getCursor()));
         }
     }
 
@@ -95,11 +89,12 @@ public class RepositoryListFragment extends Fragment {
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences(sPreferencesFileName, 0);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt(sCurrentPosition, mCurrentPosition);
+            editor.apply();
         }
     }
 
     public interface OnRepositorySelectedListener {
-        public void onRepositorySelected(int position, RepositoryInfo data);
+        public void onRepositorySelected(RepositoryInfo data);
     }
 
 }

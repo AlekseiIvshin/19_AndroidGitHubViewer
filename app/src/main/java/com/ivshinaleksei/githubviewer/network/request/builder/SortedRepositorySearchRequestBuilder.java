@@ -23,7 +23,7 @@ public class SortedRepositorySearchRequestBuilder {
         return this;
     }
 
-    public BaseRepositorySearchRequest build() {
+    public SortedRepositorySearchRequest build() {
         return new SortedRepositorySearchRequest(query, sortBy, order);
     }
 }

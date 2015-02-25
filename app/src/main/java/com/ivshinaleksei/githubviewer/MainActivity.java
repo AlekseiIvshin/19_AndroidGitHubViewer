@@ -27,6 +27,7 @@ import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
 import com.ivshinaleksei.githubviewer.domain.RepositoryList;
 import com.ivshinaleksei.githubviewer.network.BaseRepositorySearchRequest;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
+import com.ivshinaleksei.githubviewer.network.request.SortedRepositorySearchRequest;
 import com.ivshinaleksei.githubviewer.network.request.builder.SortedRepositorySearchRequestBuilder;
 import com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment;
 import com.ivshinaleksei.githubviewer.ui.list.RepositoryListFragment;
@@ -47,8 +48,9 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
     private static final String sRepositoryRequestCacheKey = "repositories";
     private static final String sSharedPreferencesName = "prefsFile";
 
+    private SortedRepositorySearchRequest mRepositoryListRequest;
+
     private boolean mDualPane;
-    private int mCurrentPos = -1;
     private RepositoryInfo mCurrentInfo;
 
     private SpiceManager mSpiceManager = new SpiceManager(RepositoryService.class);
@@ -74,7 +76,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         if (!mDualPane) {
             // TODO: check on "work?"
             if (getSupportFragmentManager().findFragmentById(R.id.contentFrame) == null) {
-                RepositoryListFragment listViewFragment = RepositoryListFragment.newInstance(mCurrentPos);
+                RepositoryListFragment listViewFragment = RepositoryListFragment.newInstance();
 
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.contentFrame, listViewFragment);
@@ -82,23 +84,33 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             }
         }
 
-        if (mCurrentInfo != null) {
-            onRepositorySelected(mCurrentPos, mCurrentInfo);
-        } else {
+        if (mCurrentInfo == null) {
             SharedPreferences sharedPreferences = getSharedPreferences(sSharedPreferencesName, 0);
             String savedValue = sharedPreferences.getString(sCurrentSavedRepository, null);
             if (savedValue != null) {
                 try {
                     mCurrentInfo = new ObjectMapper().readValue(sharedPreferences.getString(sCurrentSavedRepository, ""), RepositoryInfo.class);
-                } catch (IOException e) {
+                } catch (IOException ignored) {
                 }
             }
         }
+
+        onRepositorySelected(mCurrentInfo);
 
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentRepositoryDetails) != null && mCurrentInfo == null) {
             getSupportFragmentManager().beginTransaction().hide(getSupportFragmentManager().findFragmentById(R.id.fragmentRepositoryDetails)).commit();
         }
 
+        mRepositoryListRequest =
+                new SortedRepositorySearchRequestBuilder("hello")
+                        .sortBy("stars")
+                        .order("desc")
+                        .build();
+        mSpiceManager.execute(
+                mRepositoryListRequest,
+                sRepositoryRequestCacheKey,
+                DurationInMillis.ONE_MINUTE,
+                new RepositorySearchRequestListener());
     }
 
     @Override
@@ -122,9 +134,10 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             StringWriter writer = new StringWriter();
             try {
                 new ObjectMapper().writeValue(writer, mCurrentInfo);
-            } catch (IOException e) {
+            } catch (IOException ignored) {
             }
             editor.putString(sCurrentSavedRepository, writer.toString());
+            editor.apply();
         }
     }
 
@@ -150,13 +163,15 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query.length() >= getResources().getInteger(R.integer.minQueryLength)) {
-                    InputMethodManager inputMethodManager = (InputMethodManager) MainActivity.this.getSystemService(Activity.INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(MainActivity.this.getCurrentFocus().getWindowToken(), 0);
-                    ProgressBar mProgress = (ProgressBar) findViewById(R.id.progressBar);
-                    if (mProgress != null) {
-                        mProgress.setVisibility(View.VISIBLE);
-                    }
-                    BaseRepositorySearchRequest repositoryListRequest =
+//                    InputMethodManager inputMethodManager =
+//                            (InputMethodManager) MainActivity.this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+//                    inputMethodManager.hideSoftInputFromWindow(MainActivity.this.getCurrentFocus().getWindowToken(), 0);
+//
+//                    ProgressBar mProgress = (ProgressBar) findViewById(R.id.progressBar);
+//                    if (mProgress != null) {
+//                        mProgress.setVisibility(View.VISIBLE);
+//                    }
+                    SortedRepositorySearchRequest repositoryListRequest =
                             new SortedRepositorySearchRequestBuilder(query)
                                     .sortBy("stars")
                                     .order("desc")
@@ -191,9 +206,12 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
     }
 
     @Override
-    public void onRepositorySelected(int position, RepositoryInfo aRepository) {
+    public void onRepositorySelected(RepositoryInfo aRepository) {
+        if(mCurrentInfo==null){
+            return;
+        }
+
         mCurrentInfo = aRepository;
-        mCurrentPos = position;
         RepositoryDetailFragment detailFragment =
                 (RepositoryDetailFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentRepositoryDetails);
         if (detailFragment != null && mDualPane) {

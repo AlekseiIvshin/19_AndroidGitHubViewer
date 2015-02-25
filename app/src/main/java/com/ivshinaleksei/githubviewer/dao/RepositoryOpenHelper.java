@@ -9,16 +9,16 @@ import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 public class RepositoryOpenHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "githubviewer.db";
-    private static final String REPOSITORIES_TABLE_CREATE =
-            "CREATE TABLE " + RepositoryContract.RepositoryInfo.TABLE_NAME + " (" +
-                    RepositoryContract.RepositoryInfo._ID + " INTEGER PRIMARY KEY, " +
-                    RepositoryContract.RepositoryInfo.FULL_NAME + " TEXT UNIQUE, " +
-                    RepositoryContract.RepositoryInfo.LANGUAGE + " TEXT," +
-                    RepositoryContract.RepositoryInfo.STARGAZERS_COUNT + " INTEGER, " +
-                    RepositoryContract.RepositoryInfo.CREATED_DATE + " INTEGER," +
-                    RepositoryContract.RepositoryInfo.DESCRIPTION + " TEXT," +
-                    RepositoryContract.RepositoryInfo.OWNER_LOGIN + " TEXT, " +
-                    RepositoryContract.RepositoryInfo.OWNER_AVATAR_URL + " TEXT);";
+//    private static final String REPOSITORIES_TABLE_CREATE =
+//            "CREATE TABLE " + RepositoryContract.RepositoryInfo.TABLE_NAME + " (" +
+//                    RepositoryContract.RepositoryInfo._ID + " INTEGER PRIMARY KEY, " +
+//                    RepositoryContract.RepositoryInfo.FULL_NAME + " TEXT UNIQUE, " +
+//                    RepositoryContract.RepositoryInfo.LANGUAGE + " TEXT," +
+//                    RepositoryContract.RepositoryInfo.STARGAZERS_COUNT + " INTEGER, " +
+//                    RepositoryContract.RepositoryInfo.CREATED_DATE + " INTEGER," +
+//                    RepositoryContract.RepositoryInfo.DESCRIPTION + " TEXT," +
+//                    RepositoryContract.RepositoryInfo.OWNER_LOGIN + " TEXT, " +
+//                    RepositoryContract.RepositoryInfo.OWNER_AVATAR_URL + " TEXT);";
     private static final int DATABASE_VERSION = 1;
 
     public RepositoryOpenHelper(Context context) {
@@ -27,7 +27,7 @@ public class RepositoryOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(REPOSITORIES_TABLE_CREATE);
+//        db.execSQL(REPOSITORIES_TABLE_CREATE);
     }
 
     @Override

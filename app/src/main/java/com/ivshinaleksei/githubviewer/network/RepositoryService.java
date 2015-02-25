@@ -2,7 +2,10 @@ package com.ivshinaleksei.githubviewer.network;
 
 import android.app.Application;
 
+import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
+import com.ivshinaleksei.githubviewer.domain.RepositoryList;
+import com.ivshinaleksei.githubviewer.domain.RepositoryOwner;
 import com.octo.android.robospice.persistence.CacheManager;
 import com.octo.android.robospice.persistence.exception.CacheCreationException;
 import com.octo.android.robospice.persistence.ormlite.InDatabaseObjectPersisterFactory;
@@ -14,7 +17,6 @@ import java.util.List;
 
 public class RepositoryService extends RetrofitJackson2SpiceService {
 
-    private static final String sDatabaseName = "githubviewer.db";
 
     private final static String sBaseUrl = "https://api.github.com";
 
@@ -24,9 +26,11 @@ public class RepositoryService extends RetrofitJackson2SpiceService {
 
         List<Class<?>> classCollection = new ArrayList<Class<?>>();
         classCollection.add(RepositoryInfo.class);
+        classCollection.add(RepositoryOwner.class);
+        classCollection.add(RepositoryList.class);
 
         RoboSpiceDatabaseHelper databaseHelper =
-                new RoboSpiceDatabaseHelper(application, sDatabaseName, 1);
+                new RoboSpiceDatabaseHelper(application, RepositoryContract.DATABASE_NAME, RepositoryContract.DATABASE_VERSION);
         InDatabaseObjectPersisterFactory inDatabaseObjectPersisterFactory =
                 new InDatabaseObjectPersisterFactory(application, databaseHelper, classCollection);
         cacheManager.addPersister(inDatabaseObjectPersisterFactory);

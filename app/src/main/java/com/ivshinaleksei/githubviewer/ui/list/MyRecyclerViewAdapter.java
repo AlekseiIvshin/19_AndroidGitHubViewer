@@ -28,8 +28,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                     RepositoryContract.RepositoryInfo.STARGAZERS_COUNT,
                     RepositoryContract.RepositoryInfo.CREATED_DATE,
                     RepositoryContract.RepositoryInfo.DESCRIPTION,
-                    RepositoryContract.RepositoryInfo.OWNER_LOGIN,
-                    RepositoryContract.RepositoryInfo.OWNER_AVATAR_URL
+                    RepositoryContract.RepositoryOwner.OWNER_LOGIN,
+                    RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL
             };
     private Cursor mCursor;
     private RepositoryListFragment.OnRepositorySelectedListener mSelectedItemListener;
@@ -69,7 +69,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             case LOADER_ID:
                 return new CursorLoader(
                         mContext,
-                        RepositoryContract.CONTENT_URI,
+                        RepositoryContract.RepositoryInfo.CONTENT_URI,
                         sProjection,
                         null, null, null);
             default:
@@ -115,6 +115,18 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         }
     }
 
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        mSelectedItemListener = null;
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        mSelectedItemListener = null;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView repositoryName;
@@ -132,7 +144,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         @Override
         public void onClick(View v) {
             mCursor.moveToPosition(getPosition());
-            mSelectedItemListener.onRepositorySelected(getPosition(), RepositoryInfo.getFromCursor(mCursor));
+            mSelectedItemListener.onRepositorySelected(RepositoryInfo.getFromCursor(mCursor));
         }
 
         public void setItem(RepositoryInfo item) {

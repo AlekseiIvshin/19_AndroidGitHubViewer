@@ -2,34 +2,31 @@ package com.ivshinaleksei.githubviewer.domain;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.BaseColumns;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import org.simpleframework.xml.Element;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RepositoryOwner implements Parcelable {
 
-    public static final Parcelable.Creator<RepositoryOwner> CREATOR = new Parcelable.Creator<RepositoryOwner>() {
-        public RepositoryOwner createFromParcel(Parcel source) {
-            return new RepositoryOwner(source);
-        }
+    @DatabaseField(columnName = RepositoryContract.RepositoryOwner._ID, generatedId = true)
+    private int id;
 
-        public RepositoryOwner[] newArray(int size) {
-            return new RepositoryOwner[size];
-        }
-    };
-    @Element
+    @Element(required = false)
+    @DatabaseField(columnName = RepositoryContract.RepositoryOwner.OWNER_LOGIN)
     @JsonProperty("login")
     public String login;
 
-    @Element
+    @Element(required = false)
+    @DatabaseField(columnName = RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL)
     @JsonProperty("avatar_url")
     public String avatarUrl;
-    @DatabaseField(generatedId = true)
-    private int id;
 
     public RepositoryOwner() {
     }
@@ -44,6 +41,16 @@ public class RepositoryOwner implements Parcelable {
         this.login = in.readString();
         this.avatarUrl = in.readString();
     }
+
+    public static final Parcelable.Creator<RepositoryOwner> CREATOR = new Parcelable.Creator<RepositoryOwner>() {
+        public RepositoryOwner createFromParcel(Parcel source) {
+            return new RepositoryOwner(source);
+        }
+
+        public RepositoryOwner[] newArray(int size) {
+            return new RepositoryOwner[size];
+        }
+    };
 
     @Override
     public int describeContents() {
