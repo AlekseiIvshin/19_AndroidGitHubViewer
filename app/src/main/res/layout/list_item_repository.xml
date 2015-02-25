@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/defaultPadding"
-    android:paddingLeft="@dimen/defaultPadding"
-    android:paddingRight="@dimen/defaultPadding"
+    android:paddingLeft="@dimen/defaultHorizontalMargin"
+    android:paddingRight="@dimen/defaultHorizontalMargin"
     android:paddingTop="@dimen/defaultPadding">
 
     <TextView

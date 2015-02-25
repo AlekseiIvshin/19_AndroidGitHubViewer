@@ -2,12 +2,14 @@ package com.ivshinaleksei.githubviewer;
 
 import android.app.Application;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
 import com.ivshinaleksei.githubviewer.domain.RepositoryList;
 import com.ivshinaleksei.githubviewer.domain.RepositoryOwner;
+import com.j256.ormlite.table.TableUtils;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -24,6 +26,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         initImageLoader(getApplicationContext());
+        initDatabase(getApplicationContext());
     }
 
     public static void initImageLoader(Context applicationContext) {
@@ -37,6 +40,20 @@ public class MyApplication extends Application {
                 .build();
 
         ImageLoader.getInstance().init(config);
+    }
+
+    public static void initDatabase(Context context){
+        RoboSpiceDatabaseHelper dbHelper = new RoboSpiceDatabaseHelper(context,RepositoryContract.DATABASE_NAME,RepositoryContract.DATABASE_VERSION);
+        try {
+            TableUtils.createTableIfNotExists(
+                    dbHelper.getConnectionSource(), RepositoryOwner.class);
+            TableUtils.createTableIfNotExists(
+                    dbHelper.getConnectionSource(), RepositoryInfo.class);
+            TableUtils.createTableIfNotExists(
+                    dbHelper.getConnectionSource(), RepositoryList.class);
+        } catch (SQLException e) {
+            Log.e(MyApplication.class.getName(),"Init tables: "+e.getMessage());
+        }
     }
 
 }
