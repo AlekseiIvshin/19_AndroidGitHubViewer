@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -30,6 +31,7 @@ import com.ivshinaleksei.githubviewer.network.RepositoryService;
 import com.ivshinaleksei.githubviewer.network.request.SortedRepositorySearchRequest;
 import com.ivshinaleksei.githubviewer.network.request.builder.SortedRepositorySearchRequestBuilder;
 import com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment;
+import com.ivshinaleksei.githubviewer.ui.list.MyRecyclerViewAdapter;
 import com.ivshinaleksei.githubviewer.ui.list.RepositoryListFragment;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -100,17 +102,10 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentRepositoryDetails) != null && mCurrentInfo == null) {
             getSupportFragmentManager().beginTransaction().hide(getSupportFragmentManager().findFragmentById(R.id.fragmentRepositoryDetails)).commit();
         }
+    }
 
-        mRepositoryListRequest =
-                new SortedRepositorySearchRequestBuilder("hello")
-                        .sortBy("stars")
-                        .order("desc")
-                        .build();
-        mSpiceManager.execute(
-                mRepositoryListRequest,
-                sRepositoryRequestCacheKey,
-                DurationInMillis.ONE_MINUTE,
-                new RepositorySearchRequestListener());
+    public SpiceManager getSpiceManager(){
+        return mSpiceManager;
     }
 
     @Override
@@ -284,6 +279,12 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         @Override
         public void onRequestSuccess(RepositoryList repositoryPreviews) {
             Log.v(MainActivity.class.getSimpleName(), "Success");
+            Loader loader = getSupportLoaderManager().getLoader(MyRecyclerViewAdapter.LOADER_ID);
+            if(loader!=null){
+                loader.reset();
+            }else{
+                //getSupportLoaderManager().initLoader(MyRecyclerViewAdapter.LOADER_ID,null,new MyRecyclerViewAdapter(this, this));
+            }
             ProgressBar mProgress = (ProgressBar) findViewById(R.id.progressBar);
             if (mProgress != null) {
                 mProgress.setVisibility(View.GONE);

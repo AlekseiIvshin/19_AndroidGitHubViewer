@@ -16,8 +16,7 @@ import com.ivshinaleksei.githubviewer.R;
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
 
-public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> implements LoaderManager.LoaderCallbacks<Cursor> {
-
+public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> implements  LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int LOADER_ID = 0;
     private static final String[] sProjection =
@@ -27,32 +26,32 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                     RepositoryContract.RepositoryInfo.LANGUAGE,
                     RepositoryContract.RepositoryInfo.STARGAZERS_COUNT,
                     RepositoryContract.RepositoryInfo.CREATED_DATE,
-                    RepositoryContract.RepositoryInfo.DESCRIPTION,
-                    RepositoryContract.RepositoryOwner.OWNER_LOGIN,
-                    RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL
+                    RepositoryContract.RepositoryInfo.DESCRIPTION
             };
-    private Cursor mCursor;
-    private RepositoryListFragment.OnRepositorySelectedListener mSelectedItemListener;
-    private Context mContext;
 
-    public MyRecyclerViewAdapter(Context context, RepositoryListFragment.OnRepositorySelectedListener listener) {
+    private Cursor mCursor;
+    private Context mContext;
+    private RepositoryListFragment.OnRepositorySelectedListener mSelectedItemListener;
+
+
+    public MyRecyclerViewAdapter(Context context, RepositoryListFragment.OnRepositorySelectedListener listener){
         this.mContext = context;
         this.mSelectedItemListener = listener;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, final int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_repository, viewGroup, false);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_repository, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int i) {
-        if (!mCursor.moveToPosition(i)) {
-            throw new IllegalStateException("couldn't move cursor to position " + i);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        if (!mCursor.moveToPosition(position)) {
+            throw new IllegalStateException("couldn't move cursor to position " + position);
         }
         RepositoryInfo preview = RepositoryInfo.getFromCursor(mCursor);
-        viewHolder.setItem(preview);
+        holder.setItem(preview);
     }
 
     @Override
@@ -62,6 +61,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         }
         return 0;
     }
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -80,11 +80,13 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         changeCursor(data);
+        notifyDataSetChanged();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         changeCursor(null);
+        notifyDataSetChanged();
     }
 
     public void changeCursor(Cursor newCursor) {
@@ -95,7 +97,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         notifyDataSetChanged();
     }
 
-    // TODO: Add observers
     public Cursor swapCursor(Cursor newCursor) {
         if (newCursor == mCursor) {
             return null;
@@ -105,29 +106,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         return oldCursor;
     }
 
-    public Cursor getCursor() {
-        return mCursor;
-    }
-
-    public void moveCursorTo(int position) {
-        if (!mCursor.moveToPosition(position)) {
-            throw new IllegalStateException("couldn't move cursor to position " + position);
-        }
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-        mSelectedItemListener = null;
-    }
-
-    @Override
-    public void onViewDetachedFromWindow(ViewHolder holder) {
-        super.onViewDetachedFromWindow(holder);
-        mSelectedItemListener = null;
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
 
         public TextView repositoryName;
         public TextView repositoryLanguage;
@@ -154,5 +133,4 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         }
 
     }
-
 }

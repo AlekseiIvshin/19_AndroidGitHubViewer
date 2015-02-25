@@ -46,6 +46,8 @@ dependencies {
             'com.octo.android.robospice:robospice-ormlite:1.4.14',
 //            'com.octo.android.robospice:robospice-ormlite-content-provider:1.4.14',
             'com.tojc.ormlite.android:ormlite-content-provider-library:1.0.4'
+    compile 'com.blandware.android.atleap:core:0.3'
+
     compile('org.simpleframework:simple-xml:2.7.1'){
         exclude module: 'stax'
         exclude module: 'stax-api'
