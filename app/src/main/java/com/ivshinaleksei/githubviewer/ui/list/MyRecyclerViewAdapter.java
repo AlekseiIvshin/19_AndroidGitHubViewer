@@ -80,13 +80,11 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         changeCursor(data);
-        notifyDataSetChanged();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         changeCursor(null);
-        notifyDataSetChanged();
     }
 
     public void changeCursor(Cursor newCursor) {

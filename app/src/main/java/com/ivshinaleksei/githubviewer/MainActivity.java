@@ -44,13 +44,12 @@ import java.io.StringWriter;
 
 public class MainActivity extends ActionBarActivity implements RepositoryListFragment.OnRepositorySelectedListener {
 
-    // TODO: see to code convention
     private static final String sSelectedRepository = MainActivity.class.getName() + ".selected.repository";
     private static final String sCurrentSavedRepository = "savedRepository";
     private static final String sRepositoryRequestCacheKey = "repositories";
     private static final String sSharedPreferencesName = "prefsFile";
 
-    private SortedRepositorySearchRequest mRepositoryListRequest;
+    private BaseRepositorySearchRequest mRepositoryListRequest;
 
     private boolean mDualPane;
     private RepositoryInfo mCurrentInfo;
@@ -102,10 +101,6 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentRepositoryDetails) != null && mCurrentInfo == null) {
             getSupportFragmentManager().beginTransaction().hide(getSupportFragmentManager().findFragmentById(R.id.fragmentRepositoryDetails)).commit();
         }
-    }
-
-    public SpiceManager getSpiceManager(){
-        return mSpiceManager;
     }
 
     @Override
@@ -166,13 +161,13 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 //                    if (mProgress != null) {
 //                        mProgress.setVisibility(View.VISIBLE);
 //                    }
-                    SortedRepositorySearchRequest repositoryListRequest =
+                    mRepositoryListRequest =
                             new SortedRepositorySearchRequestBuilder(query)
                                     .sortBy("stars")
                                     .order("desc")
                                     .build();
                     mSpiceManager.execute(
-                            repositoryListRequest,
+                            mRepositoryListRequest,
                             sRepositoryRequestCacheKey,
                             DurationInMillis.ONE_MINUTE,
                             new RepositorySearchRequestListener());
@@ -202,7 +197,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 
     @Override
     public void onRepositorySelected(RepositoryInfo aRepository) {
-        if(mCurrentInfo==null){
+        if(aRepository==null){
             return;
         }
 

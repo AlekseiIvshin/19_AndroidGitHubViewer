@@ -35,15 +35,18 @@
                     android:id="@+id/details.ownerLogin"
                     style="@style/AppTheme.RepositoryDetails.Text"
                     android:layout_toRightOf="@id/details.ownerAvatar"
+                    android:padding="@dimen/defaultPadding"
                     tools:text="OwnerLogin" />
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView style="@style/AppTheme.RepositoryDetails.Cards">
+        <android.support.v7.widget.CardView
+            style="@style/AppTheme.RepositoryDetails.Cards">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:padding="@dimen/defaultPadding">
 
                 <TextView
                     android:id="@+id/details.repoFullName"
@@ -57,7 +60,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/details.repoFullName"
-                    android:layout_marginLeft="@dimen/defaultPadding"
                     android:layout_marginTop="@dimen/defaultPadding"
                     android:textColor="@color/bodyTextColor"
                     tools:text="dd/MM/yyyy" />
@@ -87,7 +89,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_below="@id/details.repoFullName"
-                    android:layout_marginRight="@dimen/defaultPadding"
                     android:layout_marginTop="@dimen/defaultPadding"
                     tools:text="NNN" />
 
@@ -97,8 +98,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/details.createdDate"
-                    android:layout_marginBottom="@dimen/defaultPadding"
-                    android:layout_marginRight="@dimen/defaultPadding"
                     android:layout_marginTop="@dimen/defaultPadding"
                     android:textSize="@dimen/mainTextSize"
                     tools:text="Redis is an in-memory database that persists on disk. The data model is key-value, but many different kind of values are supported: Strings, Lists, Sets, Sorted Sets, Hashes, HyperLogLogs, Bitmaps." />

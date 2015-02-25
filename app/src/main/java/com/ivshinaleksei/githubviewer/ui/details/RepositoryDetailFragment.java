@@ -1,5 +1,6 @@
 package com.ivshinaleksei.githubviewer.ui.details;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,7 +21,7 @@ import java.text.SimpleDateFormat;
 public class RepositoryDetailFragment extends Fragment {
 
     private static final String sRepositoryDetails = RepositoryDetailFragment.class.getSimpleName() + ".repository.details";
-    private DateFormat mDateFormat = new SimpleDateFormat(getResources().getString(R.string.dateFormat));
+    private DateFormat mDateFormat;
 
     public static RepositoryDetailFragment newInstance(RepositoryInfo aRepository) {
         RepositoryDetailFragment detailFragment = new RepositoryDetailFragment();
@@ -44,6 +45,12 @@ public class RepositoryDetailFragment extends Fragment {
             RepositoryInfo info = getArguments().getParcelable(sRepositoryDetails);
             updateView(info);
         }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mDateFormat = new SimpleDateFormat(getResources().getString(R.string.dateFormat));
     }
 
     public void updateView(RepositoryInfo details) {

@@ -108,46 +108,46 @@ public class RepositoryListFragment extends Fragment {
     }
 
 
-    public final class RepositorySearchRequestListener implements RequestListener<RepositoryList> {
-
-        private Context mContext;
-
-        public RepositorySearchRequestListener(Context context){
-            this.mContext = context;
-        }
-
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-            Log.v(RepositoryListFragment.class.getSimpleName(), "Failure");
-
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(
-                    mContext,
-                    getString(R.string.loadRepositoriesInfo_failure, spiceException.getMessage()),
-                    duration);
-            toast.setGravity(Gravity.TOP, 0, getResources().getInteger(R.integer.toastOffsetY));
-            toast.show();
-            ProgressBar mProgress = (ProgressBar) getActivity().findViewById(R.id.progressBar);
-            if (mProgress != null) {
-                mProgress.setVisibility(View.GONE);
-            }
-        }
-
-        @Override
-        public void onRequestSuccess(RepositoryList repositoryPreviews) {
-            Log.v(RepositoryListFragment.class.getSimpleName(), "Success");
-            Loader loader = getLoaderManager().getLoader(MyRecyclerViewAdapter.LOADER_ID);
-            if(loader!=null){
-                loader.reset();
-            }else{
-                getLoaderManager().initLoader(MyRecyclerViewAdapter.LOADER_ID,null,new MyRecyclerViewAdapter(getActivity(), mListener));
-            }
-            ProgressBar mProgress = (ProgressBar) getActivity().findViewById(R.id.progressBar);
-            if (mProgress != null) {
-                mProgress.setVisibility(View.GONE);
-            }
-        }
-
-    }
+//    public final class RepositorySearchRequestListener implements RequestListener<RepositoryList> {
+//
+//        private Context mContext;
+//
+//        public RepositorySearchRequestListener(Context context){
+//            this.mContext = context;
+//        }
+//
+//        @Override
+//        public void onRequestFailure(SpiceException spiceException) {
+//            Log.v(RepositoryListFragment.class.getSimpleName(), "Failure");
+//
+//            int duration = Toast.LENGTH_LONG;
+//            Toast toast = Toast.makeText(
+//                    mContext,
+//                    getString(R.string.loadRepositoriesInfo_failure, spiceException.getMessage()),
+//                    duration);
+//            toast.setGravity(Gravity.TOP, 0, getResources().getInteger(R.integer.toastOffsetY));
+//            toast.show();
+//            ProgressBar mProgress = (ProgressBar) getActivity().findViewById(R.id.progressBar);
+//            if (mProgress != null) {
+//                mProgress.setVisibility(View.GONE);
+//            }
+//        }
+//
+//        @Override
+//        public void onRequestSuccess(RepositoryList repositoryPreviews) {
+//            Log.v(RepositoryListFragment.class.getSimpleName(), "Success");
+//            Loader loader = getLoaderManager().getLoader(MyRecyclerViewAdapter.LOADER_ID);
+//            if(loader!=null){
+//                loader.reset();
+//            }else{
+//                getLoaderManager().initLoader(MyRecyclerViewAdapter.LOADER_ID,null,new MyRecyclerViewAdapter(getActivity(), mListener));
+//            }
+//            ProgressBar mProgress = (ProgressBar) getActivity().findViewById(R.id.progressBar);
+//            if (mProgress != null) {
+//                mProgress.setVisibility(View.GONE);
+//            }
+//        }
+//
+//    }
 
 }
