@@ -18,16 +18,9 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RepositoryOwner implements Parcelable {
 
-    @DatabaseField(columnName = RepositoryContract.RepositoryOwner._ID, generatedId = true)
-    private int id;
-
-    @Element(required = false)
-    @DatabaseField(columnName = RepositoryContract.RepositoryOwner.OWNER_LOGIN)
     @JsonProperty("login")
     public String login;
 
-    @Element(required = false)
-    @DatabaseField(columnName = RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL)
     @JsonProperty("avatar_url")
     public String avatarUrl;
 
@@ -43,19 +36,6 @@ public class RepositoryOwner implements Parcelable {
     private RepositoryOwner(Parcel in) {
         this.login = in.readString();
         this.avatarUrl = in.readString();
-    }
-
-    public static RepositoryOwner getFromCursor(Cursor cursor) {
-        if(cursor.getColumnCount()<=0){
-            return null;
-        }
-        int iOwnerLogin = cursor.getColumnIndex(RepositoryContract.RepositoryOwner.OWNER_LOGIN);
-        int iOwnerAvatarUrl = cursor.getColumnIndex(RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL);
-
-        String login = cursor.getString(iOwnerLogin);
-        String avatarUrl = cursor.getString(iOwnerAvatarUrl);
-
-        return new RepositoryOwner(login,avatarUrl);
     }
 
     public static final Parcelable.Creator<RepositoryOwner> CREATOR = new Parcelable.Creator<RepositoryOwner>() {
