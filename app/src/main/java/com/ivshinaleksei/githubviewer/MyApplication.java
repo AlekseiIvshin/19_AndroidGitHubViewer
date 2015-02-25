@@ -46,8 +46,6 @@ public class MyApplication extends Application {
         RoboSpiceDatabaseHelper dbHelper = new RoboSpiceDatabaseHelper(context,RepositoryContract.DATABASE_NAME,RepositoryContract.DATABASE_VERSION);
         try {
             TableUtils.createTableIfNotExists(
-                    dbHelper.getConnectionSource(), RepositoryOwner.class);
-            TableUtils.createTableIfNotExists(
                     dbHelper.getConnectionSource(), RepositoryInfo.class);
             TableUtils.createTableIfNotExists(
                     dbHelper.getConnectionSource(), RepositoryList.class);

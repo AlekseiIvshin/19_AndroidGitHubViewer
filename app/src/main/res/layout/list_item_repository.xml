@@ -6,7 +6,8 @@
     android:paddingBottom="@dimen/defaultPadding"
     android:paddingLeft="@dimen/defaultHorizontalMargin"
     android:paddingRight="@dimen/defaultHorizontalMargin"
-    android:paddingTop="@dimen/defaultPadding">
+    android:paddingTop="@dimen/defaultPadding"
+    android:background="@drawable/list_item_repository">
 
     <TextView
         android:id="@+id/list.item.repoFullName"

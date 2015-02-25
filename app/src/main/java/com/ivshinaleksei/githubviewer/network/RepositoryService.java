@@ -26,7 +26,6 @@ public class RepositoryService extends RetrofitJackson2SpiceService {
 
         List<Class<?>> classCollection = new ArrayList<Class<?>>();
         classCollection.add(RepositoryList.class);
-        classCollection.add(RepositoryOwner.class);
         classCollection.add(RepositoryInfo.class);
 
         RoboSpiceDatabaseHelper databaseHelper =

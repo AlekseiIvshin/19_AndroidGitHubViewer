@@ -100,7 +100,7 @@ public class RepositoryInfo implements Parcelable {
         if (cursor.getColumnCount() <= 0) {
             return null;
         }
-        
+
         int iRepositoryFullName = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.FULL_NAME);
         int iLanguage = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.LANGUAGE);
         int iStargazersCount = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.STARGAZERS_COUNT);
