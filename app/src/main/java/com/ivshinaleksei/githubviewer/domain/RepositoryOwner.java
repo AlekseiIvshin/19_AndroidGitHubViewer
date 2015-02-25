@@ -1,5 +1,6 @@
 package com.ivshinaleksei.githubviewer.domain;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.BaseColumns;
@@ -11,6 +12,8 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import org.simpleframework.xml.Element;
+
+import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RepositoryOwner implements Parcelable {
@@ -40,6 +43,19 @@ public class RepositoryOwner implements Parcelable {
     private RepositoryOwner(Parcel in) {
         this.login = in.readString();
         this.avatarUrl = in.readString();
+    }
+
+    public static RepositoryOwner getFromCursor(Cursor cursor) {
+        if(cursor.getColumnCount()<=0){
+            return null;
+        }
+        int iOwnerLogin = cursor.getColumnIndex(RepositoryContract.RepositoryOwner.OWNER_LOGIN);
+        int iOwnerAvatarUrl = cursor.getColumnIndex(RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL);
+
+        String login = cursor.getString(iOwnerLogin);
+        String avatarUrl = cursor.getString(iOwnerAvatarUrl);
+
+        return new RepositoryOwner(login,avatarUrl);
     }
 
     public static final Parcelable.Creator<RepositoryOwner> CREATOR = new Parcelable.Creator<RepositoryOwner>() {

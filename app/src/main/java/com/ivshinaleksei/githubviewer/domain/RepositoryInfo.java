@@ -5,17 +5,15 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.provider.BaseColumns;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.tojc.ormlite.android.annotation.AdditionalAnnotation;
 
 import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 
 import java.util.Date;
 
@@ -54,21 +52,38 @@ public class RepositoryInfo implements Parcelable {
     @JsonProperty("description")
     public String description;
 
-    @Element(required = false)
-    @DatabaseField(foreign = true, canBeNull = false,foreignAutoCreate = true,foreignAutoRefresh = true)
     @JsonProperty("owner")
     public RepositoryOwner repositoryOwner;
+
+    @Element(required = false)
+    @DatabaseField(columnName = RepositoryContract.RepositoryOwner.OWNER_LOGIN)
+    public String ownerLogin;
+
+    @Element(required = false)
+    @DatabaseField(columnName = RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL)
+    public String ownerAvatarUrl;
 
     public RepositoryInfo() {
     }
 
-    private RepositoryInfo(String fullName, String language, int stargazersCount, Date date, String description, RepositoryOwner owner) {
+    @JsonCreator
+    private RepositoryInfo(
+            @JsonProperty("full_name") String fullName,
+            @JsonProperty("language") String language,
+            @JsonProperty("stargazers_count") int stargazersCount,
+            @JsonProperty("created_at") Date date,
+            @JsonProperty("description") String description,
+            @JsonProperty("owner") RepositoryOwner owner) {
         this.fullName = fullName;
         this.language = language;
         this.stargazersCount = stargazersCount;
         this.createdDate = date;
         this.description = description;
         this.repositoryOwner = owner;
+        if (owner != null) {
+            this.ownerLogin = owner.login;
+            this.ownerAvatarUrl = owner.avatarUrl;
+        }
     }
 
     private RepositoryInfo(Parcel in) {
@@ -82,7 +97,7 @@ public class RepositoryInfo implements Parcelable {
     }
 
     public static RepositoryInfo getFromCursor(Cursor cursor) {
-        if(cursor.getColumnCount()<=0){
+        if (cursor.getColumnCount() <= 0) {
             return null;
         }
 //        int iOwnerLogin = cursor.getColumnIndex(RepositoryContract.RepositoryOwner.OWNER_LOGIN);
@@ -92,6 +107,7 @@ public class RepositoryInfo implements Parcelable {
         int iStargazersCount = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.STARGAZERS_COUNT);
         int iCreatedDate = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.CREATED_DATE);
         int iDescription = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.DESCRIPTION);
+        int iOwnerId = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.OWNER_ID);
 
 //        String login = cursor.getString(iOwnerLogin);
 //        String avatarUrl = cursor.getString(iOwnerAvatarUrl);

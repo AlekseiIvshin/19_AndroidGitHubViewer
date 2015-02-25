@@ -14,10 +14,10 @@ import com.octo.android.robospice.persistence.ormlite.RoboSpiceDatabaseHelper;
 
 public class RepositoryContentProvider extends ContentProvider {
 
-    private static final int REPOSITORY = 1;
+    private static final int sRepositories = 1;
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     static {
-        sUriMatcher.addURI(RepositoryContract.AUTHORITY, RepositoryContract.RepositoryInfo.PATH, REPOSITORY);
+        sUriMatcher.addURI(RepositoryContract.AUTHORITY, RepositoryContract.RepositoryInfo.PATH, sRepositories);
     }
 
     public RepositoryContentProvider() {
@@ -58,7 +58,7 @@ public class RepositoryContentProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
         switch (sUriMatcher.match(uri)) {
-            case REPOSITORY:
+            case sRepositories:
                 db = roboSpiceDatabaseHelper.getReadableDatabase();
                 try {
                     Cursor cursor = db.query(RepositoryContract.RepositoryInfo.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);

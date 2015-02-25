@@ -26,7 +26,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                     RepositoryContract.RepositoryInfo.LANGUAGE,
                     RepositoryContract.RepositoryInfo.STARGAZERS_COUNT,
                     RepositoryContract.RepositoryInfo.CREATED_DATE,
-                    RepositoryContract.RepositoryInfo.DESCRIPTION
+                    RepositoryContract.RepositoryInfo.DESCRIPTION,
+                    RepositoryContract.RepositoryOwner.OWNER_LOGIN,
+                    RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL
             };
 
     private Cursor mCursor;
