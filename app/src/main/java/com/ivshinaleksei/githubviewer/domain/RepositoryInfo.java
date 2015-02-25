@@ -55,7 +55,7 @@ public class RepositoryInfo implements Parcelable {
     public String description;
 
     @Element(required = false)
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, canBeNull = false,foreignAutoCreate = true,foreignAutoRefresh = true)
     @JsonProperty("owner")
     public RepositoryOwner repositoryOwner;
 

@@ -14,6 +14,8 @@ import com.ivshinaleksei.githubviewer.R;
 import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
 import com.ivshinaleksei.githubviewer.domain.RepositoryOwner;
 import com.ivshinaleksei.githubviewer.utils.MyBitmapLoader;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,6 +25,8 @@ public class RepositoryDetailFragment extends Fragment {
     private static final String sRepositoryDetails = RepositoryDetailFragment.class.getSimpleName() + ".repository.details";
     private DateFormat mDateFormat;
 
+    DisplayImageOptions mOptions;
+
     public static RepositoryDetailFragment newInstance(RepositoryInfo aRepository) {
         RepositoryDetailFragment detailFragment = new RepositoryDetailFragment();
         Bundle bundle = new Bundle();
@@ -31,6 +35,16 @@ public class RepositoryDetailFragment extends Fragment {
         return detailFragment;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mOptions = new DisplayImageOptions.Builder()
+                .showImageForEmptyUri(R.drawable.github_mark)
+                .showImageOnFail(R.drawable.github_mark)
+                .cacheInMemory(true)
+                .cacheOnDisc(true)
+                .build();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,21 +77,7 @@ public class RepositoryDetailFragment extends Fragment {
         TextView ownerLogin = (TextView) getActivity().findViewById(R.id.details_ownerLogin);
         ownerLogin.setText(owner.login);
 
-
-        ownerAvatar.setImageResource(R.drawable.github_mark);
-
-        if (owner.avatarUrl != null && owner.avatarUrl.trim().length() > 0) {
-            // Get image from cache or download from internet
-            new MyBitmapLoader() {
-
-                @Override
-                protected void onPostExecute(Bitmap bitmap) {
-                    if (bitmap != null) {
-                        ownerAvatar.setImageBitmap(bitmap);
-                    }
-                }
-            }.execute(owner.avatarUrl);
-        }
+        ImageLoader.getInstance().displayImage(owner.avatarUrl,ownerAvatar);
     }
 
     public void showRepositoryCard(RepositoryInfo details) {

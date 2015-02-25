@@ -4,11 +4,13 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.octo.android.robospice.persistence.ormlite.RoboSpiceDatabaseHelper;
+
 
 public class RepositoryContentProvider extends ContentProvider {
 
@@ -58,9 +60,13 @@ public class RepositoryContentProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case REPOSITORY:
                 db = roboSpiceDatabaseHelper.getReadableDatabase();
-                Cursor cursor = db.query(RepositoryContract.RepositoryInfo.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
-                cursor.setNotificationUri(getContext().getContentResolver(), uri);
-                return cursor;
+                try {
+                    Cursor cursor = db.query(RepositoryContract.RepositoryInfo.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                    cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                    return cursor;
+                }catch (SQLException e){
+                    return null;
+                }
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }

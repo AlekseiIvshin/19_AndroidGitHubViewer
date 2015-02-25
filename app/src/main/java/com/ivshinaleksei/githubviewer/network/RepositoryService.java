@@ -25,9 +25,9 @@ public class RepositoryService extends RetrofitJackson2SpiceService {
         CacheManager cacheManager = new CacheManager();
 
         List<Class<?>> classCollection = new ArrayList<Class<?>>();
-        classCollection.add(RepositoryInfo.class);
-        classCollection.add(RepositoryOwner.class);
         classCollection.add(RepositoryList.class);
+        classCollection.add(RepositoryOwner.class);
+        classCollection.add(RepositoryInfo.class);
 
         RoboSpiceDatabaseHelper databaseHelper =
                 new RoboSpiceDatabaseHelper(application, RepositoryContract.DATABASE_NAME, RepositoryContract.DATABASE_VERSION);
