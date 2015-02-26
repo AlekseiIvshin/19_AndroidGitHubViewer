@@ -7,4 +7,5 @@
     <string name="loadRepositoriesInfo.failure">Ошибка: %s</string>
     <string name="loadRepositoriesInfo.success">Успешно</string>
     <string name="actionSearch">Поиск репозитория</string>
+    <string name="gallery.noData">Нет изображений</string>
 </resources>
