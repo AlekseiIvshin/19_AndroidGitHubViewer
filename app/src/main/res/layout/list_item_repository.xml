@@ -15,8 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/list.item.repoLanguage"
-        android:textSize="@dimen/titleTextSize"
-        android:textStyle="bold"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
         tools:text="Repository/Full name" />
 
     <TextView
@@ -24,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/list.item.repoStarsImage"
-        android:textSize="@dimen/mainTextSize"
+        style="@style/TextAppearance.AppCompat.Body2"
         tools:text="Language" />
 
     <ImageView
@@ -40,5 +39,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        style="@style/TextAppearance.AppCompat.Body2"
         tools:text="NNN" />
 </RelativeLayout>

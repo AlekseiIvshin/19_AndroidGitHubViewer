@@ -5,6 +5,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
+        android:layout_gravity="center"
+        android:padding="@dimen/defaultPadding"
+        android:background="@color/normal"
+        android:text="@string/gallery.noData"/>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
@@ -23,13 +33,4 @@
             android:textColor="@color/titleTextColor" />
     </android.support.v4.view.ViewPager>
 
-    <TextView
-        android:id="@android:id/empty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Base.TextAppearance.AppCompat.Headline"
-        android:layout_gravity="center"
-        android:padding="@dimen/defaultPadding"
-        android:background="@color/normal"
-        android:text="@string/gallery.noData"/>
 </LinearLayout>

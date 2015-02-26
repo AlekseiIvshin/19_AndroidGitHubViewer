@@ -122,18 +122,6 @@ public class RepositoryInfo implements Parcelable {
         return new RepositoryInfo(fullName, language, stargazersCount, new Date(createdDate), description, owner);
     }
 
-    public ContentValues marshalling() {
-        ContentValues values = new ContentValues();
-        values.put(RepositoryContract.RepositoryInfo.FULL_NAME, this.fullName);
-        values.put(RepositoryContract.RepositoryInfo.LANGUAGE, this.language);
-        values.put(RepositoryContract.RepositoryInfo.STARGAZERS_COUNT, this.stargazersCount);
-        values.put(RepositoryContract.RepositoryInfo.CREATED_DATE, this.createdDate.getTime() / 1000);
-        values.put(RepositoryContract.RepositoryInfo.DESCRIPTION, this.description);
-        values.put(RepositoryContract.RepositoryOwner.OWNER_LOGIN, this.repositoryOwner.login);
-        values.put(RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL, this.repositoryOwner.avatarUrl);
-        return values;
-    }
-
     public static final Parcelable.Creator<RepositoryInfo> CREATOR = new Parcelable.Creator<RepositoryInfo>() {
         public RepositoryInfo createFromParcel(Parcel source) {
             return new RepositoryInfo(source);

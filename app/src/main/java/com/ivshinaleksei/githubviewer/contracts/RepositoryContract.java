@@ -33,4 +33,16 @@ public class RepositoryContract {
         public static final String OWNER_AVATAR_URL = "ownerAvatarUrl";
     }
 
+    public static class Comment implements BaseColumns {
+        public static final String PATH = "comment";
+        public static final Uri CONTENT_URI =
+                Uri.parse("content://" + AUTHORITY + "//" + PATH);
+
+        public static final String TITLE = "title";
+        public static final String MESSAGE = "message";
+        public static final String CREATED_DATE = "createdDate";
+
+    }
+
+
 }

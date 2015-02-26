@@ -28,7 +28,6 @@ import com.ivshinaleksei.githubviewer.network.BaseRepositorySearchRequest;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
 import com.ivshinaleksei.githubviewer.network.request.builder.SortedRepositorySearchRequestBuilder;
 import com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment;
-import com.ivshinaleksei.githubviewer.ui.gallery.MyPagerAdapter;
 import com.ivshinaleksei.githubviewer.ui.list.MyRecyclerViewAdapter;
 import com.ivshinaleksei.githubviewer.ui.list.RepositoryListFragment;
 import com.octo.android.robospice.SpiceManager;
@@ -230,12 +229,16 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
     private void selectItem(int position) {
         // TODO: replace switch
         switch (position) {
-            case 0: //TODO: Intent comments creation
-                break;
-            case 1:
+            case 0: {
+                Intent intent = new Intent(this, CommentManagementActivity.class);
+                startActivity(intent);
+            }
+            break;
+            case 1: {
                 Intent intent = new Intent(this, PictureGalleryActivity.class);
                 startActivity(intent);
-                break;
+            }
+            break;
         }
     }
 

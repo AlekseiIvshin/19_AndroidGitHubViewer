@@ -33,7 +33,9 @@
 
                 <TextView
                     android:id="@+id/details.ownerLogin"
-                    style="@style/AppTheme.RepositoryDetails.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Headline"
                     android:layout_toRightOf="@id/details.ownerAvatar"
                     android:padding="@dimen/defaultPadding"
                     tools:text="OwnerLogin" />
@@ -50,7 +52,9 @@
 
                 <TextView
                     android:id="@+id/details.repoFullName"
-                    style="@style/AppTheme.RepositoryDetails.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Headline"
                     android:layout_alignParentLeft="true"
                     tools:text="Repository/Full name" />
 
@@ -71,7 +75,7 @@
                     android:layout_below="@id/details.repoFullName"
                     android:layout_marginTop="@dimen/defaultPadding"
                     android:layout_toLeftOf="@+id/details.repoStarsImage"
-                    android:textSize="@dimen/mainTextSize"
+                    style="@style/TextAppearance.AppCompat.Body2"
                     tools:text="Language" />
 
                 <ImageView
@@ -90,6 +94,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_below="@id/details.repoFullName"
                     android:layout_marginTop="@dimen/defaultPadding"
+                    style="@style/TextAppearance.AppCompat.Body2"
                     tools:text="NNN" />
 
                 <TextView
@@ -99,7 +104,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/details.createdDate"
                     android:layout_marginTop="@dimen/defaultPadding"
-                    android:textSize="@dimen/mainTextSize"
+                    style="@style/TextAppearance.AppCompat.Body1"
                     tools:text="Redis is an in-memory database that persists on disk. The data model is key-value, but many different kind of values are supported: Strings, Lists, Sets, Sorted Sets, Hashes, HyperLogLogs, Bitmaps." />
 
             </RelativeLayout>

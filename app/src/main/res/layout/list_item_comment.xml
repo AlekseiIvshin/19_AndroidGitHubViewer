@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/defaultVerticalMargin"
+    android:paddingBottom="@dimen/defaultVerticalMargin"
+    android:paddingRight="@dimen/defaultHorizontalMargin"
+    android:paddingLeft="@dimen/defaultHorizontalMargin">
+
+    <TextView
+        android:id="@+id/comment.title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
+        tools:text="Title"/>
+    <TextView
+        android:id="@+id/comment.message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Base.TextAppearance.AppCompat.Body2"
+        tools:text="Message" />
+    <TextView
+        android:id="@+id/comment.createdDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Base.TextAppearance.AppCompat.Caption"
+        tools:text="@string/dateFormat"/>
+</LinearLayout>

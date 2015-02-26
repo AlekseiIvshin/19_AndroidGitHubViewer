@@ -11,6 +11,10 @@
 
     <!--Text colors-->
     <color name="mainTextColor">#000000</color>
-    <color name="titleTextColor">#ffffff</color>]
+    <color name="titleTextColor">#ffffff</color>
     <color name="bodyTextColor">#87000000</color>
+
+    <!-- FloatButton -->
+    <color name="primary_pressed">#303f9f</color>
+    <color name="ripple">#ff80ab</color>
 </resources>

@@ -2,27 +2,17 @@ package com.ivshinaleksei.githubviewer.ui.list;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.ivshinaleksei.githubviewer.R;
-import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
-import com.ivshinaleksei.githubviewer.domain.RepositoryList;
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
 
 public class RepositoryListFragment extends Fragment {
 
@@ -60,7 +50,7 @@ public class RepositoryListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.list_repository, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_list_repository, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewRepositoryList);
         return rootView;
     }

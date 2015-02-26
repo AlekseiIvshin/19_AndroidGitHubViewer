@@ -17,6 +17,7 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+
     <style name="ThemeOverlay.AppTheme.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@color/titleTextColor</item>
     </style>
@@ -46,13 +47,6 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">@dimen/defaultVerticalMargin</item>
-    </style>
-
-    <style name="AppTheme.RepositoryDetails.Text" parent="Theme.AppCompat">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/headlineTextSize</item>
     </style>
 
 </resources>

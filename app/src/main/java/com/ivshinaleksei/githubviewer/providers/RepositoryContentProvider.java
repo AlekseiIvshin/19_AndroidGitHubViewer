@@ -59,7 +59,7 @@ public class RepositoryContentProvider extends ContentProvider {
         classCollection.add(RepositoryList.class);
         classCollection.add(RepositoryInfo.class);
 
-        RoboSpiceDatabaseHelper mDatabaseHelper =
+        mDatabaseHelper =
                 new RoboSpiceDatabaseHelper(getContext(), RepositoryContract.DATABASE_NAME, RepositoryContract.DATABASE_VERSION);
         return true;
     }
