@@ -24,10 +24,26 @@ public class MyGalleryFragment extends Fragment {
     private int mLastOpenedPicturePosition = -1;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if(savedInstanceState != null) {
+            if (mLastOpenedPicturePosition < 0) {
+                mLastOpenedPicturePosition = savedInstanceState.getInt(sLastOpenedPicturePositionPreferenceName,-1);
+            }
+        }
+        if(mLastOpenedPicturePosition < 0){
+            SharedPreferences pref = getActivity().getSharedPreferences(sPreferencesFilename, 0);
+            mLastOpenedPicturePosition = pref.getInt(sLastOpenedPicturePositionPreferenceName, -1);
+        }
+        mPagerAdapter = new MyPagerAdapter(getFragmentManager());
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_gallery, container, false);
 
-        if (mPagerAdapter.getCount() == 0) {
+        if (mPagerAdapter.isEmpty()) {
             show(rootView.findViewById(android.R.id.empty));
             hide(rootView.findViewById(R.id.pager));
         } else {
@@ -39,42 +55,46 @@ public class MyGalleryFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onStart() {
+        super.onStart();
 
-        mPagerAdapter = new MyPagerAdapter(getFragmentManager());
+        mViewPager = (ViewPager) getActivity().findViewById(R.id.pager);
+        mViewPager.setAdapter(mPagerAdapter);
 
-        SharedPreferences pref = getActivity().getSharedPreferences(sPreferencesFilename, 0);
-        mLastOpenedPicturePosition = pref.getInt(sLastOpenedPicturePositionPreferenceName, -1);
+        if(mLastOpenedPicturePosition>=0){
+            mViewPager.setCurrentItem(mLastOpenedPicturePosition);
+        }
     }
 
-    public void hide(View v) {
+    @Override
+    public void onPause() {
+        super.onPause();
+        mLastOpenedPicturePosition = mViewPager.getCurrentItem();
+        if (mLastOpenedPicturePosition >= 0) {
+            SharedPreferences.Editor editor = getActivity().getSharedPreferences(sPreferencesFilename, 0).edit();
+            editor.putInt(sLastOpenedPicturePositionPreferenceName, mLastOpenedPicturePosition);
+            editor.apply();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(sLastOpenedPicturePositionPreferenceName,mViewPager.getCurrentItem());
+    }
+
+
+
+    private void hide(View v) {
         if (v != null) {
             v.setVisibility(View.GONE);
         }
     }
 
 
-    public void show(View v) {
+    private void show(View v) {
         if (v != null) {
             v.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        mViewPager = (ViewPager) getActivity().findViewById(R.id.pager);
-        mViewPager.setAdapter(mPagerAdapter);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mLastOpenedPicturePosition >= 0) {
-            SharedPreferences.Editor editor = getActivity().getSharedPreferences(sPreferencesFilename, 0).edit();
-            editor.putInt(sLastOpenedPicturePositionPreferenceName, mLastOpenedPicturePosition);
         }
     }
 }

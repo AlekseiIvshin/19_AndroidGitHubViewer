@@ -41,4 +41,8 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
         // TODO: get picture name
         return owners.get(position).login;
     }
+
+    public boolean isEmpty(){
+        return getCount() == 0;
+    }
 }
