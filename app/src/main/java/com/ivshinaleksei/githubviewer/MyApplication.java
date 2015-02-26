@@ -26,7 +26,6 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         initImageLoader(getApplicationContext());
-        initDatabase(getApplicationContext());
     }
 
     public static void initImageLoader(Context applicationContext) {
@@ -40,19 +39,6 @@ public class MyApplication extends Application {
                 .build();
 
         ImageLoader.getInstance().init(config);
-    }
-
-    // TODO: it's really need?
-    public static void initDatabase(Context context){
-        RoboSpiceDatabaseHelper dbHelper = new RoboSpiceDatabaseHelper(context,RepositoryContract.DATABASE_NAME,RepositoryContract.DATABASE_VERSION);
-        try {
-            TableUtils.createTableIfNotExists(
-                    dbHelper.getConnectionSource(), RepositoryInfo.class);
-            TableUtils.createTableIfNotExists(
-                    dbHelper.getConnectionSource(), RepositoryList.class);
-        } catch (SQLException e) {
-            Log.e(MyApplication.class.getName(),"Init tables: "+e.getMessage());
-        }
     }
 
 }

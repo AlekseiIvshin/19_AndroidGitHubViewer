@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ivshinaleksei.githubviewer" >
+    package="com.ivshinaleksei.githubviewer">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -10,23 +10,30 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/appName"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/appName" >
+            android:label="@string/appName">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".PictureGalleryActivity"
-            android:label="@string/title_activity_picture_gallery" >
+            android:label="@string/title_activity_picture_gallery">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value=".MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".CommentManagementActivity"
+            android:label="@string/title_activity_comment_management">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ivshinaleksei.githubviewer.MainActivity" />
         </activity>
 
         <service
@@ -38,8 +45,8 @@
             android:name=".providers.RepositoryContentProvider"
             android:authorities="com.ivshinaleksei.githubviewer.provider"
             android:enabled="true"
-            android:exported="false" >
-        </provider>
+            android:exported="false"/>
+
     </application>
 
 </manifest>

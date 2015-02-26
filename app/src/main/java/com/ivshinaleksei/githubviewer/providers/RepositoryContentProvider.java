@@ -9,7 +9,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
+import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
+import com.ivshinaleksei.githubviewer.domain.RepositoryList;
 import com.octo.android.robospice.persistence.ormlite.RoboSpiceDatabaseHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class RepositoryContentProvider extends ContentProvider {
@@ -24,7 +29,7 @@ public class RepositoryContentProvider extends ContentProvider {
     }
 
     SQLiteDatabase db;
-    private RoboSpiceDatabaseHelper roboSpiceDatabaseHelper;
+    private RoboSpiceDatabaseHelper mDatabaseHelper;
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
@@ -50,7 +55,12 @@ public class RepositoryContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        roboSpiceDatabaseHelper = new RoboSpiceDatabaseHelper(getContext(),RepositoryContract.DATABASE_NAME,RepositoryContract.DATABASE_VERSION);
+        List<Class<?>> classCollection = new ArrayList<Class<?>>();
+        classCollection.add(RepositoryList.class);
+        classCollection.add(RepositoryInfo.class);
+
+        RoboSpiceDatabaseHelper mDatabaseHelper =
+                new RoboSpiceDatabaseHelper(getContext(), RepositoryContract.DATABASE_NAME, RepositoryContract.DATABASE_VERSION);
         return true;
     }
 
@@ -59,7 +69,7 @@ public class RepositoryContentProvider extends ContentProvider {
                         String[] selectionArgs, String sortOrder) {
         switch (sUriMatcher.match(uri)) {
             case sRepositories:
-                db = roboSpiceDatabaseHelper.getReadableDatabase();
+                db = mDatabaseHelper.getReadableDatabase();
                 try {
                     Cursor cursor = db.query(RepositoryContract.RepositoryInfo.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
