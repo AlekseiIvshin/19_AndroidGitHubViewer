@@ -1,16 +1,13 @@
 package com.ivshinaleksei.githubviewer;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,7 +15,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -30,9 +26,9 @@ import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
 import com.ivshinaleksei.githubviewer.domain.RepositoryList;
 import com.ivshinaleksei.githubviewer.network.BaseRepositorySearchRequest;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
-import com.ivshinaleksei.githubviewer.network.request.SortedRepositorySearchRequest;
 import com.ivshinaleksei.githubviewer.network.request.builder.SortedRepositorySearchRequestBuilder;
 import com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment;
+import com.ivshinaleksei.githubviewer.ui.gallery.MyPagerAdapter;
 import com.ivshinaleksei.githubviewer.ui.list.MyRecyclerViewAdapter;
 import com.ivshinaleksei.githubviewer.ui.list.RepositoryListFragment;
 import com.octo.android.robospice.SpiceManager;
@@ -58,8 +54,8 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 
     private SpiceManager mSpiceManager = new SpiceManager(RepositoryService.class);
 
-    private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
 
 
     @Override
@@ -107,12 +103,6 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
-
-    @Override
     protected void onStart() {
         mSpiceManager.start(this);
         super.onStart();
@@ -132,12 +122,6 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             editor.putString(sCurrentSavedRepository, writer.toString());
             editor.apply();
         }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -189,7 +173,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -200,7 +184,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 
     @Override
     public void onRepositorySelected(RepositoryInfo aRepository) {
-        if(aRepository==null){
+        if (aRepository == null) {
             return;
         }
 
@@ -222,17 +206,14 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 
     private void initNavigationDrawer() {
 
-        ListView navigation = (ListView) findViewById(R.id.leftNavigationDrawer);
+        mDrawerList = (ListView) findViewById(R.id.leftNavigationDrawer);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawerOpen, R.string.drawerClose);
-
-        navigation.setAdapter(
+        mDrawerList.setAdapter(
                 new ArrayAdapter<>(this, R.layout.list_item_drawer_navigation,
                         getResources().getStringArray(R.array.navigation)));
 
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-        navigation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItem(position);
@@ -241,14 +222,19 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        mDrawerList.bringToFront();
+        mDrawerLayout.requestLayout();
     }
 
-    private void selectItem(int position){
+    private void selectItem(int position) {
         // TODO: replace switch
-        switch (position){
+        switch (position) {
             case 0: //TODO: Intent comments creation
                 break;
-            case 1: // TODO: intent picture gallery
+            case 1:
+                Intent intent = new Intent(this, PictureGalleryActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -275,10 +261,11 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         @Override
         public void onRequestSuccess(RepositoryList repositoryPreviews) {
             Log.v(MainActivity.class.getSimpleName(), "Success");
+            // TODO: add normal behaviour on success: update cursor and etc.
             Loader loader = getSupportLoaderManager().getLoader(MyRecyclerViewAdapter.LOADER_ID);
-            if(loader!=null){
+            if (loader != null) {
                 loader.reset();
-            }else{
+            } else {
                 //getSupportLoaderManager().initLoader(MyRecyclerViewAdapter.LOADER_ID,null,new MyRecyclerViewAdapter(this, this));
             }
             ProgressBar mProgress = (ProgressBar) findViewById(R.id.progressBar);
