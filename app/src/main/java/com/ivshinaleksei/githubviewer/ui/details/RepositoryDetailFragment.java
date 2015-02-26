@@ -25,7 +25,12 @@ public class RepositoryDetailFragment extends Fragment {
     private static final String sRepositoryDetails = RepositoryDetailFragment.class.getSimpleName() + ".repository.details";
     private DateFormat mDateFormat;
 
-    DisplayImageOptions mOptions;
+    private static final DisplayImageOptions sOptions = new DisplayImageOptions.Builder()
+            .showImageForEmptyUri(R.drawable.github_mark)
+            .showImageOnFail(R.drawable.github_mark)
+            .cacheInMemory(true)
+            .cacheOnDisc(true)
+            .build();
 
     public static RepositoryDetailFragment newInstance(RepositoryInfo aRepository) {
         RepositoryDetailFragment detailFragment = new RepositoryDetailFragment();
@@ -38,12 +43,6 @@ public class RepositoryDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mOptions = new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.drawable.github_mark)
-                .showImageOnFail(R.drawable.github_mark)
-                .cacheInMemory(true)
-                .cacheOnDisc(true)
-                .build();
     }
 
     @Override
@@ -77,7 +76,7 @@ public class RepositoryDetailFragment extends Fragment {
         TextView ownerLogin = (TextView) getActivity().findViewById(R.id.details_ownerLogin);
         ownerLogin.setText(owner.login);
 
-        ImageLoader.getInstance().displayImage(owner.avatarUrl,ownerAvatar);
+        ImageLoader.getInstance().displayImage(owner.avatarUrl, ownerAvatar,sOptions);
     }
 
     public void showRepositoryCard(RepositoryInfo details) {
