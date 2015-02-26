@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/comment.editor.title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/comment.editor.hint.title"
+        android:textSize="34sp"
+        app:baseColor="@android:color/black"
+        app:floatingLabel="highlight"
+        app:minCharacters="5"
+        app:maxCharacters="20"
+        app:primaryColor="?colorAccent"
+        app:singleLineEllipsis="true"/>
+
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/comment.editor.message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/comment.editor.hint.message"
+        android:textSize="34sp"
+        app:baseColor="@android:color/black"
+        app:floatingLabel="highlight"
+        app:minCharacters="5"
+        app:maxCharacters="100"
+        app:primaryColor="?colorAccent"
+        app:singleLineEllipsis="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/comment.editor.send"/>
+
+</LinearLayout>

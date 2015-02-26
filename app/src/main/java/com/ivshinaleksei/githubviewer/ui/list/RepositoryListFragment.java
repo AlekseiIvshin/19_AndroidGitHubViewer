@@ -37,7 +37,7 @@ public class RepositoryListFragment extends Fragment {
             mListener = (OnRepositorySelectedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                    + " must implement "+OnRepositorySelectedListener.class.getSimpleName());
         }
     }
 

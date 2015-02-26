@@ -14,5 +14,8 @@
     <string name="action_settings">Settings</string>
     <string name="gallery.noData">No images</string>
     <string name="title_activity_comment_management">CommentManagmentActivity</string>
+    <string name="comment.editor.hint.title">Title</string>
+    <string name="comment.editor.hint.message">Title</string>
+    <string name="comment.editor.send">Send</string>
 
 </resources>

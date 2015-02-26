@@ -1,5 +1,6 @@
 package com.ivshinaleksei.githubviewer.ui.comment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,11 +13,33 @@ import android.view.ViewGroup;
 import com.ivshinaleksei.githubviewer.R;
 import com.melnykov.fab.FloatingActionButton;
 
-public class CommentListFragment extends Fragment{
+public class CommentListFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private CommentListAdapter mAdapter;
-    FloatingActionButton mFab;
+    private FloatingActionButton mFab;
+    private OnAddCommentListener mOnAddCommentListener;
+
+    public static CommentListFragment newInstance() {
+        return new CommentListFragment();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mOnAddCommentListener = (OnAddCommentListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement " + OnAddCommentListener.class.getSimpleName());
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mOnAddCommentListener = null;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -24,8 +47,12 @@ public class CommentListFragment extends Fragment{
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.list_comment);
         mFab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         mFab.attachToRecyclerView(mRecyclerView);
-        mFab.show();
-        mFab.bringToFront();
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnAddCommentListener.addComment();
+            }
+        });
         return rootView;
     }
 
@@ -36,5 +63,9 @@ public class CommentListFragment extends Fragment{
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new CommentListAdapter();
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    public interface OnAddCommentListener {
+        void addComment();
     }
 }

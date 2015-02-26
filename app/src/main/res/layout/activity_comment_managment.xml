@@ -1,12 +1,23 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.ivshinaleksei.githubviewer.CommentManagementActivity">
 
-    <fragment
-        android:id="@+id/fragment.comment.list"
-        class="com.ivshinaleksei.githubviewer.ui.comment.CommentListFragment"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/AppTheme.Toolbar" />
+
+    <FrameLayout
+        android:id="@+id/contentFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-</RelativeLayout>
+    <!--<fragment-->
+        <!--android:id="@+id/fragment.comment.list"-->
+        <!--class="com.ivshinaleksei.githubviewer.ui.comment.CommentListFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
+</LinearLayout>
