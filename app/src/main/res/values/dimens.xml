@@ -1,18 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <dimen name="defaultVerticalMargin">16dp</dimen>
     <dimen name="defaultHorizontalMargin">16dp</dimen>
     <dimen name="defaultPadding">16dp</dimen>
     <dimen name="dividerHeight">8dp</dimen>
+
+    <!-- Pager title -->
+    <dimen name="pager.title.paddingTop">4dp</dimen>
+    <dimen name="pager.title.paddingBottom">4dp</dimen>
 
     <!-- Text sizes -->
     <dimen name="mainTextSize">16dp</dimen>
     <dimen name="titleTextSize">20sp</dimen>
     <dimen name="headlineTextSize">24sp</dimen>
 
-    <!-- Image sizes-->
+    <!-- Image sizes -->
     <dimen name="ownerAvatarMaxHeight">100dp</dimen>
     <dimen name="ownerAvatarMinHeight">100dp</dimen>
     <dimen name="ownerAvatarMaxWidth">100dp</dimen>
     <dimen name="ownerAvatarMinWidth">100dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
 
 </resources>

@@ -42,6 +42,7 @@ public class MyApplication extends Application {
         ImageLoader.getInstance().init(config);
     }
 
+    // TODO: it's really need?
     public static void initDatabase(Context context){
         RoboSpiceDatabaseHelper dbHelper = new RoboSpiceDatabaseHelper(context,RepositoryContract.DATABASE_NAME,RepositoryContract.DATABASE_VERSION);
         try {

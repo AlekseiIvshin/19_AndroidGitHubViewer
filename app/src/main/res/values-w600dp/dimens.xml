@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Pager title -->
+    <dimen name="pager.title.paddingTop">16dp</dimen>
+    <dimen name="pager.title.paddingBottom">16dp</dimen>
+
     <!-- Image sizes-->
     <dimen name="ownerAvatarMaxHeight">200dp</dimen>
     <dimen name="ownerAvatarMinHeight">150dp</dimen>

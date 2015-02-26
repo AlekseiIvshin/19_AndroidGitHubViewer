@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Pager title -->
+    <dimen name="pager.title.paddingTop">8dp</dimen>
+    <dimen name="pager.title.paddingBottom">8dp</dimen>
+
     <dimen name="defaultHorizontalMargin">32dp</dimen>
 </resources>

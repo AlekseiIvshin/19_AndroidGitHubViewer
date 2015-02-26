@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="navigation">
-        <item>Item 0</item>
-        <item>Item 1</item>
-        <item>Item 2</item>
+        <item>Comments</item>
+        <item>Gallery</item>
     </string-array>
 </resources>

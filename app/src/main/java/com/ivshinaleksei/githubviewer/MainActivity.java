@@ -1,6 +1,7 @@
 package com.ivshinaleksei.githubviewer;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -57,6 +59,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
     private SpiceManager mSpiceManager = new SpiceManager(RepositoryService.class);
 
     private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
 
 
     @Override
@@ -219,37 +222,35 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 
     private void initNavigationDrawer() {
 
-        final CharSequence mTitle = getTitle();
-        final CharSequence mDrawerTitle = getString(R.string.drawerCloseTitleText);
-
         ListView navigation = (ListView) findViewById(R.id.leftNavigationDrawer);
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawerOpen, R.string.drawerClose) {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                getSupportActionBar().setTitle(mTitle);
-                this.syncState();
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-
-                getSupportActionBar().setTitle(mDrawerTitle);
-                this.syncState();
-            }
-        };
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawerOpen, R.string.drawerClose);
 
         navigation.setAdapter(
                 new ArrayAdapter<>(this, R.layout.list_item_drawer_navigation,
                         getResources().getStringArray(R.array.navigation)));
 
-        drawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        navigation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectItem(position);
+            }
+        });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+    }
+
+    private void selectItem(int position){
+        // TODO: replace switch
+        switch (position){
+            case 0: //TODO: Intent comments creation
+                break;
+            case 1: // TODO: intent picture gallery
+                break;
+        }
     }
 
     public final class RepositorySearchRequestListener implements RequestListener<RepositoryList> {

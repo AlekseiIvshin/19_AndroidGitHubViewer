@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="navigation">
-        <item>Пункт 0</item>
-        <item>Пункт 1</item>
-        <item>Пункт 2</item>
+        <item>Комментировать</item>
+        <item>Галерея</item>
     </string-array>
 </resources>

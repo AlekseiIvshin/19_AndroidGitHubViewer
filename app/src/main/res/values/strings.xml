@@ -10,4 +10,8 @@
     <string name="loadRepositoriesInfo.failure">Failure: %s</string>
     <string name="loadRepositoriesInfo.success">Success</string>
     <string name="actionSearch">Search the repository</string>
+    <string name="title_activity_picture_gallery">PictureGalleryActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
 </resources>
