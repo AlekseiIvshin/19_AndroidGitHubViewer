@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.ivshinaleksei.githubviewer.R;
 import com.melnykov.fab.FloatingActionButton;
@@ -19,6 +20,8 @@ public class CommentListFragment extends Fragment{
     private View mEmptyHolder;
     private CommentListAdapter mAdapter;
     private OnAddCommentListener mOnAddCommentListener;
+    private ProgressBar mProgressBar;
+    private CommentsObserver mCommentsObserver;
 
     public static CommentListFragment newInstance() {
         return new CommentListFragment();
@@ -42,6 +45,13 @@ public class CommentListFragment extends Fragment{
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAdapter = new CommentListAdapter(getActivity());
+        mAdapter.registerAdapterDataObserver(new CommentsObserver());
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_list_comment, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.list_comment);
@@ -55,10 +65,12 @@ public class CommentListFragment extends Fragment{
         });
         getActivity().setTitle(R.string.title_activity_comment_management);
 
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new CommentListAdapter(getActivity());
-        mAdapter.registerAdapterDataObserver(new CommentsObserver());
+        //mAdapter = new CommentListAdapter(getActivity());
+        mCommentsObserver = new CommentsObserver();
+        mAdapter.registerAdapterDataObserver(mCommentsObserver);
         mRecyclerView.setAdapter(mAdapter);
 
 
@@ -68,10 +80,23 @@ public class CommentListFragment extends Fragment{
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        mAdapter.unregisterAdapterDataObserver(mCommentsObserver);
+        mCommentsObserver = null;
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
-
+        viewBeforeUpdate(mRecyclerView,mEmptyHolder,mProgressBar);
         getLoaderManager().initLoader(CommentListAdapter.LOADER_ID, null, mAdapter);
+    }
+
+    private void viewBeforeUpdate(View dataContainer, View emptyView, ProgressBar progressBar){
+        dataContainer.setVisibility(View.GONE);
+        emptyView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     public interface OnAddCommentListener {
@@ -82,43 +107,21 @@ public class CommentListFragment extends Fragment{
 
         @Override
         public void onChanged() {
-            showHolder(mRecyclerView, mEmptyHolder, mAdapter.isEmpty());
+            viewAfterUpdate(mRecyclerView, mEmptyHolder, mProgressBar, mAdapter.isEmpty());
+        }
+
+        private void viewAfterUpdate(View dataContainer, View emptyView, ProgressBar progressBar, boolean isDataEmpty){
+            dataContainer.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+            if (isDataEmpty) {
+                dataContainer.setVisibility(View.GONE);
+                emptyView.setVisibility(View.VISIBLE);
+            } else {
+                dataContainer.setVisibility(View.VISIBLE);
+                emptyView.setVisibility(View.GONE);
+            }
         }
     }
 
-
-    /**
-     * Show view.
-     *
-     * @param dataView       view with data
-     * @param emptyView      empty view
-     * @param isDataSetEmpty is data set for dataView empty
-     */
-    private void showHolder(View dataView, View emptyView, boolean isDataSetEmpty) {
-        if (isDataSetEmpty) {
-            show(emptyView);
-            hide(dataView);
-        } else {
-            hide(emptyView);
-            show(dataView);
-        }
-    }
-
-    /**
-     * Hide view.
-     */
-    private void hide(View v) {
-        if (v != null) {
-            v.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * Show view.
-     */
-    private void show(View v) {
-        if (v != null) {
-            v.setVisibility(View.VISIBLE);
-        }
-    }
 }

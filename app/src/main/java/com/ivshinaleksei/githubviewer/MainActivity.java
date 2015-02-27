@@ -1,31 +1,22 @@
 package com.ivshinaleksei.githubviewer;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -36,7 +27,6 @@ import com.ivshinaleksei.githubviewer.domain.RepositoryList;
 import com.ivshinaleksei.githubviewer.network.BaseRepositorySearchRequest;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
 import com.ivshinaleksei.githubviewer.network.request.builder.SortedRepositorySearchRequestBuilder;
-import com.ivshinaleksei.githubviewer.ui.comment.CommentListFragment;
 import com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment;
 import com.ivshinaleksei.githubviewer.ui.list.MyRecyclerViewAdapter;
 import com.ivshinaleksei.githubviewer.ui.list.RepositoryListFragment;
@@ -66,9 +56,6 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
     private RepositoryInfo mCurrentInfo;
 
     private SpiceManager mSpiceManager = new SpiceManager(RepositoryService.class);
-
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
 
 
     @Override
@@ -228,8 +215,8 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 
     private void initNavigationDrawer() {
 
-        mDrawerList = (ListView) findViewById(R.id.leftNavigationDrawer);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        ListView mDrawerList = (ListView) findViewById(R.id.leftNavigationDrawer);
+        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
 //        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 //        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;

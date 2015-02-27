@@ -1,6 +1,7 @@
 package com.ivshinaleksei.githubviewer.network;
 
 import android.app.Application;
+import android.net.Uri;
 
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
@@ -13,7 +14,9 @@ import com.octo.android.robospice.persistence.ormlite.RoboSpiceDatabaseHelper;
 import com.octo.android.robospice.retrofit.RetrofitJackson2SpiceService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RepositoryService extends RetrofitJackson2SpiceService {
 
@@ -24,14 +27,14 @@ public class RepositoryService extends RetrofitJackson2SpiceService {
     public CacheManager createCacheManager(Application application) throws CacheCreationException {
         CacheManager cacheManager = new CacheManager();
 
-        List<Class<?>> classCollection = new ArrayList<Class<?>>();
-        classCollection.add(RepositoryList.class);
-        classCollection.add(RepositoryInfo.class);
+        Map<Class<?>, Uri> classUriMap = new HashMap<>(2);
+        classUriMap.put(RepositoryList.class,RepositoryContract.RepositoryInfo.CONTENT_URI);
+        classUriMap.put(RepositoryInfo.class,RepositoryContract.RepositoryInfo.CONTENT_URI);
 
         RoboSpiceDatabaseHelper databaseHelper =
                 new RoboSpiceDatabaseHelper(application, RepositoryContract.DATABASE_NAME, RepositoryContract.DATABASE_VERSION);
         InDatabaseObjectPersisterFactory inDatabaseObjectPersisterFactory =
-                new InDatabaseObjectPersisterFactory(application, databaseHelper, classCollection);
+                new InDatabaseObjectPersisterFactory(application, databaseHelper, classUriMap);
         cacheManager.addPersister(inDatabaseObjectPersisterFactory);
         return cacheManager;
     }
