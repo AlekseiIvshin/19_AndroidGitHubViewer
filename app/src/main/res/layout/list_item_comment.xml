@@ -6,7 +6,8 @@
     android:paddingTop="@dimen/defaultVerticalMargin"
     android:paddingBottom="@dimen/defaultVerticalMargin"
     android:paddingRight="@dimen/defaultHorizontalMargin"
-    android:paddingLeft="@dimen/defaultHorizontalMargin">
+    android:paddingLeft="@dimen/defaultHorizontalMargin"
+    android:background="@drawable/list_item_repository">
 
     <TextView
         android:id="@+id/comment.title"
