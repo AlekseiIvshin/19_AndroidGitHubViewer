@@ -11,8 +11,11 @@
     <string name="loadRepositoriesInfo.success">Success</string>
     <string name="actionSearch">Search the repository</string>
     <string name="title_activity_picture_gallery">PictureGalleryActivity</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="gallery.noData" >No images</string>
-
+    <string name="gallery.noData">No images</string>
+    <string name="title_activity_comment_management">Comments</string>
+    <string name="comment.editor.hint.title">Title</string>
+    <string name="comment.editor.hint.message">Message</string>
+    <string name="comment.editor.control.send">Send</string>
+    <string name="comment.editor.title">Create new comment</string>
 </resources>

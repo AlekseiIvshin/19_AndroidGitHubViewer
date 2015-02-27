@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".CommentEditorFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/comment.editor.title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/comment.editor.hint.title"
+            android:textSize="34sp"
+            app:baseColor="@android:color/black"
+            app:floatingLabel="highlight"
+            app:maxCharacters="20"
+            app:minCharacters="5"
+            app:primaryColor="?colorAccent"
+            app:singleLineEllipsis="true" />
+
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/comment.editor.message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/comment.editor.hint.message"
+            android:textSize="34sp"
+            app:baseColor="@android:color/black"
+            app:floatingLabel="highlight"
+            app:maxCharacters="100"
+            app:minCharacters="5"
+            app:primaryColor="?colorAccent"
+            app:singleLineEllipsis="true" />
+
+        <Button
+            android:id="@+id/comment.editor.send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comment.editor.control.send" />
+
+    </LinearLayout>
+</ScrollView>

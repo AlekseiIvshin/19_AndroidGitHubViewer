@@ -43,10 +43,11 @@ dependencies {
 
     compile 'com.octo.android.robospice:robospice:1.4.14',
             'com.octo.android.robospice:robospice-retrofit:1.4.14',
-            'com.octo.android.robospice:robospice-ormlite:1.4.14',
-//            'com.octo.android.robospice:robospice-ormlite-content-provider:1.4.14',
-            'com.tojc.ormlite.android:ormlite-content-provider-library:1.0.4'
+            'com.octo.android.robospice:robospice-ormlite:1.4.14'
+
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.8.6'
+    compile 'com.rengwuxian.materialedittext:library:1.8.2'
+    compile 'com.melnykov:floatingactionbutton:1.2.0'
 
     compile('org.simpleframework:simple-xml:2.7.1'){
         exclude module: 'stax'

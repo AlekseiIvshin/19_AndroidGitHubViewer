@@ -101,37 +101,24 @@ public class RepositoryInfo implements Parcelable {
             return null;
         }
 
-        int iRepositoryFullName = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.FULL_NAME);
-        int iLanguage = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.LANGUAGE);
-        int iStargazersCount = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.STARGAZERS_COUNT);
-        int iCreatedDate = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.CREATED_DATE);
-        int iDescription = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.DESCRIPTION);
-        int iOwnerLogin = cursor.getColumnIndex(RepositoryContract.RepositoryOwner.OWNER_LOGIN);
-        int iOwnerAvatarUrl = cursor.getColumnIndex(RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL);
+        int indexRepositoryFullName = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.FULL_NAME);
+        int indexLanguage = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.LANGUAGE);
+        int indexStargazersCount = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.STARGAZERS_COUNT);
+        int indexCreatedDate = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.CREATED_DATE);
+        int indexDescription = cursor.getColumnIndex(RepositoryContract.RepositoryInfo.DESCRIPTION);
+        int indexOwnerLogin = cursor.getColumnIndex(RepositoryContract.RepositoryOwner.OWNER_LOGIN);
+        int indexOwnerAvatarUrl = cursor.getColumnIndex(RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL);
 
-        String fullName = cursor.getString(iRepositoryFullName);
-        String language = cursor.getString(iLanguage);
-        int stargazersCount = cursor.getInt(iStargazersCount);
-        long createdDate = cursor.getLong(iCreatedDate) * 1000;
-        String description = cursor.getString(iDescription);
-        String login = cursor.getString(iOwnerLogin);
-        String avatarUrl = cursor.getString(iOwnerAvatarUrl);
+        String fullName = cursor.getString(indexRepositoryFullName);
+        String language = cursor.getString(indexLanguage);
+        int stargazersCount = cursor.getInt(indexStargazersCount);
+        long createdDate = cursor.getLong(indexCreatedDate) * 1000;
+        String description = cursor.getString(indexDescription);
+        String login = cursor.getString(indexOwnerLogin);
+        String avatarUrl = cursor.getString(indexOwnerAvatarUrl);
 
-        // TODO:
         RepositoryOwner owner = new RepositoryOwner(login,avatarUrl);
         return new RepositoryInfo(fullName, language, stargazersCount, new Date(createdDate), description, owner);
-    }
-
-    public ContentValues marshalling() {
-        ContentValues values = new ContentValues();
-        values.put(RepositoryContract.RepositoryInfo.FULL_NAME, this.fullName);
-        values.put(RepositoryContract.RepositoryInfo.LANGUAGE, this.language);
-        values.put(RepositoryContract.RepositoryInfo.STARGAZERS_COUNT, this.stargazersCount);
-        values.put(RepositoryContract.RepositoryInfo.CREATED_DATE, this.createdDate.getTime() / 1000);
-        values.put(RepositoryContract.RepositoryInfo.DESCRIPTION, this.description);
-        values.put(RepositoryContract.RepositoryOwner.OWNER_LOGIN, this.repositoryOwner.login);
-        values.put(RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL, this.repositoryOwner.avatarUrl);
-        return values;
     }
 
     public static final Parcelable.Creator<RepositoryInfo> CREATOR = new Parcelable.Creator<RepositoryInfo>() {
