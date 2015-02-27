@@ -20,4 +20,5 @@
 
     <string name="repository.details.title">Repository details</string>
     <string name="repository.list.title">Repository list</string>
+    <string name="list.comment.noData">No comments</string>
 </resources>

@@ -14,6 +14,15 @@
         <!--android:visibility="gone" />-->
 
 
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
+        android:layout_gravity="center"
+        android:padding="@dimen/defaultPadding"
+        android:text="@string/list.comment.noData"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list.comment"
         android:layout_width="match_parent"

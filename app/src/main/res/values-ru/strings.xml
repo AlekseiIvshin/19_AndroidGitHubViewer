@@ -18,4 +18,5 @@
 
     <string name="repository.details.title">Детали репозитория</string>
     <string name="repository.list.title">Лист репозиториев</string>
+    <string name="list.comment.noData">Нет комментариев</string>
 </resources>

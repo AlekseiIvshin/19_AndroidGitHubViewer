@@ -61,6 +61,10 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         return 0;
     }
 
+    public boolean isEmpty(){
+        return getItemCount() == 0;
+    }
+
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
         switch (id) {
