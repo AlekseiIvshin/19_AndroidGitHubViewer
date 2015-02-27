@@ -66,6 +66,7 @@ public class RepositoryContentProvider extends ContentProvider {
             case sComments:
                 db = mDatabaseHelper.getWritableDatabase();
                 long id = db.insert(RepositoryContract.Comment.TABLE_NAME, null, values);
+                getContext().getContentResolver().notifyChange(uri,null);
                 return Uri.parse(RepositoryContract.Comment.CONTENT_URI + "/" + id);
             default:
                 throw new IllegalArgumentException("Uri " + uri.toString() + " not supported");
