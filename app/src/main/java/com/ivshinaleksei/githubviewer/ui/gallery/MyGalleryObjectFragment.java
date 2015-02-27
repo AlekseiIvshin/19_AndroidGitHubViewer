@@ -37,7 +37,7 @@ public class MyGalleryObjectFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_page_gallery, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_item_gallery, container, false);
         ImageView imageView = (ImageView) rootView.findViewById(R.id.imageView);
         Bundle args = getArguments();
         if (args != null) {
