@@ -19,26 +19,28 @@
         tools:text="Repository/Full name" />
 
     <TextView
-        android:id="@id/list.item.repoLanguage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/list.item.repoStarsImage"
-        style="@style/TextAppearance.AppCompat.Body2"
-        tools:text="Language" />
-
-    <ImageView
-        android:id="@id/list.item.repoStarsImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/list.item.repoStars"
-        android:src="@drawable/ic_star" />
-
-    <TextView
-        android:id="@id/list.item.repoStars"
+        android:id="@+id/list.item.repoStars"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         style="@style/TextAppearance.AppCompat.Body2"
         tools:text="NNN" />
+
+    <ImageView
+        android:id="@+id/list.item.repoStarsImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/list.item.repoStars"
+        android:src="@drawable/ic_star" />
+
+
+    <TextView
+        android:id="@+id/list.item.repoLanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/list.item.repoStarsImage"
+        style="@style/TextAppearance.AppCompat.Body2"
+        tools:text="Language" />
+
 </RelativeLayout>

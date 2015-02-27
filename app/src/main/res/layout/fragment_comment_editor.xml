@@ -30,13 +30,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/comment.editor.hint.message"
+            android:scrollbars="vertical"
+            android:inputType="textMultiLine"
             android:textSize="34sp"
             app:baseColor="@android:color/black"
             app:floatingLabel="highlight"
             app:maxCharacters="100"
             app:minCharacters="5"
             app:primaryColor="?colorAccent"
-            app:singleLineEllipsis="true" />
+            app:singleLineEllipsis="false"/>
 
         <Button
             android:id="@+id/comment.editor.send"

@@ -18,4 +18,5 @@
     <string name="comment.editor.hint.message">Message</string>
     <string name="comment.editor.control.send">Send</string>
     <string name="comment.editor.title">Create new comment</string>
+    <string name="comment.editor.error.length">Invalid text length</string>
 </resources>
