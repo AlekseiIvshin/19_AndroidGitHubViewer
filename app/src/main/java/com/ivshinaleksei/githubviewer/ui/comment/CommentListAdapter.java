@@ -100,7 +100,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         return oldCursor;
     }
 
-    public final class ViewHolder extends RecyclerView.ViewHolder {
+    public final class ViewHolder extends RecyclerView.ViewHolder{
 
         private TextView mTitle;
         private TextView mMessage;

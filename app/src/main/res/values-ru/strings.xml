@@ -7,5 +7,12 @@
     <string name="loadRepositoriesInfo.failure">Ошибка: %s</string>
     <string name="loadRepositoriesInfo.success">Успешно</string>
     <string name="actionSearch">Поиск репозитория</string>
+    <string name="title_activity_picture_gallery">Галерея</string>
     <string name="gallery.noData">Нет изображений</string>
+    <string name="title_activity_comment_management">Комментарии</string>
+    <string name="comment.editor.hint.title">Заголовок</string>
+    <string name="comment.editor.hint.message">Сообщение</string>
+    <string name="comment.editor.control.send">Добавить</string>
+    <string name="comment.editor.title">Добавить новый комментарий</string>
+    <string name="comment.editor.error.length">Недопустимая длина текста</string>
 </resources>
