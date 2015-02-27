@@ -106,17 +106,6 @@ public class CommentEditorFragment extends Fragment {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                getFragmentManager().popBackStack();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * Check data in views.
      */
