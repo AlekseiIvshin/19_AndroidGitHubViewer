@@ -1,5 +1,11 @@
 package com.ivshinaleksei.githubviewer.ui.comment;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,29 +13,31 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ivshinaleksei.githubviewer.R;
+import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.ivshinaleksei.githubviewer.domain.Comment;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
-public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.ViewHolder> {
+public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.ViewHolder> implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    public static final int LOADER_ID = 2;
+    private static final String[] sProjection =
+            {
+                    RepositoryContract.Comment._ID,
+                    RepositoryContract.Comment.TITLE,
+                    RepositoryContract.Comment.MESSAGE,
+                    RepositoryContract.Comment.CREATED_DATE
+            };
+
+    private Context mContext;
+    private Cursor mCursor;
 
     // TODO: get pattern from resources
     private DateFormat mDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
-    // TODO: get from content provider
-    private List<Comment> mDataSet;
-
-    public CommentListAdapter(){
-        mDataSet = new ArrayList<>(4);
-        mDataSet.add(new Comment("Title 0", "Message 0", new Date()));
-        mDataSet.add(new Comment("Title 1", "Message 1", new Date()));
-        mDataSet.add(new Comment("Title 2", "Message 2", new Date()));
-        mDataSet.add(new Comment("Title 3", "Message 3", new Date()));
+    public CommentListAdapter(Context context){
+        this.mContext = context;
     }
 
     @Override
@@ -40,18 +48,59 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if(position<0 || position>= mDataSet.size() ){
+        if (!mCursor.moveToPosition(position)) {
             throw new IllegalStateException("couldn't move cursor to position " + position);
         }
-        holder.setItem(mDataSet.get(position));
+        holder.setItem(Comment.getFromCursor(mCursor));
     }
 
     @Override
     public int getItemCount() {
-        return mDataSet.size();
+        if (mCursor != null) {
+            return mCursor.getCount();
+        }
+        return 0;
     }
 
-    public final class ViewHolder extends RecyclerView.ViewHolder{
+    @Override
+    public Loader onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case LOADER_ID:
+                return new CursorLoader(mContext, RepositoryContract.Comment.CONTENT_URI, sProjection, null, null, null);
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        changeCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+        changeCursor(null);
+    }
+
+
+    public void changeCursor(Cursor newCursor) {
+        Cursor old = swapCursor(newCursor);
+        if (old != null) {
+            old.close();
+        }
+        notifyDataSetChanged();
+    }
+
+    public Cursor swapCursor(Cursor newCursor) {
+        if (newCursor == mCursor) {
+            return null;
+        }
+        Cursor oldCursor = mCursor;
+        mCursor = newCursor;
+        return oldCursor;
+    }
+
+    public final class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mTitle;
         private TextView mMessage;
@@ -64,7 +113,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
             mCreatedDate = (TextView) itemView.findViewById(R.id.comment_createdDate);
         }
 
-        public void setItem(Comment comment){
+        public void setItem(Comment comment) {
             mTitle.setText(comment.title);
             mMessage.setText(comment.message);
             mCreatedDate.setText(mDateFormat.format(comment.createdDate));

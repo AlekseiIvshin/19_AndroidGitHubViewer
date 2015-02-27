@@ -53,6 +53,7 @@ public class CommentListFragment extends Fragment {
                 mOnAddCommentListener.addComment();
             }
         });
+        getActivity().setTitle(R.string.title_activity_comment_management);
         return rootView;
     }
 
@@ -61,8 +62,9 @@ public class CommentListFragment extends Fragment {
         super.onStart();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new CommentListAdapter();
+        mAdapter = new CommentListAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
+        getLoaderManager().initLoader(CommentListAdapter.LOADER_ID, null, mAdapter);
     }
 
     public interface OnAddCommentListener {

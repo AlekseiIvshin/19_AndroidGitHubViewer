@@ -14,6 +14,9 @@ import com.ivshinaleksei.githubviewer.ui.comment.CommentListFragment;
 
 public class CommentManagementActivity extends ActionBarActivity implements CommentListFragment.OnAddCommentListener {
 
+    private  final static String sCommentsListTag = "COMMENTS_LIST";
+    private  final static String sCommentsEditorTag = "COMMENTS_EDITOR";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +32,7 @@ public class CommentManagementActivity extends ActionBarActivity implements Comm
             CommentListFragment commentListFragment = CommentListFragment.newInstance();
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.contentFrame, commentListFragment);
+            transaction.replace(R.id.contentFrame, commentListFragment,sCommentsListTag);
             transaction.commit();
         }
     }
@@ -45,7 +48,12 @@ public class CommentManagementActivity extends ActionBarActivity implements Comm
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                CommentListFragment commentListFragment = (CommentListFragment) getSupportFragmentManager().findFragmentByTag(sCommentsListTag);
+                if(commentListFragment.isVisible()){
+                    NavUtils.navigateUpFromSameTask(this);
+                }else {
+                    getSupportFragmentManager().popBackStack();
+                }
                 return true;
         }
 
@@ -55,9 +63,8 @@ public class CommentManagementActivity extends ActionBarActivity implements Comm
     @Override
     public void addComment() {
         CommentEditorFragment commentEditorFragment = CommentEditorFragment.newInstance();
-
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.contentFrame, commentEditorFragment);
+        transaction.replace(R.id.contentFrame, commentEditorFragment,sCommentsEditorTag).addToBackStack(null);
         transaction.commit();
     }
 }
