@@ -17,8 +17,8 @@ import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
 public class RepositoryListFragment extends Fragment {
 
 
-    private static final String sPreferencesFileName = RepositoryListFragment.class.getSimpleName() + "_prefs";
-    private static final String sCurrentPosition = RepositoryListFragment.class.getSimpleName() + ".current.position";
+    private static final String sPreferencesFileName = RepositoryListFragment.class.getName() + "_prefs";
+    private static final String sCurrentPosition = RepositoryListFragment.class.getName() + ".current.position";
 
     private OnRepositorySelectedListener mListener;
     private RecyclerView mRecyclerView;

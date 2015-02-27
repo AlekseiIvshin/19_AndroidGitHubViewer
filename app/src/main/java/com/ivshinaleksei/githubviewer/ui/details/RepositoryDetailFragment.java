@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 
 public class RepositoryDetailFragment extends Fragment {
 
-    private static final String sRepositoryDetails = RepositoryDetailFragment.class.getSimpleName() + ".repository.details";
+    private static final String sRepositoryDetails = RepositoryDetailFragment.class.getName() + ".repository.details";
     private DateFormat mDateFormat;
 
     private static final DisplayImageOptions sOptions = new DisplayImageOptions.Builder()
