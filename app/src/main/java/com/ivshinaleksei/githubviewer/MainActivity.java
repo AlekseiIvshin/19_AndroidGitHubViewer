@@ -1,24 +1,31 @@
 package com.ivshinaleksei.githubviewer;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -29,9 +36,11 @@ import com.ivshinaleksei.githubviewer.domain.RepositoryList;
 import com.ivshinaleksei.githubviewer.network.BaseRepositorySearchRequest;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
 import com.ivshinaleksei.githubviewer.network.request.builder.SortedRepositorySearchRequestBuilder;
+import com.ivshinaleksei.githubviewer.ui.comment.CommentListFragment;
 import com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment;
 import com.ivshinaleksei.githubviewer.ui.list.MyRecyclerViewAdapter;
 import com.ivshinaleksei.githubviewer.ui.list.RepositoryListFragment;
+import com.ivshinaleksei.githubviewer.utils.UiUtils;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -48,6 +57,9 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
     private static final String sRepositoryRequestCacheKey = "repositories";
     private static final String sSharedPreferencesName = "prefsFile";
 
+    private static final String sRepositoryListFragmentTag = "repositoryList";
+    private static final String sRepositoryDetailsFragmentTag = "repositoryDetails";
+
     private BaseRepositorySearchRequest mRepositoryListRequest;
 
     private boolean mDualPane;
@@ -63,24 +75,28 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        UiUtils.setupUI(this,findViewById(R.id.drawerLayout));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_white_36dp);
+
+        initNavigationDrawer();
+
+        mDualPane = (findViewById(R.id.contentFrame) == null);
+
         if (savedInstanceState != null) {
             mCurrentInfo = savedInstanceState.getParcelable(sSelectedRepository);
         }
 
-        mDualPane = (findViewById(R.id.contentFrame) == null);
-
-        initNavigationDrawer();
-
-
         if (!mDualPane) {
-            // TODO: check on "work?"
             if (getSupportFragmentManager().findFragmentById(R.id.contentFrame) == null) {
                 RepositoryListFragment listViewFragment = RepositoryListFragment.newInstance();
-
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.contentFrame, listViewFragment);
+                transaction.replace(R.id.contentFrame, listViewFragment,sRepositoryListFragmentTag);
                 transaction.commit();
             }
         }
@@ -141,9 +157,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query.length() >= getResources().getInteger(R.integer.minQueryLength)) {
-                    InputMethodManager inputMethodManager =
-                            (InputMethodManager) MainActivity.this.getSystemService(Activity.INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(MainActivity.this.getCurrentFocus().getWindowToken(), 0);
+                    UiUtils.hideSoftKeyboard(MainActivity.this);
 
 //                    ProgressBar mProgress = (ProgressBar) findViewById(R.id.progressBar);
 //                    if (mProgress != null) {
@@ -159,6 +173,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
                             sRepositoryRequestCacheKey,
                             DurationInMillis.ONE_MINUTE,
                             new RepositorySearchRequestListener());
+                    searchView.setQuery("",false);
                 }
                 return true;
             }
@@ -169,11 +184,17 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             }
         });
 
+
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                getSupportFragmentManager().popBackStack();
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -200,7 +221,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         } else {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             RepositoryDetailFragment newDetailFragment = RepositoryDetailFragment.newInstance(aRepository);
-            transaction.replace(R.id.contentFrame, newDetailFragment).addToBackStack(null).commit();
+            transaction.replace(R.id.contentFrame, newDetailFragment,sRepositoryDetailsFragmentTag).addToBackStack(null).commit();
 
         }
     }
@@ -209,6 +230,13 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 
         mDrawerList = (ListView) findViewById(R.id.leftNavigationDrawer);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+
+//        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+//        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+//
+//        DrawerLayout.LayoutParams params = (android.support.v4.widget.DrawerLayout.LayoutParams) mDrawerList.getLayoutParams();
+//        params.width = Math.min((int)dpWidth-getSupportActionBar().getHeight(),320);
+//        mDrawerList.setLayoutParams(params);
 
         mDrawerList.setAdapter(
                 new ArrayAdapter<>(this, R.layout.list_item_drawer_navigation,
@@ -220,9 +248,6 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
                 selectItem(position);
             }
         });
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
 
         mDrawerList.bringToFront();
         mDrawerLayout.requestLayout();
@@ -279,5 +304,41 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             }
         }
 
+
     }
+
+//    private void hideSoftKeyboard(Activity activity){
+//        InputMethodManager inputMethodManager =
+//                (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+//        if(activity.getCurrentFocus()!=null) {
+//            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+//        }
+//    }
+//
+//    public void setupUI(View view) {
+//
+//        //Set up touch listener for non-text box views to hide keyboard.
+//        if(!(view instanceof EditText)) {
+//
+//            view.setOnTouchListener(new View.OnTouchListener() {
+//
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    hideSoftKeyboard(MainActivity.this);
+//                    return false;
+//                }
+//
+//            });
+//        }
+//
+//        //If a layout container, iterate over children and seed recursion.
+//        if (view instanceof ViewGroup) {
+//
+//            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+//
+//                View innerView = ((ViewGroup) view).getChildAt(i);
+//
+//                setupUI(innerView);
+//            }
+//        }
+//    }
 }

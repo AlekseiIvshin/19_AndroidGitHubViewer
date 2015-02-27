@@ -15,4 +15,7 @@
     <string name="comment.editor.control.send">Добавить</string>
     <string name="comment.editor.title">Добавить новый комментарий</string>
     <string name="comment.editor.error.length">Недопустимая длина текста</string>
+
+    <string name="repository.details.title">Детали репозитория</string>
+    <string name="repository.list.title">Лист репозиториев</string>
 </resources>

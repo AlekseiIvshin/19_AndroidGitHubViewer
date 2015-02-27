@@ -33,8 +33,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
     private Context mContext;
     private Cursor mCursor;
 
-    // TODO: get pattern from resources
-    private DateFormat mDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+    private DateFormat mDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
     public CommentListAdapter(Context context){
         this.mContext = context;

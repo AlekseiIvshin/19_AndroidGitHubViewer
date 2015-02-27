@@ -1,5 +1,6 @@
 package com.ivshinaleksei.githubviewer;
 
+import android.app.Activity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
@@ -7,15 +8,21 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import com.ivshinaleksei.githubviewer.ui.comment.CommentEditorFragment;
 import com.ivshinaleksei.githubviewer.ui.comment.CommentListFragment;
+import com.ivshinaleksei.githubviewer.utils.UiUtils;
 
 
 public class CommentManagementActivity extends ActionBarActivity implements CommentListFragment.OnAddCommentListener {
 
-    private  final static String sCommentsListTag = "COMMENTS_LIST";
-    private  final static String sCommentsEditorTag = "COMMENTS_EDITOR";
+    private final static String sCommentsListTag = "COMMENTS_LIST";
+    private final static String sCommentsEditorTag = "COMMENTS_EDITOR";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +39,7 @@ public class CommentManagementActivity extends ActionBarActivity implements Comm
             CommentListFragment commentListFragment = CommentListFragment.newInstance();
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.contentFrame, commentListFragment,sCommentsListTag);
+            transaction.replace(R.id.contentFrame, commentListFragment, sCommentsListTag);
             transaction.commit();
         }
     }
@@ -46,12 +53,13 @@ public class CommentManagementActivity extends ActionBarActivity implements Comm
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 CommentListFragment commentListFragment = (CommentListFragment) getSupportFragmentManager().findFragmentByTag(sCommentsListTag);
-                if(commentListFragment.isVisible()){
+                UiUtils.hideSoftKeyboard(this);
+                if (commentListFragment.isVisible()) {
                     NavUtils.navigateUpFromSameTask(this);
-                }else {
+                } else {
                     getSupportFragmentManager().popBackStack();
                 }
                 return true;
@@ -64,7 +72,7 @@ public class CommentManagementActivity extends ActionBarActivity implements Comm
     public void addComment() {
         CommentEditorFragment commentEditorFragment = CommentEditorFragment.newInstance();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.contentFrame, commentEditorFragment,sCommentsEditorTag).addToBackStack(null);
+        transaction.replace(R.id.contentFrame, commentEditorFragment, sCommentsEditorTag).addToBackStack(null);
         transaction.commit();
     }
 }

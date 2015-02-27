@@ -16,6 +16,7 @@ import android.widget.EditText;
 import com.ivshinaleksei.githubviewer.R;
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.ivshinaleksei.githubviewer.domain.Comment;
+import com.ivshinaleksei.githubviewer.utils.UiUtils;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.rengwuxian.materialedittext.validation.METValidator;
 
@@ -55,6 +56,7 @@ public class CommentEditorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_comment_editor, container, false);
+        UiUtils.setupUI(getActivity(),rootView);
         mTitleView = (MaterialEditText) rootView.findViewById(R.id.comment_editor_title);
         mTitleView.addValidator(new LengthValidator(mTitleView.getMinCharacters(),mTitleView.getMaxCharacters()));
         mMessageView = (MaterialEditText) rootView.findViewById(R.id.comment_editor_message);

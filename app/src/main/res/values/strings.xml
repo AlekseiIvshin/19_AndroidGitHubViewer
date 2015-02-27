@@ -17,4 +17,7 @@
     <string name="comment.editor.control.send">Add</string>
     <string name="comment.editor.title">Add new comment</string>
     <string name="comment.editor.error.length">Invalid text length</string>
+
+    <string name="repository.details.title">Repository details</string>
+    <string name="repository.list.title">Repository list</string>
 </resources>

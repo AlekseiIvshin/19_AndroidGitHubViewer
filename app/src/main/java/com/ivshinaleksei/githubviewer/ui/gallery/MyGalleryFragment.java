@@ -23,9 +23,6 @@ public class MyGalleryFragment extends Fragment {
     private ViewPager mViewPager;
     private int mLastOpenedPicturePosition = -1;
 
-    private View mListView;
-    private View mEmptyHolder;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,10 +46,9 @@ public class MyGalleryFragment extends Fragment {
         mViewPager = (ViewPager) rootView.findViewById(R.id.pager);
         mViewPager.setAdapter(mPagerAdapter);
 
-        mListView = rootView.findViewById(R.id.pager);
-        mEmptyHolder = rootView.findViewById(android.R.id.empty);
+        View emptyHolder = rootView.findViewById(android.R.id.empty);
 
-        showHolder(mListView, mEmptyHolder, mPagerAdapter.isEmpty());
+        showHolder(mViewPager, emptyHolder, mPagerAdapter.isEmpty());
 
         return rootView;
     }
@@ -60,7 +56,6 @@ public class MyGalleryFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
         if (mLastOpenedPicturePosition >= 0) {
             mViewPager.setCurrentItem(mLastOpenedPicturePosition);
         }
@@ -70,35 +65,18 @@ public class MyGalleryFragment extends Fragment {
     public void onStop() {
         super.onStop();
         if (mViewPager.getCurrentItem() >= 0) {
-            SharedPreferences.Editor editor = getActivity().getSharedPreferences(sPreferencesFilename, 0).edit();
+            SharedPreferences.Editor editor = getActivity()
+                    .getSharedPreferences(sPreferencesFilename, 0).edit();
             editor.putInt(sLastOpenedPicturePositionPreferenceName, mViewPager.getCurrentItem());
             editor.apply();
         }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(sLastOpenedPicturePositionPreferenceName, mViewPager.getCurrentItem());
-    }
+    public void onPause() {
+        super.onPause();
 
-
-    /**
-     * Hide view.
-     */
-    private void hide(View v) {
-        if (v != null) {
-            v.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * Show view.
-     */
-    private void show(View v) {
-        if (v != null) {
-            v.setVisibility(View.VISIBLE);
-        }
+        mLastOpenedPicturePosition = mViewPager.getCurrentItem();
     }
 
     /**
@@ -115,6 +93,24 @@ public class MyGalleryFragment extends Fragment {
         } else {
             hide(emptyView);
             show(dataView);
+        }
+    }
+
+    /**
+     * Hide view.
+     */
+    private void hide(View v) {
+        if (v != null) {
+            v.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Show view.
+     */
+    private void show(View v) {
+        if (v != null) {
+            v.setVisibility(View.VISIBLE);
         }
     }
 }
