@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class MyPagerAdapter extends FragmentStatePagerAdapter {
 
+    // TODO: get data from provider
     List<RepositoryOwner> owners = new ArrayList<>();
 
     public MyPagerAdapter(FragmentManager fm) {
@@ -32,13 +33,11 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        // TODO: stub
         return owners.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        // TODO: get picture name
         return owners.get(position).login;
     }
 

@@ -18,7 +18,6 @@ public class CommentListFragment extends Fragment{
     private RecyclerView mRecyclerView;
     private View mEmptyHolder;
     private CommentListAdapter mAdapter;
-    private FloatingActionButton mFab;
     private OnAddCommentListener mOnAddCommentListener;
 
     public static CommentListFragment newInstance() {
@@ -46,29 +45,33 @@ public class CommentListFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_list_comment, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.list_comment);
-        mFab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        mFab.attachToRecyclerView(mRecyclerView);
-        mFab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fab.attachToRecyclerView(mRecyclerView);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnAddCommentListener.addComment();
             }
         });
         getActivity().setTitle(R.string.title_activity_comment_management);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(layoutManager);
+        mAdapter = new CommentListAdapter(getActivity());
+        mAdapter.registerAdapterDataObserver(new CommentsObserver());
+        mRecyclerView.setAdapter(mAdapter);
+
+
+        mEmptyHolder = rootView.findViewById(android.R.id.empty);
+
         return rootView;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new CommentListAdapter(getActivity());
-        mAdapter.registerAdapterDataObserver(new CommentsObserver());
-        mRecyclerView.setAdapter(mAdapter);
-        getLoaderManager().initLoader(CommentListAdapter.LOADER_ID, null, mAdapter);
 
-        mEmptyHolder = getActivity().findViewById(android.R.id.empty);
+        getLoaderManager().initLoader(CommentListAdapter.LOADER_ID, null, mAdapter);
     }
 
     public interface OnAddCommentListener {

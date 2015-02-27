@@ -35,7 +35,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
 
     private DateFormat mDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
-    public CommentListAdapter(Context context){
+    public CommentListAdapter(Context context) {
         this.mContext = context;
     }
 
@@ -61,7 +61,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         return 0;
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return getItemCount() == 0;
     }
 
@@ -69,7 +69,10 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
     public Loader onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_ID:
-                return new CursorLoader(mContext, RepositoryContract.Comment.CONTENT_URI, sProjection, null, null, null);
+                return new CursorLoader(
+                        mContext,
+                        RepositoryContract.Comment.CONTENT_URI,
+                        sProjection, null, null, null);
             default:
                 return null;
         }
@@ -103,7 +106,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         return oldCursor;
     }
 
-    public final class ViewHolder extends RecyclerView.ViewHolder{
+    public final class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mTitle;
         private TextView mMessage;
