@@ -32,7 +32,7 @@ public class RepositoryContract {
 
         public static final String DIR_TYPE = "vnd.cursor.dir/"+AUTHORITY+"/"+PATH;
 
-        public static final String TABLE_NAME = "repositoryOwner";
+        public static final String TABLE_NAME = RepositoryInfo.TABLE_NAME;
         public static final String OWNER_LOGIN = "ownerLogin";
         public static final String OWNER_AVATAR_URL = "ownerAvatarUrl";
     }

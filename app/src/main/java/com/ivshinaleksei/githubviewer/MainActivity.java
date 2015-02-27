@@ -260,8 +260,6 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
-            Log.v(MainActivity.class.getSimpleName(), "Failure");
-
             int duration = Toast.LENGTH_LONG;
             Toast toast = Toast.makeText(
                     MainActivity.this,
@@ -277,55 +275,10 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 
         @Override
         public void onRequestSuccess(RepositoryList repositoryPreviews) {
-            Log.v(MainActivity.class.getSimpleName(), "Success");
-            // TODO: add normal behaviour on success: update cursor and etc.
-            Loader loader = getSupportLoaderManager().getLoader(MyRecyclerViewAdapter.LOADER_ID);
-            if (loader != null) {
-                loader.reset();
-            } else {
-                //getSupportLoaderManager().initLoader(MyRecyclerViewAdapter.LOADER_ID,null,new MyRecyclerViewAdapter(this, this));
-            }
             ProgressBar mProgress = (ProgressBar) findViewById(R.id.progressBar);
             if (mProgress != null) {
                 mProgress.setVisibility(View.GONE);
             }
         }
-
-
     }
-
-//    private void hideSoftKeyboard(Activity activity){
-//        InputMethodManager inputMethodManager =
-//                (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-//        if(activity.getCurrentFocus()!=null) {
-//            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-//        }
-//    }
-//
-//    public void setupUI(View view) {
-//
-//        //Set up touch listener for non-text box views to hide keyboard.
-//        if(!(view instanceof EditText)) {
-//
-//            view.setOnTouchListener(new View.OnTouchListener() {
-//
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    hideSoftKeyboard(MainActivity.this);
-//                    return false;
-//                }
-//
-//            });
-//        }
-//
-//        //If a layout container, iterate over children and seed recursion.
-//        if (view instanceof ViewGroup) {
-//
-//            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-//
-//                View innerView = ((ViewGroup) view).getChildAt(i);
-//
-//                setupUI(innerView);
-//            }
-//        }
-//    }
 }

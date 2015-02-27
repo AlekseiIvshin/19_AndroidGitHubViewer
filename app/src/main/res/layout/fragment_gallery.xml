@@ -12,7 +12,6 @@
         style="@style/Base.TextAppearance.AppCompat.Headline"
         android:layout_gravity="center"
         android:padding="@dimen/defaultPadding"
-        android:background="@color/normal"
         android:text="@string/gallery.noData"/>
 
     <android.support.v4.view.ViewPager

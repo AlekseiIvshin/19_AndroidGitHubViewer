@@ -38,6 +38,22 @@ public class RepositoryOwner implements Parcelable {
         this.avatarUrl = in.readString();
     }
 
+
+    public static RepositoryOwner getFromCursor(Cursor cursor) {
+        if (cursor.getColumnCount() <= 0) {
+            return null;
+        }
+
+        int indexLogin = cursor.getColumnIndex(RepositoryContract.RepositoryOwner.OWNER_LOGIN);
+        int indexAvatarUrl = cursor.getColumnIndex(RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL);
+
+        String login = cursor.getString(indexLogin);
+        String avatarUrl = cursor.getString(indexAvatarUrl);
+
+
+        return new RepositoryOwner(login,avatarUrl);
+    }
+
     public static final Parcelable.Creator<RepositoryOwner> CREATOR = new Parcelable.Creator<RepositoryOwner>() {
         public RepositoryOwner createFromParcel(Parcel source) {
             return new RepositoryOwner(source);

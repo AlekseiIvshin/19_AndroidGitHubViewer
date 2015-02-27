@@ -2,6 +2,7 @@ package com.ivshinaleksei.githubviewer.ui.gallery;
 
 
 import android.content.SharedPreferences;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,8 @@ public class MyGalleryFragment extends Fragment {
     private MyPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
     private int mLastOpenedPicturePosition = -1;
+    private View mEmptyHolder;
+    private ContentObserver mContentObserver;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,10 @@ public class MyGalleryFragment extends Fragment {
             SharedPreferences pref = getActivity().getSharedPreferences(sPreferencesFilename, 0);
             mLastOpenedPicturePosition = pref.getInt(sLastOpenedPicturePositionPreferenceName, -1);
         }
-        mPagerAdapter = new MyPagerAdapter(getFragmentManager());
+        mContentObserver = new ContentObserver();
+        mPagerAdapter = new MyPagerAdapter(getFragmentManager(),getActivity());
+        mPagerAdapter.registerDataSetObserver(mContentObserver);
+        getLoaderManager().initLoader(MyPagerAdapter.LOADER_ID,null,mPagerAdapter);
     }
 
     @Override
@@ -46,9 +52,9 @@ public class MyGalleryFragment extends Fragment {
         mViewPager = (ViewPager) rootView.findViewById(R.id.pager);
         mViewPager.setAdapter(mPagerAdapter);
 
-        View emptyHolder = rootView.findViewById(android.R.id.empty);
+        mEmptyHolder = rootView.findViewById(android.R.id.empty);
 
-        showHolder(mViewPager, emptyHolder, mPagerAdapter.isEmpty());
+        showHolder(mViewPager, mEmptyHolder, mPagerAdapter.isEmpty());
 
         return rootView;
     }
@@ -77,6 +83,14 @@ public class MyGalleryFragment extends Fragment {
         super.onPause();
 
         mLastOpenedPicturePosition = mViewPager.getCurrentItem();
+    }
+
+    // TODO: stub
+    private class ContentObserver extends DataSetObserver {
+        @Override
+        public void onChanged() {
+            showHolder(mViewPager, mEmptyHolder, mPagerAdapter.isEmpty());
+        }
     }
 
     /**

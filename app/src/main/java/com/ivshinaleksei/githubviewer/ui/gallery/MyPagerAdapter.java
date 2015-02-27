@@ -1,47 +1,115 @@
 package com.ivshinaleksei.githubviewer.ui.gallery;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 
+import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.ivshinaleksei.githubviewer.domain.RepositoryOwner;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Aleksei_Ivshin on 26/02/2015.
  */
-public class MyPagerAdapter extends FragmentStatePagerAdapter {
+public class MyPagerAdapter extends FragmentStatePagerAdapter implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    // TODO: get data from provider
-    List<RepositoryOwner> owners = new ArrayList<>();
+    private Cursor mCursor;
+    public static final int LOADER_ID = 3;
+    private Context mContext;
 
-    public MyPagerAdapter(FragmentManager fm) {
+    private static final String[] sProjection =
+            {
+                    RepositoryContract.RepositoryOwner.OWNER_LOGIN,
+                    RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL
+            };
+
+    public MyPagerAdapter(FragmentManager fm,Context context) {
         super(fm);
-        owners.add(new RepositoryOwner("login0","avatarUrl0"));
-        owners.add(new RepositoryOwner("login1","avatarUrl1"));
-        owners.add(new RepositoryOwner("login2","avatarUrl2"));
-        owners.add(new RepositoryOwner("login3","avatarUrl3"));
-        owners.add(new RepositoryOwner("login4","avatarUrl4"));
+        this.mContext = context;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return MyGalleryObjectFragment.newInstance(owners.get(position).avatarUrl);
+        if (!mCursor.moveToPosition(position)) {
+            throw new IllegalStateException("couldn't move cursor to position " + position);
+        }
+        RepositoryOwner owner = RepositoryOwner.getFromCursor(mCursor);
+        if(owner == null){
+            return MyGalleryObjectFragment.newInstance("");
+        }
+        return MyGalleryObjectFragment.newInstance(RepositoryOwner.getFromCursor(mCursor).avatarUrl);
     }
 
     @Override
     public int getCount() {
-        return owners.size();
+        if (mCursor != null) {
+            return mCursor.getCount();
+        }
+        return 0;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return owners.get(position).login;
+        if (!mCursor.moveToPosition(position)) {
+            throw new IllegalStateException("couldn't move cursor to position " + position);
+        }
+        RepositoryOwner owner = RepositoryOwner.getFromCursor(mCursor);
+        if(owner != null){
+            return owner.login;
+        }
+        // TODO: set title for no name
+        return "No name";
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return getCount() == 0;
     }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case LOADER_ID:
+                return new CursorLoader(
+                        mContext,
+                        RepositoryContract.RepositoryOwner.CONTENT_URI,
+                        sProjection,
+                        null, null, null);
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
+        changeCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
+        changeCursor(null);
+    }
+
+    public void changeCursor(Cursor newCursor) {
+        Cursor old = swapCursor(newCursor);
+        if (old != null) {
+            old.close();
+        }
+        notifyDataSetChanged();
+    }
+
+    public Cursor swapCursor(Cursor newCursor) {
+        if (newCursor == mCursor) {
+            return null;
+        }
+        Cursor oldCursor = mCursor;
+        mCursor = newCursor;
+        return oldCursor;
+    }
+
 }

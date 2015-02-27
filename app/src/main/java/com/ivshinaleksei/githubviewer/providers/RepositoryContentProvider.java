@@ -24,11 +24,13 @@ public class RepositoryContentProvider extends ContentProvider {
 
     private static final int sRepositories = 1;
     private static final int sComments = 2;
+    private static final int sRepositoryOwners =3;
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         sUriMatcher.addURI(RepositoryContract.AUTHORITY, RepositoryContract.RepositoryInfo.PATH, sRepositories);
         sUriMatcher.addURI(RepositoryContract.AUTHORITY, RepositoryContract.Comment.PATH, sComments);
+        sUriMatcher.addURI(RepositoryContract.AUTHORITY, RepositoryContract.RepositoryOwner.PATH, sRepositoryOwners);
     }
 
     public RepositoryContentProvider() {
@@ -55,6 +57,8 @@ public class RepositoryContentProvider extends ContentProvider {
                 return RepositoryContract.RepositoryInfo.DIR_TYPE;
             case sComments:
                 return RepositoryContract.Comment.DIR_TYPE;
+            case sRepositoryOwners:
+                return RepositoryContract.RepositoryOwner.DIR_TYPE;
             default:
                 throw new IllegalArgumentException("Uri " + uri.toString() + " not supported");
         }
@@ -113,6 +117,17 @@ public class RepositoryContentProvider extends ContentProvider {
                 try {
                     Cursor cursor = db.query(RepositoryContract.Comment.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                    return cursor;
+                } catch (SQLException e) {
+                    return null;
+                }
+            }
+
+            case sRepositoryOwners: {
+                db = mDatabaseHelper.getReadableDatabase();
+                try{
+                    Cursor cursor = db.query(RepositoryContract.RepositoryOwner.TABLE_NAME, projection,selection,selectionArgs,null,null,sortOrder);
+                    cursor.setNotificationUri(getContext().getContentResolver(),uri);
                     return cursor;
                 } catch (SQLException e) {
                     return null;

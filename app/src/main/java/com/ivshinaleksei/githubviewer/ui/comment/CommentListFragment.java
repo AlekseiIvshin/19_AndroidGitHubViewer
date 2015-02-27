@@ -65,7 +65,7 @@ public class CommentListFragment extends Fragment{
         });
         getActivity().setTitle(R.string.title_activity_comment_management);
 
-        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        mProgressBar = (ProgressBar) rootView.findViewById(android.R.id.progress);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
         //mAdapter = new CommentListAdapter(getActivity());
