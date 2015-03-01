@@ -13,7 +13,6 @@ import com.ivshinaleksei.githubviewer.domain.RepositoryOwner;
  */
 public class MyPagerAdapter extends FragmentStatePagerAdapter{
 
-    public static final int LOADER_ID = 3;
     private Cursor mCursor;
     private final String mNoNameTitle;
 

@@ -1,18 +1,19 @@
 package com.ivshinaleksei.githubviewer.ui.list;
 
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ivshinaleksei.githubviewer.MainActivity;
 import com.ivshinaleksei.githubviewer.R;
-import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
 
 public class RepositoryListFragment extends Fragment {
 
@@ -20,7 +21,6 @@ public class RepositoryListFragment extends Fragment {
     private static final String sPreferencesFileName = RepositoryListFragment.class.getName() + "_prefs";
     private static final String sCurrentPosition = RepositoryListFragment.class.getName() + ".current.position";
 
-    private OnRepositorySelectedListener mListener;
     private RecyclerView mRecyclerView;
     private int mCurrentPosition;
     private MyRecyclerViewAdapter mAdapter;
@@ -30,21 +30,8 @@ public class RepositoryListFragment extends Fragment {
         return new RepositoryListFragment();
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnRepositorySelectedListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement " + OnRepositorySelectedListener.class.getSimpleName());
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void setAdapter(MyRecyclerViewAdapter adapter){
+        this.mAdapter = adapter;
     }
 
     @Override
@@ -65,6 +52,12 @@ public class RepositoryListFragment extends Fragment {
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences(sPreferencesFileName, 0);
             mCurrentPosition = sharedPreferences.getInt(sCurrentPosition, -1);
         }
+        Loader loader = getLoaderManager().getLoader(MainActivity.LOADER_ID);
+        if(loader==null){
+            getLoaderManager().initLoader(MainActivity.LOADER_ID,null,(LoaderManager.LoaderCallbacks) getActivity());
+        }else{
+            loader.forceLoad();
+        }
     }
 
     @Override
@@ -73,9 +66,7 @@ public class RepositoryListFragment extends Fragment {
         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recyclerViewRepositoryList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new MyRecyclerViewAdapter(getActivity(), mListener);
         mRecyclerView.setAdapter(mAdapter);
-        getLoaderManager().initLoader(MyRecyclerViewAdapter.LOADER_ID, null, mAdapter);
     }
 
     @Override
@@ -92,12 +83,8 @@ public class RepositoryListFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        mAdapter.changeCursor(null);
     }
 
-    public interface OnRepositorySelectedListener {
-        public void onRepositorySelected(RepositoryInfo data);
-    }
 
 
 }

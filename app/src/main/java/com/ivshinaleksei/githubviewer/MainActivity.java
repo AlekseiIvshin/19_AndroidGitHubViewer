@@ -2,8 +2,12 @@ package com.ivshinaleksei.githubviewer;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -20,12 +24,14 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
 import com.ivshinaleksei.githubviewer.domain.RepositoryList;
 import com.ivshinaleksei.githubviewer.network.BaseRepositorySearchRequest;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
 import com.ivshinaleksei.githubviewer.network.request.SortedRepositorySearchRequest;
 import com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment;
+import com.ivshinaleksei.githubviewer.ui.list.MyRecyclerViewAdapter;
 import com.ivshinaleksei.githubviewer.ui.list.RepositoryListFragment;
 import com.ivshinaleksei.githubviewer.utils.UiUtils;
 import com.octo.android.robospice.SpiceManager;
@@ -37,7 +43,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 
-public class MainActivity extends ActionBarActivity implements RepositoryListFragment.OnRepositorySelectedListener {
+public class MainActivity extends ActionBarActivity implements MyRecyclerViewAdapter.OnRepositorySelectedListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String sSelectedRepository = MainActivity.class.getName() + ".selected.repository";
     private static final String sCurrentSavedRepository = "savedRepository";
@@ -47,10 +53,24 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
     private static final String sRepositoryListFragmentTag = "repositoryList";
     private static final String sRepositoryDetailsFragmentTag = "repositoryDetails";
 
+    public static final int LOADER_ID = 0;
+    private static final String[] sProjection =
+            {
+                    RepositoryContract.RepositoryInfo._ID,
+                    RepositoryContract.RepositoryInfo.FULL_NAME,
+                    RepositoryContract.RepositoryInfo.LANGUAGE,
+                    RepositoryContract.RepositoryInfo.STARGAZERS_COUNT,
+                    RepositoryContract.RepositoryInfo.CREATED_DATE,
+                    RepositoryContract.RepositoryInfo.DESCRIPTION,
+                    RepositoryContract.RepositoryOwner.OWNER_LOGIN,
+                    RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL
+            };
+
     private BaseRepositorySearchRequest mRepositoryListRequest;
 
     private boolean mDualPane;
     private RepositoryInfo mCurrentInfo;
+    private MyRecyclerViewAdapter mAdapter;
 
     private SpiceManager mSpiceManager = new SpiceManager(RepositoryService.class);
 
@@ -70,19 +90,27 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 
         initNavigationDrawer();
 
+        mAdapter = new MyRecyclerViewAdapter();
+        mAdapter.setOnClickListener(this);
+
         mDualPane = (findViewById(R.id.contentFrame) == null);
 
         if (savedInstanceState != null) {
             mCurrentInfo = savedInstanceState.getParcelable(sSelectedRepository);
         }
-
+        RepositoryListFragment listViewFragment = null;
         if (!mDualPane) {
             if (getSupportFragmentManager().findFragmentById(R.id.contentFrame) == null) {
-                RepositoryListFragment listViewFragment = RepositoryListFragment.newInstance();
+                listViewFragment = RepositoryListFragment.newInstance();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.contentFrame, listViewFragment, sRepositoryListFragmentTag);
                 transaction.commit();
             }
+        } else {
+            listViewFragment = (RepositoryListFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentRepositoryList);
+        }
+        if (listViewFragment != null) {
+            listViewFragment.setAdapter(mAdapter);
         }
 
         if (mCurrentInfo == null) {
@@ -101,12 +129,17 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentRepositoryDetails) != null && mCurrentInfo == null) {
             getSupportFragmentManager().beginTransaction().hide(getSupportFragmentManager().findFragmentById(R.id.fragmentRepositoryDetails)).commit();
         }
+
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
     protected void onStart() {
         mSpiceManager.start(this);
         super.onStart();
+        if(mAdapter!=null){
+            mAdapter.setOnClickListener(this);
+        }
     }
 
     @Override
@@ -122,6 +155,10 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             }
             editor.putString(sCurrentSavedRepository, writer.toString());
             editor.apply();
+        }
+
+        if(mAdapter != null){
+            mAdapter.setOnClickListener(null);
         }
     }
 
@@ -248,6 +285,31 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             }
             break;
         }
+    }
+
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case LOADER_ID:
+                return new CursorLoader(
+                        this,
+                        RepositoryContract.RepositoryInfo.CONTENT_URI,
+                        sProjection,
+                        null, null, null);
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mAdapter.changeCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.changeCursor(null);
     }
 
     public final class RepositorySearchRequestListener implements RequestListener<RepositoryList> {
