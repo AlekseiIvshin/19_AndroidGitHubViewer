@@ -48,7 +48,6 @@ public class CommentListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mAdapter = new CommentListAdapter(getActivity());
         mAdapter.registerAdapterDataObserver(new CommentsObserver());
-        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -57,6 +56,7 @@ public class CommentListFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_list_comment, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.list_comment);
+        mRecyclerView.setAdapter(mAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.attachToRecyclerView(mRecyclerView);

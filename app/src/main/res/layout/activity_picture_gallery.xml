@@ -9,10 +9,32 @@
         android:id="@+id/toolbar"
         style="@style/AppTheme.Toolbar" />
 
-    <fragment
-        android:id="@+id/galleryViewPager"
-        class="com.ivshinaleksei.githubviewer.ui.gallery.MyGalleryFragment"
+
+    <TextView
+        android:id="@android:id/empty"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="@dimen/defaultPadding"
+        android:text="@string/gallery.noData" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:visibility="gone">
+
+        <android.support.v4.view.PagerTitleStrip
+            android:id="@+id/pager_title_strip"
+            style="@style/Base.TextAppearance.AppCompat.Headline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@color/primary"
+            android:paddingBottom="@dimen/pager.title.paddingBottom"
+            android:paddingTop="@dimen/pager.title.paddingTop"
+            android:textColor="@color/titleTextColor" />
+    </android.support.v4.view.ViewPager>
 
 </LinearLayout>
