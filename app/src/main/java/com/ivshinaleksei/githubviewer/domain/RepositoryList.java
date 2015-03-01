@@ -8,7 +8,6 @@ import com.j256.ormlite.field.ForeignCollectionField;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 @Root
@@ -18,7 +17,7 @@ public class RepositoryList {
     public int id;
 
     @ForeignCollectionField(eager = false)
-    @ElementList(inline = true, entry = RepositoryContract.RepositoryInfo.TABLE_NAME,required = false)
+    @ElementList(inline = true, entry = RepositoryContract.RepositoryInfo.TABLE_NAME, required = false)
     private Collection<RepositoryInfo> items;
 
     public Collection<RepositoryInfo> getItems() {

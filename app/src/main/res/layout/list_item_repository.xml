@@ -3,28 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/list_item_repository"
     android:paddingBottom="@dimen/defaultPadding"
     android:paddingLeft="@dimen/defaultHorizontalMargin"
     android:paddingRight="@dimen/defaultHorizontalMargin"
-    android:paddingTop="@dimen/defaultPadding"
-    android:background="@drawable/list_item_repository">
+    android:paddingTop="@dimen/defaultPadding">
 
     <TextView
         android:id="@+id/list.item.repoFullName"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/list.item.repoLanguage"
-        style="@style/Base.TextAppearance.AppCompat.Headline"
         tools:text="Repository/Full name" />
 
     <TextView
         android:id="@+id/list.item.repoStars"
+        style="@style/TextAppearance.AppCompat.Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        style="@style/TextAppearance.AppCompat.Body2"
         tools:text="NNN" />
 
     <ImageView
@@ -37,10 +37,10 @@
 
     <TextView
         android:id="@+id/list.item.repoLanguage"
+        style="@style/TextAppearance.AppCompat.Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/list.item.repoStarsImage"
-        style="@style/TextAppearance.AppCompat.Body2"
         tools:text="Language" />
 
 </RelativeLayout>

@@ -19,12 +19,12 @@ import com.ivshinaleksei.githubviewer.domain.Comment;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.ViewHolder> implements LoaderManager.LoaderCallbacks<Cursor> {
+public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.ViewHolder>
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int LOADER_ID = 2;
     private static final String[] sProjection =
             {
-                    RepositoryContract.Comment._ID,
                     RepositoryContract.Comment.TITLE,
                     RepositoryContract.Comment.MESSAGE,
                     RepositoryContract.Comment.CREATED_DATE
@@ -66,7 +66,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
     }
 
     @Override
-    public Loader onCreateLoader(int id, Bundle args) {
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_ID:
                 return new CursorLoader(

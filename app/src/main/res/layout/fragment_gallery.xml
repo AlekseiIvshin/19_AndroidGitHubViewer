@@ -3,16 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <TextView
         android:id="@android:id/empty"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Base.TextAppearance.AppCompat.Headline"
         android:layout_gravity="center"
         android:padding="@dimen/defaultPadding"
-        android:text="@string/gallery.noData"/>
+        android:text="@string/gallery.noData" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"

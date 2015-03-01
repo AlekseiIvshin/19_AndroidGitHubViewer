@@ -45,7 +45,7 @@
             android:name=".providers.RepositoryContentProvider"
             android:authorities="com.ivshinaleksei.githubviewer.provider"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
 
     </application>
 

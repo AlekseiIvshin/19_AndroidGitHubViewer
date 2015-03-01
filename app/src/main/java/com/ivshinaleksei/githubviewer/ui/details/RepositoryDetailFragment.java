@@ -1,7 +1,6 @@
 package com.ivshinaleksei.githubviewer.ui.details;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import com.ivshinaleksei.githubviewer.R;
 import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
 import com.ivshinaleksei.githubviewer.domain.RepositoryOwner;
-import com.ivshinaleksei.githubviewer.utils.MyBitmapLoader;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -23,14 +21,13 @@ import java.text.SimpleDateFormat;
 public class RepositoryDetailFragment extends Fragment {
 
     private static final String sRepositoryDetails = RepositoryDetailFragment.class.getName() + ".repository.details";
-    private DateFormat mDateFormat;
-
     private static final DisplayImageOptions sOptions = new DisplayImageOptions.Builder()
             .showImageForEmptyUri(R.drawable.github_mark)
             .showImageOnFail(R.drawable.github_mark)
             .cacheInMemory(true)
             .cacheOnDisc(true)
             .build();
+    private DateFormat mDateFormat;
 
     public static RepositoryDetailFragment newInstance(RepositoryInfo aRepository) {
         RepositoryDetailFragment detailFragment = new RepositoryDetailFragment();
@@ -38,11 +35,6 @@ public class RepositoryDetailFragment extends Fragment {
         bundle.putParcelable(sRepositoryDetails, aRepository);
         detailFragment.setArguments(bundle);
         return detailFragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -76,7 +68,7 @@ public class RepositoryDetailFragment extends Fragment {
         TextView ownerLogin = (TextView) getActivity().findViewById(R.id.details_ownerLogin);
         ownerLogin.setText(owner.login);
 
-        ImageLoader.getInstance().displayImage(owner.avatarUrl, ownerAvatar,sOptions);
+        ImageLoader.getInstance().displayImage(owner.avatarUrl, ownerAvatar, sOptions);
     }
 
     public void showRepositoryCard(RepositoryInfo details) {

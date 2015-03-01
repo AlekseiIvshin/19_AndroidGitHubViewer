@@ -1,26 +1,14 @@
 package com.ivshinaleksei.githubviewer;
 
-import android.content.SharedPreferences;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NavUtils;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.ivshinaleksei.githubviewer.ui.gallery.MyPagerAdapter;
-
 
 public class PictureGalleryActivity extends ActionBarActivity {
-
-    private static final String sPreferencesFilename = PictureGalleryActivity.class.getSimpleName()+".prefs";
-    private static final String sLastOpenedPicturePosition = PictureGalleryActivity.class.getSimpleName()+".lastOpened";
-
-    private MyPagerAdapter mPagerAdapter;
-    private ViewPager mViewPager;
-    private int mLastOpenedPicturePosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +31,7 @@ public class PictureGalleryActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;

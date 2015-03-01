@@ -17,9 +17,17 @@ import java.util.Date;
 @DatabaseTable(tableName = RepositoryContract.Comment.TABLE_NAME)
 public class Comment implements Parcelable {
 
-    @DatabaseField(columnName = RepositoryContract.Comment._ID,generatedId = true)
-    public int id;
+    public static final Parcelable.Creator<Comment> CREATOR = new Parcelable.Creator<Comment>() {
+        public Comment createFromParcel(Parcel source) {
+            return new Comment(source);
+        }
 
+        public Comment[] newArray(int size) {
+            return new Comment[size];
+        }
+    };
+    @DatabaseField(columnName = RepositoryContract.Comment._ID, generatedId = true)
+    public int id;
     @Element(required = false)
     @DatabaseField(columnName = RepositoryContract.Comment.TITLE)
     public String title;
@@ -30,22 +38,16 @@ public class Comment implements Parcelable {
     @DatabaseField(columnName = RepositoryContract.Comment.CREATED_DATE)
     public Date createdDate;
 
-    public Comment(){}
-
-    public Comment(String title,String message,Date createdDate){
-        this.title = title;
-        this.message = message;
-        this.createdDate = createdDate;
+    public Comment() {
     }
 
-    public ContentValues marshalling(){
-        ContentValues values = new ContentValues(3);
-        values.put(RepositoryContract.Comment.TITLE,title);
-        values.put(RepositoryContract.Comment.MESSAGE,message);
-        values.put(RepositoryContract.Comment.CREATED_DATE,createdDate.getTime()/1000);
-        return values;
+    private Comment(Parcel in) {
+        this.id = in.readInt();
+        this.title = in.readString();
+        this.message = in.readString();
+        long tmpCreatedDate = in.readLong();
+        this.createdDate = tmpCreatedDate == -1 ? null : new Date(tmpCreatedDate);
     }
-
 
     public static Comment getFromCursor(Cursor cursor) {
         if (cursor.getColumnCount() <= 0) {
@@ -56,11 +58,20 @@ public class Comment implements Parcelable {
         int indexMessage = cursor.getColumnIndex(RepositoryContract.Comment.MESSAGE);
         int indexCreatedDate = cursor.getColumnIndex(RepositoryContract.Comment.CREATED_DATE);
 
-        String title = cursor.getString(indexTitle);
-        String message = cursor.getString(indexMessage);
-        long createdDate = cursor.getLong(indexCreatedDate) * 1000;
+        Comment comment = new Comment();
+        comment.title = cursor.getString(indexTitle);
+        comment.message = cursor.getString(indexMessage);
+        comment.createdDate = new Date(cursor.getLong(indexCreatedDate) * 1000);
 
-        return new Comment(title,message,new Date(createdDate));
+        return comment;
+    }
+
+    public ContentValues marshalling() {
+        ContentValues values = new ContentValues(3);
+        values.put(RepositoryContract.Comment.TITLE, title);
+        values.put(RepositoryContract.Comment.MESSAGE, message);
+        values.put(RepositoryContract.Comment.CREATED_DATE, createdDate.getTime() / 1000);
+        return values;
     }
 
     @Override
@@ -75,22 +86,4 @@ public class Comment implements Parcelable {
         dest.writeString(this.message);
         dest.writeLong(createdDate != null ? createdDate.getTime() : -1);
     }
-
-    private Comment(Parcel in) {
-        this.id = in.readInt();
-        this.title = in.readString();
-        this.message = in.readString();
-        long tmpCreatedDate = in.readLong();
-        this.createdDate = tmpCreatedDate == -1 ? null : new Date(tmpCreatedDate);
-    }
-
-    public static final Parcelable.Creator<Comment> CREATOR = new Parcelable.Creator<Comment>() {
-        public Comment createFromParcel(Parcel source) {
-            return new Comment(source);
-        }
-
-        public Comment[] newArray(int size) {
-            return new Comment[size];
-        }
-    };
 }

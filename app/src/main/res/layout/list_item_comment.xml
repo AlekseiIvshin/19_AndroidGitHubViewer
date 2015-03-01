@@ -3,31 +3,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/defaultVerticalMargin"
+    android:background="@drawable/list_item_repository"
     android:paddingBottom="@dimen/defaultVerticalMargin"
-    android:paddingRight="@dimen/defaultHorizontalMargin"
     android:paddingLeft="@dimen/defaultHorizontalMargin"
-    android:background="@drawable/list_item_repository">
+    android:paddingRight="@dimen/defaultHorizontalMargin"
+    android:paddingTop="@dimen/defaultVerticalMargin">
 
     <TextView
         android:id="@+id/comment.title"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        style="@style/Base.TextAppearance.AppCompat.Headline"
-        tools:text="Title"/>
+        tools:text="Title" />
+
     <TextView
         android:id="@+id/comment.createdDate"
+        style="@style/Base.TextAppearance.AppCompat.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        style="@style/Base.TextAppearance.AppCompat.Caption"
-        tools:text="@string/dateFormat"/>
+        tools:text="@string/dateFormat" />
+
     <TextView
         android:id="@+id/comment.message"
+        style="@style/Base.TextAppearance.AppCompat.Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/comment.title"
-        style="@style/Base.TextAppearance.AppCompat.Body2"
         tools:text="Message" />
 </RelativeLayout>

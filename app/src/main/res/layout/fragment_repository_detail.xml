@@ -33,17 +33,16 @@
 
                 <TextView
                     android:id="@+id/details.ownerLogin"
+                    style="@style/TextAppearance.AppCompat.Headline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Headline"
                     android:layout_toRightOf="@id/details.ownerAvatar"
                     android:padding="@dimen/defaultPadding"
                     tools:text="OwnerLogin" />
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
-            style="@style/AppTheme.RepositoryDetails.Cards">
+        <android.support.v7.widget.CardView style="@style/AppTheme.RepositoryDetails.Cards">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -52,9 +51,9 @@
 
                 <TextView
                     android:id="@+id/details.repoFullName"
+                    style="@style/TextAppearance.AppCompat.Headline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Headline"
                     android:layout_alignParentLeft="true"
                     tools:text="Repository/Full name" />
 
@@ -70,12 +69,12 @@
 
                 <TextView
                     android:id="@+id/details.repoLanguage"
+                    style="@style/TextAppearance.AppCompat.Body2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/details.repoFullName"
                     android:layout_marginTop="@dimen/defaultPadding"
                     android:layout_toLeftOf="@+id/details.repoStarsImage"
-                    style="@style/TextAppearance.AppCompat.Body2"
                     tools:text="Language" />
 
                 <ImageView
@@ -89,22 +88,22 @@
 
                 <TextView
                     android:id="@id/details.repoStars"
+                    style="@style/TextAppearance.AppCompat.Body2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_below="@id/details.repoFullName"
                     android:layout_marginTop="@dimen/defaultPadding"
-                    style="@style/TextAppearance.AppCompat.Body2"
                     tools:text="NNN" />
 
                 <TextView
                     android:id="@+id/details.repoDescription"
+                    style="@style/TextAppearance.AppCompat.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/details.createdDate"
                     android:layout_marginTop="@dimen/defaultPadding"
-                    style="@style/TextAppearance.AppCompat.Body1"
                     tools:text="Redis is an in-memory database that persists on disk. The data model is key-value, but many different kind of values are supported: Strings, Lists, Sets, Sorted Sets, Hashes, HyperLogLogs, Bitmaps." />
 
             </RelativeLayout>

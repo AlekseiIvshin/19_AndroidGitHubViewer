@@ -1,7 +1,6 @@
 package com.ivshinaleksei.githubviewer.domain;
 
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -21,44 +20,44 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RepositoryInfo implements Parcelable {
 
+    public static final Parcelable.Creator<RepositoryInfo> CREATOR = new Parcelable.Creator<RepositoryInfo>() {
+        public RepositoryInfo createFromParcel(Parcel source) {
+            return new RepositoryInfo(source);
+        }
+
+        public RepositoryInfo[] newArray(int size) {
+            return new RepositoryInfo[size];
+        }
+    };
     @DatabaseField(columnName = RepositoryContract.RepositoryInfo._ID, generatedId = true)
     public int id;
-
     @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "repositorylist_id")
     public RepositoryList repositorylist;
-
     @Element(required = false)
     @DatabaseField(columnName = RepositoryContract.RepositoryInfo.FULL_NAME)
     @JsonProperty("full_name")
     public String fullName;
-
     @Element(required = false)
     @DatabaseField(columnName = RepositoryContract.RepositoryInfo.LANGUAGE)
     @JsonProperty("language")
     public String language;
-
     @Element(required = false)
     @DatabaseField(columnName = RepositoryContract.RepositoryInfo.STARGAZERS_COUNT)
     @JsonProperty("stargazers_count")
     public int stargazersCount;
-
     @Element(required = false)
     @DatabaseField(columnName = RepositoryContract.RepositoryInfo.CREATED_DATE)
     @JsonProperty("created_at")
     public Date createdDate;
-
     @Element(required = false)
     @DatabaseField(columnName = RepositoryContract.RepositoryInfo.DESCRIPTION)
     @JsonProperty("description")
     public String description;
-
     @JsonProperty("owner")
     public RepositoryOwner repositoryOwner;
-
     @Element(required = false)
     @DatabaseField(columnName = RepositoryContract.RepositoryOwner.OWNER_LOGIN)
     public String ownerLogin;
-
     @Element(required = false)
     @DatabaseField(columnName = RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL)
     public String ownerAvatarUrl;
@@ -114,22 +113,13 @@ public class RepositoryInfo implements Parcelable {
         int stargazersCount = cursor.getInt(indexStargazersCount);
         long createdDate = cursor.getLong(indexCreatedDate) * 1000;
         String description = cursor.getString(indexDescription);
-        String login = cursor.getString(indexOwnerLogin);
-        String avatarUrl = cursor.getString(indexOwnerAvatarUrl);
 
-        RepositoryOwner owner = new RepositoryOwner(login,avatarUrl);
+        RepositoryOwner owner = new RepositoryOwner();
+        owner.login = cursor.getString(indexOwnerLogin);
+        owner.avatarUrl = cursor.getString(indexOwnerAvatarUrl);
+
         return new RepositoryInfo(fullName, language, stargazersCount, new Date(createdDate), description, owner);
     }
-
-    public static final Parcelable.Creator<RepositoryInfo> CREATOR = new Parcelable.Creator<RepositoryInfo>() {
-        public RepositoryInfo createFromParcel(Parcel source) {
-            return new RepositoryInfo(source);
-        }
-
-        public RepositoryInfo[] newArray(int size) {
-            return new RepositoryInfo[size];
-        }
-    };
 
     @Override
     public int describeContents() {
@@ -153,11 +143,12 @@ public class RepositoryInfo implements Parcelable {
 
         RepositoryInfo that = (RepositoryInfo) o;
 
-        if (!createdDate.equals(that.createdDate)) return false;
-        if (!fullName.equals(that.fullName)) return false;
-        if (language != null ? !language.equals(that.language) : that.language != null)
-            return false;
-        return repositoryOwner.equals(that.repositoryOwner);
+        return createdDate.equals(that.createdDate)
+                && fullName.equals(that.fullName)
+                && !(language != null
+                ? !language.equals(that.language)
+                : that.language != null)
+                && repositoryOwner.equals(that.repositoryOwner);
 
     }
 

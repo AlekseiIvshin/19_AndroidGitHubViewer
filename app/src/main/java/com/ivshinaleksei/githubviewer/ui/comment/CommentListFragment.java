@@ -14,14 +14,13 @@ import android.widget.ProgressBar;
 import com.ivshinaleksei.githubviewer.R;
 import com.melnykov.fab.FloatingActionButton;
 
-public class CommentListFragment extends Fragment{
+public class CommentListFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private View mEmptyHolder;
     private CommentListAdapter mAdapter;
     private OnAddCommentListener mOnAddCommentListener;
     private ProgressBar mProgressBar;
-    private CommentsObserver mCommentsObserver;
 
     public static CommentListFragment newInstance() {
         return new CommentListFragment();
@@ -49,12 +48,16 @@ public class CommentListFragment extends Fragment{
         super.onCreate(savedInstanceState);
         mAdapter = new CommentListAdapter(getActivity());
         mAdapter.registerAdapterDataObserver(new CommentsObserver());
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_list_comment, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.list_comment);
+
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.attachToRecyclerView(mRecyclerView);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -68,11 +71,6 @@ public class CommentListFragment extends Fragment{
         mProgressBar = (ProgressBar) rootView.findViewById(android.R.id.progress);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
-        //mAdapter = new CommentListAdapter(getActivity());
-        mCommentsObserver = new CommentsObserver();
-        mAdapter.registerAdapterDataObserver(mCommentsObserver);
-        mRecyclerView.setAdapter(mAdapter);
-
 
         mEmptyHolder = rootView.findViewById(android.R.id.empty);
 
@@ -80,37 +78,26 @@ public class CommentListFragment extends Fragment{
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        mAdapter.unregisterAdapterDataObserver(mCommentsObserver);
-        mCommentsObserver = null;
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
-        viewBeforeUpdate(mRecyclerView,mEmptyHolder,mProgressBar);
+        mRecyclerView.setVisibility(View.GONE);
+        mEmptyHolder.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
         getLoaderManager().initLoader(CommentListAdapter.LOADER_ID, null, mAdapter);
-    }
-
-    private void viewBeforeUpdate(View dataContainer, View emptyView, ProgressBar progressBar){
-        dataContainer.setVisibility(View.GONE);
-        emptyView.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
     }
 
     public interface OnAddCommentListener {
         void addComment();
     }
 
-    private class CommentsObserver extends RecyclerView.AdapterDataObserver{
+    private class CommentsObserver extends RecyclerView.AdapterDataObserver {
 
         @Override
         public void onChanged() {
             viewAfterUpdate(mRecyclerView, mEmptyHolder, mProgressBar, mAdapter.isEmpty());
         }
 
-        private void viewAfterUpdate(View dataContainer, View emptyView, ProgressBar progressBar, boolean isDataEmpty){
+        private void viewAfterUpdate(View dataContainer, View emptyView, ProgressBar progressBar, boolean isDataEmpty) {
             dataContainer.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);

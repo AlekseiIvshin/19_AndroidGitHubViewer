@@ -2,47 +2,55 @@ package com.ivshinaleksei.githubviewer.ui.gallery;
 
 
 import android.content.SharedPreferences;
-import android.database.DataSetObserver;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ivshinaleksei.githubviewer.R;
+import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 
 /**
  * Created by Aleksei_Ivshin on 26/02/2015.
  */
-public class MyGalleryFragment extends Fragment {
+public class MyGalleryFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String sPreferencesFilename = MyGalleryFragment.class.getName() + ".prefs";
-    private static final String sLastOpenedPicturePositionPreferenceName = MyGalleryFragment.class.getName() + ".lastOpened";
+    private static final String sLastOpenedItemPosition = MyGalleryFragment.class.getSimpleName() + ".lastItem";
+
+
+    public static final int LOADER_ID = 3;
+    private static final String[] sProjection =
+            {
+                    RepositoryContract.RepositoryOwner.OWNER_LOGIN,
+                    RepositoryContract.RepositoryOwner.OWNER_AVATAR_URL
+            };
 
     private MyPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
     private int mLastOpenedPicturePosition = -1;
     private View mEmptyHolder;
-    private ContentObserver mContentObserver;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
-            if (mLastOpenedPicturePosition < 0) {
-                mLastOpenedPicturePosition = savedInstanceState.getInt(sLastOpenedPicturePositionPreferenceName, -1);
-            }
+            mLastOpenedPicturePosition = savedInstanceState.getInt(sLastOpenedItemPosition, -1);
         }
         if (mLastOpenedPicturePosition < 0) {
             SharedPreferences pref = getActivity().getSharedPreferences(sPreferencesFilename, 0);
-            mLastOpenedPicturePosition = pref.getInt(sLastOpenedPicturePositionPreferenceName, -1);
+            mLastOpenedPicturePosition = pref.getInt(sLastOpenedItemPosition, -1);
         }
-        mContentObserver = new ContentObserver();
-        mPagerAdapter = new MyPagerAdapter(getFragmentManager(),getActivity());
-        mPagerAdapter.registerDataSetObserver(mContentObserver);
-        getLoaderManager().initLoader(MyPagerAdapter.LOADER_ID,null,mPagerAdapter);
+        mPagerAdapter = new MyPagerAdapter(getFragmentManager(), getString(R.string.gallery_noData));
+
+        getLoaderManager().initLoader(MyPagerAdapter.LOADER_ID, null, this);
     }
 
     @Override
@@ -60,38 +68,48 @@ public class MyGalleryFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        if (mLastOpenedPicturePosition >= 0) {
-            mViewPager.setCurrentItem(mLastOpenedPicturePosition);
-        }
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
         if (mViewPager.getCurrentItem() >= 0) {
             SharedPreferences.Editor editor = getActivity()
                     .getSharedPreferences(sPreferencesFilename, 0).edit();
-            editor.putInt(sLastOpenedPicturePositionPreferenceName, mViewPager.getCurrentItem());
+            editor.putInt(sLastOpenedItemPosition, mViewPager.getCurrentItem());
             editor.apply();
         }
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-
-        mLastOpenedPicturePosition = mViewPager.getCurrentItem();
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(sLastOpenedItemPosition, mViewPager.getCurrentItem());
     }
 
-    // TODO: stub
-    private class ContentObserver extends DataSetObserver {
-        @Override
-        public void onChanged() {
-            showHolder(mViewPager, mEmptyHolder, mPagerAdapter.isEmpty());
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case LOADER_ID:
+                return new CursorLoader(
+                        getActivity(),
+                        RepositoryContract.RepositoryOwner.CONTENT_URI,
+                        sProjection,
+                        null, null, null);
+            default:
+                return null;
         }
     }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mPagerAdapter.changeCursor(data);
+        mViewPager.setCurrentItem(mLastOpenedPicturePosition);
+        showHolder(mViewPager, mEmptyHolder, mPagerAdapter.isEmpty());
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mPagerAdapter.changeCursor(null);
+    }
+
 
     /**
      * Show view.
@@ -127,4 +145,5 @@ public class MyGalleryFragment extends Fragment {
             v.setVisibility(View.VISIBLE);
         }
     }
+
 }

@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,9 +24,8 @@ import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
 import com.ivshinaleksei.githubviewer.domain.RepositoryList;
 import com.ivshinaleksei.githubviewer.network.BaseRepositorySearchRequest;
 import com.ivshinaleksei.githubviewer.network.RepositoryService;
-import com.ivshinaleksei.githubviewer.network.request.builder.SortedRepositorySearchRequestBuilder;
+import com.ivshinaleksei.githubviewer.network.request.SortedRepositorySearchRequest;
 import com.ivshinaleksei.githubviewer.ui.details.RepositoryDetailFragment;
-import com.ivshinaleksei.githubviewer.ui.list.MyRecyclerViewAdapter;
 import com.ivshinaleksei.githubviewer.ui.list.RepositoryListFragment;
 import com.ivshinaleksei.githubviewer.utils.UiUtils;
 import com.octo.android.robospice.SpiceManager;
@@ -62,7 +59,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        UiUtils.setupUI(this,findViewById(R.id.drawerLayout));
+        UiUtils.setupUI(this, findViewById(R.id.drawerLayout));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
@@ -83,7 +80,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
             if (getSupportFragmentManager().findFragmentById(R.id.contentFrame) == null) {
                 RepositoryListFragment listViewFragment = RepositoryListFragment.newInstance();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.contentFrame, listViewFragment,sRepositoryListFragmentTag);
+                transaction.replace(R.id.contentFrame, listViewFragment, sRepositoryListFragmentTag);
                 transaction.commit();
             }
         }
@@ -146,12 +143,9 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
                 if (query.length() >= getResources().getInteger(R.integer.minQueryLength)) {
                     UiUtils.hideSoftKeyboard(MainActivity.this);
 
-//                    ProgressBar mProgress = (ProgressBar) findViewById(R.id.progressBar);
-//                    if (mProgress != null) {
-//                        mProgress.setVisibility(View.VISIBLE);
-//                    }
                     mRepositoryListRequest =
-                            new SortedRepositorySearchRequestBuilder(query)
+                            SortedRepositorySearchRequest.newInstance()
+                                    .query(query)
                                     .sortBy("stars")
                                     .order("desc")
                                     .build();
@@ -160,7 +154,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
                             sRepositoryRequestCacheKey,
                             DurationInMillis.ONE_MINUTE,
                             new RepositorySearchRequestListener());
-                    searchView.setQuery("",false);
+                    searchView.setQuery("", false);
                 }
                 return true;
             }
@@ -177,7 +171,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 getSupportFragmentManager().popBackStack();
                 return true;
@@ -208,7 +202,7 @@ public class MainActivity extends ActionBarActivity implements RepositoryListFra
         } else {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             RepositoryDetailFragment newDetailFragment = RepositoryDetailFragment.newInstance(aRepository);
-            transaction.replace(R.id.contentFrame, newDetailFragment,sRepositoryDetailsFragmentTag).addToBackStack(null).commit();
+            transaction.replace(R.id.contentFrame, newDetailFragment, sRepositoryDetailsFragmentTag).addToBackStack(null).commit();
 
         }
     }

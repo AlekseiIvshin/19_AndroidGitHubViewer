@@ -16,7 +16,7 @@ import com.ivshinaleksei.githubviewer.R;
 import com.ivshinaleksei.githubviewer.contracts.RepositoryContract;
 import com.ivshinaleksei.githubviewer.domain.RepositoryInfo;
 
-public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> implements  LoaderManager.LoaderCallbacks<Cursor> {
+public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int LOADER_ID = 0;
     private static final String[] sProjection =
@@ -36,7 +36,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private RepositoryListFragment.OnRepositorySelectedListener mSelectedItemListener;
 
 
-    public MyRecyclerViewAdapter(Context context, RepositoryListFragment.OnRepositorySelectedListener listener){
+    public MyRecyclerViewAdapter(Context context, RepositoryListFragment.OnRepositorySelectedListener listener) {
         this.mContext = context;
         this.mSelectedItemListener = listener;
     }
@@ -106,7 +106,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         return oldCursor;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView repositoryName;
         public TextView repositoryLanguage;

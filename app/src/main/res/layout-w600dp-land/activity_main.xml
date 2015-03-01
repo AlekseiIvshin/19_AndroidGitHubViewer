@@ -7,8 +7,7 @@
 
     <ListView
         android:id="@+id/leftNavigationDrawer"
-        style="@style/AppTheme.NavDrawer" >
-    </ListView>
+        style="@style/AppTheme.NavDrawer"></ListView>
 
     <LinearLayout
         android:layout_width="match_parent"

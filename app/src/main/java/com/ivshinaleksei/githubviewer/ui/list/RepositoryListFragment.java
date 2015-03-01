@@ -22,8 +22,8 @@ public class RepositoryListFragment extends Fragment {
 
     private OnRepositorySelectedListener mListener;
     private RecyclerView mRecyclerView;
-    private MyRecyclerViewAdapter mAdapter;
     private int mCurrentPosition;
+    private MyRecyclerViewAdapter mAdapter;
 
 
     public static RepositoryListFragment newInstance() {
@@ -37,7 +37,7 @@ public class RepositoryListFragment extends Fragment {
             mListener = (OnRepositorySelectedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement "+OnRepositorySelectedListener.class.getSimpleName());
+                    + " must implement " + OnRepositorySelectedListener.class.getSimpleName());
         }
     }
 
@@ -65,10 +65,6 @@ public class RepositoryListFragment extends Fragment {
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences(sPreferencesFileName, 0);
             mCurrentPosition = sharedPreferences.getInt(sCurrentPosition, -1);
         }
-
-        if (mCurrentPosition >= 0) {
-            //mListener.onRepositorySelected(RepositoryInfo.getFromCursor(mAdapter.getCursor()));
-        }
     }
 
     @Override
@@ -77,7 +73,7 @@ public class RepositoryListFragment extends Fragment {
         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recyclerViewRepositoryList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new MyRecyclerViewAdapter(getActivity(),mListener);
+        mAdapter = new MyRecyclerViewAdapter(getActivity(), mListener);
         mRecyclerView.setAdapter(mAdapter);
         getLoaderManager().initLoader(MyRecyclerViewAdapter.LOADER_ID, null, mAdapter);
     }
@@ -91,6 +87,12 @@ public class RepositoryListFragment extends Fragment {
             editor.putInt(sCurrentPosition, mCurrentPosition);
             editor.apply();
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mAdapter.changeCursor(null);
     }
 
     public interface OnRepositorySelectedListener {

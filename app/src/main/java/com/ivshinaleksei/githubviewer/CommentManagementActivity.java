@@ -1,18 +1,12 @@
 package com.ivshinaleksei.githubviewer;
 
-import android.app.Activity;
+import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 
 import com.ivshinaleksei.githubviewer.ui.comment.CommentEditorFragment;
 import com.ivshinaleksei.githubviewer.ui.comment.CommentListFragment;

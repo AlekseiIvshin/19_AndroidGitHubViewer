@@ -24,7 +24,7 @@ public class RepositoryContentProvider extends ContentProvider {
 
     private static final int sRepositories = 1;
     private static final int sComments = 2;
-    private static final int sRepositoryOwners =3;
+    private static final int sRepositoryOwners = 3;
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
@@ -32,12 +32,10 @@ public class RepositoryContentProvider extends ContentProvider {
         sUriMatcher.addURI(RepositoryContract.AUTHORITY, RepositoryContract.Comment.PATH, sComments);
         sUriMatcher.addURI(RepositoryContract.AUTHORITY, RepositoryContract.RepositoryOwner.PATH, sRepositoryOwners);
     }
-
-    public RepositoryContentProvider() {
-    }
-
     SQLiteDatabase db;
     private RoboSpiceDatabaseHelper mDatabaseHelper;
+    public RepositoryContentProvider() {
+    }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
@@ -70,7 +68,7 @@ public class RepositoryContentProvider extends ContentProvider {
             case sComments:
                 db = mDatabaseHelper.getWritableDatabase();
                 long id = db.insert(RepositoryContract.Comment.TABLE_NAME, null, values);
-                getContext().getContentResolver().notifyChange(uri,null);
+                getContext().getContentResolver().notifyChange(uri, null);
                 return Uri.parse(RepositoryContract.Comment.CONTENT_URI + "/" + id);
             default:
                 throw new IllegalArgumentException("Uri " + uri.toString() + " not supported");
@@ -81,7 +79,7 @@ public class RepositoryContentProvider extends ContentProvider {
     public boolean onCreate() {
 
 
-        List<Class<?>> classCollection = new ArrayList<Class<?>>();
+        List<Class<?>> classCollection = new ArrayList<>();
         classCollection.add(RepositoryList.class);
         classCollection.add(RepositoryInfo.class);
         classCollection.add(Comment.class);
@@ -125,9 +123,9 @@ public class RepositoryContentProvider extends ContentProvider {
 
             case sRepositoryOwners: {
                 db = mDatabaseHelper.getReadableDatabase();
-                try{
-                    Cursor cursor = db.query(RepositoryContract.RepositoryOwner.TABLE_NAME, projection,selection,selectionArgs,null,null,sortOrder);
-                    cursor.setNotificationUri(getContext().getContentResolver(),uri);
+                try {
+                    Cursor cursor = db.query(RepositoryContract.RepositoryOwner.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                    cursor.setNotificationUri(getContext().getContentResolver(), uri);
                     return cursor;
                 } catch (SQLException e) {
                     return null;
