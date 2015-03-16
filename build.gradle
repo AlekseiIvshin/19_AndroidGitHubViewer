@@ -9,9 +9,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.android.tools.build:gradle:1.1.3'
         classpath "net.saliman:gradle-cobertura-plugin:2.2.7"
-
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -22,3 +21,12 @@ allprojects {
         jcenter()
     }
 }
+
+cobertura {
+    coverageFormats = ['html', 'xml']
+    coverageIgnoreTrivial = true
+    coverageIgnores = ['org.slf4j.Logger.*']
+    coverageReportDir = new File("$buildDir/reports/cobertura")
+}
+
+test.finalizedBy(project.tasks.cobertura)

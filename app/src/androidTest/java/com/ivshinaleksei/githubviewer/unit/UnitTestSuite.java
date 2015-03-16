@@ -7,6 +7,6 @@ import junit.framework.TestSuite;
  */
 public class UnitTestSuite extends TestSuite {
     public UnitTestSuite(){
-        addTest(new SomUnitTest());
+        addTest(new SomeUnitTest());
     }
 }

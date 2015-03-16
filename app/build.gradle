@@ -58,6 +58,7 @@ dependencies {
         exclude module: 'xpp3'
     }
 
-
     androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.1'
+    testCompile 'junit:junit:4.12'
+
 }

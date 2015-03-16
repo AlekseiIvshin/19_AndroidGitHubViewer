@@ -2,13 +2,11 @@ package com.ivshinaleksei.githubviewer.unit;
 
 import com.ivshinaleksei.githubviewer.network.request.SortedRepositorySearchRequest;
 
-import junit.framework.Test;
 import junit.framework.TestCase;
-
 /**
  * Created by dnss on 16.03.2015.
  */
-public class SomUnitTest extends TestCase {
+public class SomeUnitTest extends TestCase {
 
     public void testShouldCreateNewRequestInstance(){
         SortedRepositorySearchRequest.Builder builder = SortedRepositorySearchRequest.newInstance();
